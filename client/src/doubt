@@ -1,0 +1,38 @@
+const{allscreen}=this.state.screens;
+          const list2=(
+           <Fragment>
+              <Autocomplete
+              
+               id="tags-outlined"
+               options={allscreen}
+               getOptionLabel={(option) => option.Screens}
+               filterOptions={filterOptions2}
+                renderInput={(params) => (
+                <TextField
+                 {...params}
+                  variant="outlined"
+                  label="screens"
+                  placeholder="screens"
+                />
+                )}
+                />
+                </Fragment>
+        );
+
+
+
+         {allscreen.length?list2:''}  
+
+ <div>
+            <Autocomplete
+            id="Module"
+            options={}
+            getOptionLabel={(option)=>option.Module}
+            filterOptions={filterOptions1}
+            style={{width:300}}
+            onChange={this.handlechange}
+            renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
+            />
+           {this.state.screens.length?console.log(this.state.screens):'fuck no'}
+        
+            </div>
