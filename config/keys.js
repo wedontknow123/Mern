@@ -1,8 +1,8 @@
 exports.dbConfig={
-    server:"LAPTOP-DVJ39MSC",
+    server:"LAPTOP-P4D7V446\\SQLEXPRESS",
     database:"INTERNSHIP",
-    user:"sourish",
-    password:"sourish@123",
+    user:"tejasp",
+    password:"tejasp@2000",
     port:1433
 };
 exports.httpMsgsFormat="HTML";
