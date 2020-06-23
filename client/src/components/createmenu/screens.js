@@ -71,7 +71,7 @@ class screens extends Component{
     }
 
   getheader=()=>{
-    axios.get('api/items/key')
+    axios.get('/api/items/key')
     .then(res=>{
       this.setState({
         key:res.data[0]['']
@@ -90,7 +90,7 @@ class screens extends Component{
            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
            UserAccess_Headerkey:this.state.key
           }
-          axios.post('api/screens/save',new2)
+          axios.post('/api/screens/save',new2)
           .then(res=>{
             console.log(res);
           })

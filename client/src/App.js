@@ -31,7 +31,7 @@ class App extends Component{
       <Route exact path ='/options/newuser/screens' component={screens}/>
       <Route exact path='/options/newuser' component={newuserform}/> 
       <Route exact path='/options/editdraftform' component={editdraftform}/> 
-      <Route exact path='/options/delete' component={deleteform}/> 
+      <Route exact path='/options/deleteform' component={deleteform}/> 
       <Route exact path='/' component={home}/>
       <Route exact path='/options' component={createmenu}/>
     </div>

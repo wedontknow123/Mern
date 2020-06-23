@@ -191,9 +191,7 @@ exports.add4=function(req,resp,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-        var sql=util.format("UPDATE UserAccess_Header SET Location ='%s',Reason ='%s',Emp_Name ='%s',Emp_Designation ='%s',Emp_Department ='%s',Emp_Email ='%s',DOJ ='%s',Employee_Type ='%s',Software ='%s',Trans_Datetime ='%s',Status ='%s' WHERE Emp_ID ='%d'",
-        data.Location,data.Reason,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.Status,data.Emp_ID);
-               
+        var sql=util.format("UPDATE UserAccess_Header SET Location ='%s',Reason ='%s',Emp_Name ='%s',Emp_Designation ='%s',Emp_Department ='%s',Emp_Email ='%s',DOJ ='%s',Employee_Type ='%s',Software ='%s',Trans_Datetime ='%s',Status ='%s' WHERE Emp_ID ='%d'",data.Location,data.Reason,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.Status,data.Emp_ID);
         db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);

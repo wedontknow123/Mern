@@ -94,7 +94,7 @@ class newuserform extends Component{
     
     render(){
         if(this.state.empid&&this.state.done=='yes'){
-            return <Redirect to='/options/form/screens'/>
+            return <Redirect to='/options/newuser/screens'/>
         }
         return(
             <div className="container">
