@@ -121,7 +121,8 @@ class editdraftform extends Component{
             Software:this.state.software,
             Reason:this.state.reason,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-            Status:this.state.status
+            Status:this.state.status,            
+            Emp_ID:this.state.empid,
         }
 
         axios.post('/api/draft/save',newItem)
@@ -139,7 +140,7 @@ class editdraftform extends Component{
 
     render(){
         if(this.state.done=='yes'){
-            return <Redirect to='/options/form/screens'/>
+            return <Redirect to='/options/newuser/screens'/>
         }
         const filterOptions1 = createFilterOptions({   //for combo box till the next @
             matchFrom: 'start',
