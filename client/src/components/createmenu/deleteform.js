@@ -4,7 +4,7 @@ import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import {Button} from 'reactstrap';
 import axios from 'axios';
 
-class delete1 extends Component{
+class deleteform extends Component{
     state={
         empid:[],
         selectid:'',
@@ -58,4 +58,4 @@ class delete1 extends Component{
     }
 }
 
-export default delete1 ;
+export default deleteform ;
