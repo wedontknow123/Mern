@@ -1,4 +1,4 @@
-import React, { Component,Fragment } from 'react';
+import React, { Component,Fragment} from 'react';
 import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {connect} from 'react-redux';
@@ -9,6 +9,23 @@ import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
+import MaterialTable from "material-table";
+import { forwardRef } from 'react';
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 
 var a='';
 var dateFormat = require('dateformat');
@@ -21,9 +38,18 @@ class screens_test extends Component{
           screens: [],
           selectedscreen: [],
           boola:false,
-          key:''
+          key:'',
+          columns:[
+            { title: 'Module', field: 'name' },
+            { title: 'Screen', field: 'surname', initialEditValue: 'initial edit value' },            
+          ],
+          data:[
+            { name: 'Mehmet', surname: 'Baran'},
+            { name: 'Zerya Betül', surname: 'Baran' },
+          ]
         };
-           
+   
+         
       handlechange = (values,event) => {
           if(event!==null){
            a=event.Module;   
@@ -115,13 +141,33 @@ class screens_test extends Component{
     }
     
       
-    render(){
+    render(){  
+        
+        const tableIcons = {
+            Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+            Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+            Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+            Delete: forwardRef((props, ref) => <Delete {...props} ref={ref} />),
+            DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+            Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+            Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+            Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+            FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+            LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+            NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+            PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+            ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+            Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+            SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+            ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+            ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+          };
+
         const filterOptions2 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Screens,
           });
-        const list2=(
-            
+        const list2=(            
             <Fragment>
                <Autocomplete
                multiple
@@ -168,7 +214,39 @@ class screens_test extends Component{
             renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
             /><br></br>
             {(this.state.screens.length&&this.state.module)?list2:''}  
-            {(this.state.selectedscreen.length)?list3:''}  
+            {(this.state.selectedscreen.length)?list3:''}            
+            
+            <br/>
+
+            <MaterialTable
+            title="Modules and Screens"
+            style={{ width : "50%" }}
+            columns={this.state.columns}
+            icons={tableIcons}
+            data={this.state.data}            
+            localization={{                
+                header: {
+                    actions: ''
+                }}}            
+            editable={{
+                    
+                onRowDelete: oldData =>
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                    const dataDelete = [...this.state.data];
+                    const index = oldData.tableData.id;
+                    dataDelete.splice(index, 1);
+                    this.setState({ data : [...dataDelete]});
+                    
+                    resolve()
+                    }, 1000)
+                }),
+            }}
+            options={{
+                filtering: true,
+                actionsColumnIndex: -1
+            }}
+            /> 
            </div>
            
         )
