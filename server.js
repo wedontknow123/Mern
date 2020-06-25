@@ -11,6 +11,7 @@ app.use('/api/users',require('./routes/api/Users'));
 app.use('/api/auth',require('./routes/api/auth'));
 app.use('/api/screens',require('./routes/api/screens'));
 app.use('/api/draft',require('./routes/api/draft'));
+app.use('/api/screens_test',require('./routes/api/screens_test'));
 
 require("./routes/api/items");
 

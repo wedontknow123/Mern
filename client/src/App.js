@@ -16,6 +16,7 @@ import screens from './components/createmenu/screens';
 import PropTypes from 'prop-types';
 import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
+import screens_test from './components/createmenu/screens_test';
 class App extends Component{
   componentDidMount(){
     store.dispatch(loadUser());
@@ -29,6 +30,7 @@ class App extends Component{
       <AppNavbar/>
 
       <Route exact path ='/options/newuser/screens' component={screens}/>
+      <Route exact path ='/options/newuser/screens_test' component={screens_test}/>
       <Route exact path='/options/newuser' component={newuserform}/> 
       <Route exact path='/options/editdraftform' component={editdraftform}/> 
       <Route exact path='/options/deleteform' component={deleteform}/> 
