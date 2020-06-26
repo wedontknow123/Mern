@@ -15,7 +15,7 @@ class home extends Component{
                 <Button href='/options'>New User Creation</Button>
                 <br></br>
                 <br></br>
-                <Button >Changes Regired</Button>
+                <Button >Changes Required</Button>
                 <br></br>
                 <br></br>
                 <Button >Deactivation</Button>

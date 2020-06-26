@@ -94,6 +94,7 @@ class editdraftform extends Component{
             this.setState({
                 items:res.data
             })
+            console.log(this.state.item)
             })
 
             }        // @
@@ -148,7 +149,7 @@ class editdraftform extends Component{
           });
         return(
             <div className="container">
-                <Autocomplete
+            <Autocomplete
             id="EmpId"
             options={this.state.items}
             getOptionLabel={(option)=>option.Emp_ID}
