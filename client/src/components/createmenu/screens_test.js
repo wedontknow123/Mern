@@ -225,7 +225,7 @@ class screens_test extends Component{
          );
         const list3=(
             <Fragment>
-             <Button onClick={this.handleclick1} >save the screens from {this.state.module} module</Button>
+             <Button onClick={this.handleclick1} >Add the screens from {this.state.module} module</Button>
             </Fragment>
         );
         const list4=(
