@@ -114,6 +114,7 @@ exports.get9=function(req,res){
      }
   });
 };
+
 exports.add=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");
@@ -332,9 +333,35 @@ exports.del2=function(req,res,reqbody){
     }
   }
   catch(ex){
-    httpMsgs.show500(req,resp,ex);
+    httpMsgs.show500(req,res,ex);
   }
 };
+
+exports.del3=function(req,res,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql="delete from UserAccess_Detail where UserAccess_Headerkey = "+data.UserAccess_Headerkey;
+      db.executeSql(sql,function(data,err){
+        if(err){
+          httpMsgs.show500(req,res,err);
+        }
+        else{
+          httpMsgs.send200(req,res);
+        }
+      })
+    }
+    else{
+      throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,res,ex);
+  }
+};
+
 exports.delete=function(req,resp,reqbody){
     try{
         if(!reqbody) throw new Error("Input not valid");

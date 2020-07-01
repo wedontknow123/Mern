@@ -16,8 +16,13 @@ import screens from './components/createmenu/screens';
 import PropTypes from 'prop-types';
 import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
+<<<<<<< HEAD
 import GlobalContextProvider from './components/contexts/GlobalContext';
 import deactivate from './components/deactivate/deactivate';
+=======
+import screens_test from './components/createmenu/screens_test';
+import screens_test_d from './components/createmenu/screens_test_d';
+>>>>>>> 6cf99ad52ba7b18450adef6d73fec0c2a3e33eda
 class App extends Component{
   componentDidMount(){
     store.dispatch(loadUser());
@@ -32,7 +37,9 @@ class App extends Component{
       <GlobalContextProvider>
        <AppNavbar/>
 
-      <Route exact path ='/options/newuser/screens' component={screens}/>
+      {/* <Route exact path ='/options/newuser/screens' component={screens}/> */}
+      <Route exact path ='/options/newuser/screens_test' component={screens_test}/>
+      <Route exact path ='/options/editdraftform/screens_test_d' component={screens_test_d}/>
       <Route exact path='/options/newuser' component={newuserform}/> 
       <Route exact path='/options/editdraftform' component={editdraftform}/> 
       <Route exact path='/options/deleteform' component={deleteform}/> 

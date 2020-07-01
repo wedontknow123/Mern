@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import screens_test_d from './screens_test_d';
 import {
     Button,
     Label,
@@ -141,7 +142,10 @@ class editdraftform extends Component{
 
     render(){
         if(this.state.done=='yes'){
-            return <Redirect to='/options/newuser/screens'/>
+            return (
+            <Redirect to='/options/editdraftform/screens_test_d'/>
+            // <div><screens_test_d empid = {this.state.empid}/></div>
+             )
         }
         const filterOptions1 = createFilterOptions({   //for combo box till the next @
             matchFrom: 'start',
