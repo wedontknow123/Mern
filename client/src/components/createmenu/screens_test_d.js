@@ -148,7 +148,7 @@ class screens_test extends Component{
     var now = new Date();
     var i;
     console.log(this.state.key);
-    const x ={ UserAccess_Headerkey:this.state.key }
+    var x ={ UserAccess_Headerkey:this.state.key }
     axios.post('/api/screens_test_d/del',x)    
     .then(res=>{
       console.log(res);
