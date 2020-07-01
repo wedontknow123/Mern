@@ -16,13 +16,11 @@ import screens from './components/createmenu/screens';
 import PropTypes from 'prop-types';
 import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
-<<<<<<< HEAD
+
 import GlobalContextProvider from './components/contexts/GlobalContext';
 import deactivate from './components/deactivate/deactivate';
-=======
 import screens_test from './components/createmenu/screens_test';
 import screens_test_d from './components/createmenu/screens_test_d';
->>>>>>> 6cf99ad52ba7b18450adef6d73fec0c2a3e33eda
 class App extends Component{
   componentDidMount(){
     store.dispatch(loadUser());

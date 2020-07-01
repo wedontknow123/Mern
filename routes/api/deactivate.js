@@ -3,7 +3,7 @@ const router =express.Router();
 const call= require('./calling');
 
 router.get('/',(req,res)=>{
-    call.get9(req,res);
+    call.get10(req,res);
 })
 
 router.post('/cont',(req,res)=>{

@@ -94,7 +94,17 @@ exports.get7=function(req,res){
     }
   });
 };
-exports.get8=function(req,res){
+exports.get8=function(req,res,key){
+  db.executeSql("SELECT * FROM UserAccess_Detail where UserAccess_Headerkey='"+key+"'",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
+exports.get9=function(req,res){
   db.executeSql("Select Document_Path from Org_details",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
@@ -104,7 +114,7 @@ exports.get8=function(req,res){
      }
   });
 };
-exports.get9=function(req,res){
+exports.get10=function(req,res){
   db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'approved' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Status = 'inactive')",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
