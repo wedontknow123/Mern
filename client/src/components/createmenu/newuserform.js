@@ -28,7 +28,8 @@ class newuserform extends Component{
         reason:'',
         key:'',
         done:'',
-        status:'draft'      
+        file:'',
+        status:'draft'     
     }
    
     handlechange1=(e)=>{
@@ -196,10 +197,15 @@ class newuserform extends Component{
                             <FormGroup row>
                                <Label for="exampleText"sm={3}>Reason</Label>
                                <Col sm={5}>
-                               <Input type="textarea" name="reason" id="reason"onChange={this.handlechange1}/>
+                               <Input type="textarea" name="reason" id="reason" onChange={this.handlechange1}/>
                                </Col>
                             </FormGroup>
-                            
+                            <FormGroup row>
+                             <Label for="file" sm={3}>Upload attachment</Label>
+                             <Col sm={5}>
+                             <input type="file" name="file" onChange={this.handlechange1} multiple />
+                             </Col>
+                            </FormGroup>
                             <FormGroup check row>
                                 <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save and Next</Button>
@@ -208,6 +214,8 @@ class newuserform extends Component{
                                  <Button >Save as Draft</Button>
                                 </Col> */}
                             </FormGroup>
+
+
                 </Form>            
             </div>
         );

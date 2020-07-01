@@ -16,6 +16,9 @@ import screens from './components/createmenu/screens';
 import PropTypes from 'prop-types';
 import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
+
+import GlobalContextProvider from './components/contexts/GlobalContext';
+import deactivate from './components/deactivate/deactivate';
 import screens_test from './components/createmenu/screens_test';
 import screens_test_d from './components/createmenu/screens_test_d';
 class App extends Component{
@@ -27,8 +30,10 @@ class App extends Component{
   return (
     <Provider store={store}>
       <BrowserRouter>
+      
     <div className="App">
-      <AppNavbar/>
+      <GlobalContextProvider>
+       <AppNavbar/>
 
       {/* <Route exact path ='/options/newuser/screens' component={screens}/> */}
       <Route exact path ='/options/newuser/screens_test' component={screens_test}/>
@@ -38,7 +43,10 @@ class App extends Component{
       <Route exact path='/options/deleteform' component={deleteform}/> 
       <Route exact path='/' component={home}/>
       <Route exact path='/options' component={createmenu}/>
+      <Route exact path='/deactivate' component={deactivate}/>
+    </GlobalContextProvider>
     </div>
+
     </BrowserRouter>
     </Provider>
   );

@@ -5,8 +5,6 @@ import {connect} from 'react-redux';
 import {getItems,addItem2} from '../../actions/itemActions';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
-import Chip from '@material-ui/core/Chip';
-import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
 
@@ -111,6 +109,7 @@ class screens extends Component{
            items:res.data
        })
     })
+    console.log(this.state.items)
     
     }
     
