@@ -11,7 +11,8 @@ app.use('/api/users',require('./routes/api/Users'));
 app.use('/api/auth',require('./routes/api/auth'));
 app.use('/api/screens',require('./routes/api/screens'));
 app.use('/api/draft',require('./routes/api/draft'));
-
+app.use('/api/docaddress',require('./routes/api/docfiles'));
+app.use('/api/deactivate',require('./routes/api/deactivate'));
 require("./routes/api/items");
 
 const port = process.env.PORT || 5000;

@@ -18,7 +18,7 @@ class home extends Component{
                 <Button >Changes Regired</Button>
                 <br></br>
                 <br></br>
-                <Button >Deactivation</Button>
+                <Button href='/deactivate'>Deactivation</Button>
 
             </div>
         )

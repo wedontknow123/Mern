@@ -94,17 +94,26 @@ exports.get7=function(req,res){
     }
   });
 };
-
 exports.get8=function(req,res){
-  db.executeSql("Select Emp_ID from UserAccess_Header where Status='draft'",function(data,err){
+  db.executeSql("Select Document_Path from Org_details",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
-    }
-    else{
+     }
+     else{
       httpMsgs.sendJson(req,res,data);
-    }
-  })
-}
+     }
+  });
+};
+exports.get9=function(req,res){
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'approved' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Status = 'inactive')",function(data,err){
+    if(err){
+      httpMsgs.show500(req,res,err);
+     }
+     else{
+      httpMsgs.sendJson(req,res,data);
+     }
+  });
+};
 exports.add=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");
@@ -191,8 +200,8 @@ exports.add4=function(req,resp,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-        var sql=util.format("UPDATE UserAccess_Header SET Location ='%s',Reason ='%s',Emp_Name ='%s',Emp_Designation ='%s',Emp_Department ='%s',Emp_Email ='%s',DOJ ='%s',Employee_Type ='%s',Software ='%s',Trans_Datetime ='%s',Status ='%s' WHERE Emp_ID ='%d'",data.Location,data.Reason,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.Status,data.Emp_ID);
-        db.executeSql(sql,function(data,err){
+      var sql=util.format("UPDATE UserAccess_Header SET Location ='%s',Reason ='%s',Emp_Name ='%s',Emp_Designation ='%s',Emp_Department ='%s',Emp_Email ='%s',DOJ ='%s',Employee_Type ='%s',Software ='%s',Trans_Datetime ='%s',Status ='%s' WHERE Emp_ID ='%d'",data.Location,data.Reason,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.Status,data.Emp_ID);
+      db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -209,7 +218,30 @@ exports.add4=function(req,resp,reqbody){
     httpMsgs.show500(req,resp,ex);
   }
 };
-
+exports.add5=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("Insert into UserAccess_Header (Trans_Type,Reason,Trans_Datetime,UserAccess_Headerkey,Emp_ID,Status) Values('%s','%s','%s','%d','%d','%s')",data.Trans_Type,data.Reason,data.Trans_Datetime,data.UserAccess_Headerkey,data.Emp_ID,data.Status);
+      db.executeSql(sql,function(data,err){
+        if(err){ 
+         httpMsgs.show500(req,resp,err);
+        }
+        else{
+         httpMsgs.send200(req,resp);
+        }
+        });
+}
+else{
+     throw new Error("Input not valid");
+}
+}
+catch(ex){
+httpMsgs.show500(req,resp,ex);
+}
+};
 exports.login=function(req,resp,reqbody){
   try{
     var a;
