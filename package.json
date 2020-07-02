@@ -19,6 +19,7 @@
     "concurrently": "^5.2.0",
     "config": "^3.3.1",
     "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.3",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "mssql": "^6.2.0"

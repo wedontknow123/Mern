@@ -6,12 +6,14 @@ import {
     FormGroup,
     Input,
     Col,
+    CustomInput,
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
 import {addItem} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
+import e from 'express';
 var dateFormat = require('dateformat');
 class newuserform extends Component{
     state={
@@ -29,6 +31,7 @@ class newuserform extends Component{
         key:'',
         done:'',
         file:'',
+        filename:'',
         status:'draft'     
     }
    
@@ -40,7 +43,13 @@ class newuserform extends Component{
             this.getheader()
         }
     }
-    
+    handlechange=(e)=>{
+        console.log(e.target.files);
+        this.setState({
+            file:e.target.files[0],
+            filename:e.target.files[0].name
+        })
+    }
     getheader=()=>{
         var v='';
         axios.get('/api/items/key')
@@ -61,13 +70,11 @@ class newuserform extends Component{
         })
     }
     
-    onSubmit=(event)=>{
+    handlechange3=(event)=>{
+        e.preventDefault();
         if(this.state.empid){
         event.preventDefault();
         var now = new Date();
-        this.setState({
-            status:'approved'   // changes status to approved when we select save and next( this function shd be triggered from the screens page later)
-          })
         const newItem={
             Trans_Type:this.state.type,
             Location:this.state.branch,
@@ -100,7 +107,7 @@ class newuserform extends Component{
         }
         return(
             <div className="container">
-                <Form onSubmit={this.onSubmit}>
+                <Form onSubmit={this.handlechange3}>
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -201,11 +208,11 @@ class newuserform extends Component{
                                </Col>
                             </FormGroup>
                             <FormGroup row>
-                             <Label for="file" sm={3}>Upload attachment</Label>
-                             <Col sm={5}>
-                             <input type="file" name="file" onChange={this.handlechange1} multiple />
-                             </Col>
-                            </FormGroup>
+                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                               <Col sm={5}>
+                               <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Yo, pick a file!" onChange= {this.handlechange} multiple/>
+                               </Col>
+                             </FormGroup>
                             <FormGroup check row>
                                 <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save and Next</Button>
