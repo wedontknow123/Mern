@@ -115,13 +115,34 @@ exports.get9=function(req,res){
   });
 };
 exports.get10=function(req,res){
-  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'approved' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Status = 'inactive')",function(data,err){
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'sent for approval' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Status = 'inactive')",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
      }
      else{
       httpMsgs.sendJson(req,res,data);
      }
+  });
+};
+exports.get11=function(req,res){
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'draft' and A.Trans_Type = 'New User Creation'",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+    if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
+
+exports.get12=function(req,res,empid){
+  db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+empid+"' and Trans_Type = 'New User Creation'",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
   });
 };
 
