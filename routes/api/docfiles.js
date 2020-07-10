@@ -1,9 +1,0 @@
-const express = require('express');
-const router =express.Router();
-const call= require('./calling');
-
-router.get('/',(req,res)=>{
-    call.get9(req,res);
-})
-
-module.exports=router;
