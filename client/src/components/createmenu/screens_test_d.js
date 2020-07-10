@@ -72,10 +72,10 @@ class screens_test extends Component{
                         console.log(res.data)
                         var datas =[];
                         var i;
-                        for (i=0;i<res.data.length;i++){
-                            var x ={ mo: res.data[i].Module , sc: res.data[i].Screens };
+                        for (i=1;i<res.data.length+1;i++){
+                            var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
                             console.log(x)
-                            datas[i] = x
+                            datas[i-1] = x
                             console.log(datas)
                         }                        
                         this.setState({
@@ -189,6 +189,7 @@ class screens_test extends Component{
         datas[i] = x
         console.log(datas)
     }
+    console.log(datas);
     var dataf = [...this.state.data].concat(datas)
     this.setState({
         data : dataf ,

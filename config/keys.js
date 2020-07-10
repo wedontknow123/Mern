@@ -9,5 +9,4 @@ exports.dbConfig={
     port:1433
 };
 exports.httpMsgsFormat="HTML";
-
 exports.webPort=5000;

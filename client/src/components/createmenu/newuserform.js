@@ -6,6 +6,7 @@ import {
     FormGroup,
     Input,
     Col,
+    CustomInput,
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
@@ -28,8 +29,9 @@ class newuserform extends Component{
         reason:'',
         key:'',
         done:'',
-        file:'',
-        status:'draft'     
+        file:null,
+        filepath:[],
+        status:'draft'    
     }
    
     handlechange1=(e)=>{
@@ -40,7 +42,7 @@ class newuserform extends Component{
             this.getheader()
         }
     }
-    
+   
     getheader=()=>{
         var v='';
         axios.get('/api/items/key')
@@ -60,14 +62,44 @@ class newuserform extends Component{
             }
         })
     }
-    
-    onSubmit=(event)=>{
-        if(this.state.empid){
-        event.preventDefault();
-        var now = new Date();
+    handlechange2=(e)=>{
+
         this.setState({
-            status:'approved'   // changes status to approved when we select save and next( this function shd be triggered from the screens page later)
-          })
+            file:e.target.files
+        })
+    }
+
+    handlechange3=(event)=>{
+    
+        event.preventDefault();
+        const data=new FormData();
+         console.log(this.state)
+        for(var x=0;x<this.state.file.length;x++){
+            data.append('file',this.state.file[x]);
+        }
+        axios.post('/api/doc',data,{}).
+        then(res=>{
+        console.log(res.data);
+        this.setState({
+            filepath:res.data
+        },()=>{
+            
+            for(var x=0;x<this.state.filepath.length;x++){
+            const new5={
+                UserAccess_Headerkey:this.state.key,
+                Emp_ID:this.state.empid,
+                Document_Name:this.state.filepath[x]
+            }
+            axios.post('/api/doc/rec',new5)
+            .then(res=>{
+               console.log(res)
+            })
+        }
+        })
+    
+        if(this.state.empid){
+        //event.preventDefault();
+        var now = new Date();
         const newItem={
             Trans_Type:this.state.type,
             Location:this.state.branch,
@@ -91,6 +123,7 @@ class newuserform extends Component{
             done:'yes'
         })
         }
+    })
     }
     
     render(){
@@ -100,7 +133,7 @@ class newuserform extends Component{
         }
         return(
             <div className="container">
-                <Form onSubmit={this.onSubmit}>
+                <Form onSubmit={this.handlechange3}>
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -201,11 +234,11 @@ class newuserform extends Component{
                                </Col>
                             </FormGroup>
                             <FormGroup row>
-                             <Label for="file" sm={3}>Upload attachment</Label>
-                             <Col sm={5}>
-                             <input type="file" name="file" onChange={this.handlechange1} multiple />
-                             </Col>
-                            </FormGroup>
+                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                               <Col sm={5}>
+                               <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Select the required files" multiple onChange={this.handlechange2}/>
+                               </Col>
+                             </FormGroup>
                             <FormGroup check row>
                                 <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save and Next</Button>
