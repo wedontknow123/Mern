@@ -106,9 +106,24 @@ class changes_screen extends Component{
         }, () => {
           axios.post('/api/changes_screen',this.state)
           .then(res=>{
+            var x=res.data             
+            if(this.state.data.length!==0)
+            {              
+              var d = (this.state.data).map(da => {                                    
+                  return da.sc
+              })                                 
+              const z = x.filter(function(item) {
+                return !d.includes(item.Screens); 
+              })              
               this.setState({
-                  screens:res.data
-              })
+                  screens:z 
+              })      
+           }              
+            else              
+            this.setState({
+                screens:x 
+            })
+
               console.log(this.state.screens)
           })
 
@@ -301,6 +316,19 @@ class changes_screen extends Component{
           matchFrom: 'start',
           stringify: (option) => option.Emp_ID,
         });
+        const list5=(
+          <Autocomplete
+            id="Module"
+            options={this.state.items}
+            getOptionLabel={(option)=>option.Module}
+            filterOptions={filterOptions1}
+            style={{width:300}}
+            onChange={this.handlechange}
+            disabled={this.state.boola}
+            renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
+            />
+        )
+
 
 
         return(
@@ -315,16 +343,8 @@ class changes_screen extends Component{
             renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
             />
             <br/>
-            <Autocomplete
-            id="Module"
-            options={this.state.items}
-            getOptionLabel={(option)=>option.Module}
-            filterOptions={filterOptions1}
-            style={{width:300}}
-            onChange={this.handlechange}
-            disabled={this.state.boola}
-            renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
-            /><br></br>
+            {(this.state.empid != '' )?list5:''}
+            <br></br>
             {(this.state.screens.length&&this.state.module)?list2:''}
             {(this.state.selectedscreen.length)?list3:''}
 

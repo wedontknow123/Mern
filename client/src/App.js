@@ -12,7 +12,7 @@ import newuserform from './components/createmenu/newuserform';
 import editdraftform from './components/createmenu/editdraftform';
 import deleteform from './components/createmenu/deleteform';
 import {loadUser} from './actions/authActions';
-import screens from './components/createmenu/screens';
+
 import PropTypes from 'prop-types';
 import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
@@ -36,7 +36,7 @@ class App extends Component{
       <GlobalContextProvider>
        <AppNavbar/>
 
-      {/* <Route exact path ='/options/newuser/screens' component={screens}/> */}
+      
       <Route exact path ='/options/newuser/screens_test' component={screens_test}/>
       <Route exact path ='/options/editdraftform/screens_test_d' component={screens_test_d}/>
       <Route exact path='/options/newuser' component={newuserform}/> 

@@ -81,6 +81,7 @@ class screens_test extends Component{
                         this.setState({
                             data : datas,                 
                             })
+                        
                         console.log(this.state)
                       })              
                 })
@@ -105,9 +106,28 @@ class screens_test extends Component{
         }, () => {
           axios.post('/api/screens_test_d',this.state)
           .then(res=>{
+              //here
+              var x=res.data             
+              if(this.state.data.length!==0)
+              {              
+                var d = (this.state.data).map(da => {                                    
+                    return da.sc
+                })
+                console.log(x)  
+                console.log(d)                    
+                const z = x.filter(function(item) {
+                  return !d.includes(item.Screens); 
+                })              
+                console.log(z)
+                this.setState({
+                    screens:z 
+                })      
+             }              
+              else              
               this.setState({
-                  screens:res.data
+                  screens:x 
               })
+              
               console.log(this.state.screens)
           })
 
@@ -193,7 +213,7 @@ class screens_test extends Component{
     this.setState({
         data : dataf ,
         screens:[],
-        module:'',
+        // module:'', 
         selectedscreen:[],
         boola:false
         })
@@ -287,6 +307,18 @@ class screens_test extends Component{
           matchFrom: 'start',
           stringify: (option) => option.Emp_ID,
         });
+        const list5=(
+          <Autocomplete
+            id="Module"
+            options={this.state.items}
+            getOptionLabel={(option)=>option.Module}
+            filterOptions={filterOptions1}
+            style={{width:300}}
+            onChange={this.handlechange}
+            disabled={this.state.boola}
+            renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
+            />
+        )
 
 
         return(
@@ -301,16 +333,8 @@ class screens_test extends Component{
             renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
             />
             <br/>
-            <Autocomplete
-            id="Module"
-            options={this.state.items}
-            getOptionLabel={(option)=>option.Module}
-            filterOptions={filterOptions1}
-            style={{width:300}}
-            onChange={this.handlechange}
-            disabled={this.state.boola}
-            renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
-            /><br></br>
+            {(this.state.empid != '' )?list5:''}
+            <br></br>
             {(this.state.screens.length&&this.state.module)?list2:''}
             {(this.state.selectedscreen.length)?list3:''}
 
