@@ -13,7 +13,6 @@ import {connect} from 'react-redux';
 import {addItem} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
-import e from 'express';
 var dateFormat = require('dateformat');
 class newuserform extends Component{
     state={
@@ -30,9 +29,9 @@ class newuserform extends Component{
         reason:'',
         key:'',
         done:'',
-        file:'',
-        filename:'',
-        status:'draft'     
+        file:null,
+        filepath:[],
+        status:'draft'    
     }
    
     handlechange1=(e)=>{
@@ -43,13 +42,7 @@ class newuserform extends Component{
             this.getheader()
         }
     }
-    handlechange=(e)=>{
-        console.log(e.target.files);
-        this.setState({
-            file:e.target.files[0],
-            filename:e.target.files[0].name
-        })
-    }
+   
     getheader=()=>{
         var v='';
         axios.get('/api/items/key')
@@ -69,11 +62,43 @@ class newuserform extends Component{
             }
         })
     }
-    
+    handlechange2=(e)=>{
+
+        this.setState({
+            file:e.target.files
+        })
+    }
+
     handlechange3=(event)=>{
-        e.preventDefault();
-        if(this.state.empid){
+    
         event.preventDefault();
+        const data=new FormData();
+         console.log(this.state)
+        for(var x=0;x<this.state.file.length;x++){
+            data.append('file',this.state.file[x]);
+        }
+        axios.post('/api/doc',data,{}).
+        then(res=>{
+        console.log(res.data);
+        this.setState({
+            filepath:res.data
+        },()=>{
+            
+            for(var x=0;x<this.state.filepath.length;x++){
+            const new5={
+                UserAccess_Headerkey:this.state.key,
+                Emp_ID:this.state.empid,
+                Document_Name:this.state.filepath[x]
+            }
+            axios.post('/api/doc/rec',new5)
+            .then(res=>{
+               console.log(res)
+            })
+        }
+        })
+    
+        if(this.state.empid){
+        //event.preventDefault();
         var now = new Date();
         const newItem={
             Trans_Type:this.state.type,
@@ -98,6 +123,7 @@ class newuserform extends Component{
             done:'yes'
         })
         }
+    })
     }
     
     render(){
@@ -210,7 +236,7 @@ class newuserform extends Component{
                             <FormGroup row>
                                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
                                <Col sm={5}>
-                               <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Yo, pick a file!" onChange= {this.handlechange} multiple/>
+                               <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Select the required files" multiple onChange={this.handlechange2}/>
                                </Col>
                              </FormGroup>
                             <FormGroup check row>

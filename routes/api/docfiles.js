@@ -1,25 +1,43 @@
 const express = require('express');
-const router =express.Router();
 const call= require('./calling');
-const fileUpload=require('express-fileupload');
 const app=express();
-app.use(fileUpload());
+var multer=require('multer');
+var cors=require('cors');
+const { Time } = require('mssql');
 var a='';
-router.post('/upload',(req,res)=>{
-    call.get9(req2,res2,function(data){
-        a=data;
-        if(req.files===null){
-            return res.status(400).json({msg:'No file uploaded'});
-        }
-        const file=req.files.file;
+app.use(cors())
 
-        file.mv(`${a}/${file.name}`,err=>{
-            if(err){
-                console.error(err);
-                return res.status(500).send(err);
-            }
-            res.json({fileName:file.name,filePath:`/uploads/${file.name}`});
-        })
-    });
+app.post('/',function(req,res){
+    call.get9(req,res,function(data){
+        a=data;
+     
+    multer({storage:multer.diskStorage(
+         
+        {
+        destination:function(req,file,cb){
+            cb(null,a)
+        },
+        filename:function(req,file,cb){
+            cb(null,Date.now()+"-"+file.originalname)
+        }
+    
+    }
+    )}).array('file')(req,res,function(err){
+        if(err instanceof multer.MulterError){
+            return res.status(503).json(err)
+        }
+        else if(err){
+            res.status(503).json(err)
+            console.log(err);
+        }
+        var arr=[];
+        for(var x=0;x<req.files.length;x++){
+        arr[x]=req.files[x].path
+     } console.log(arr);
+     return res.status(200).send(arr) 
+    })
+
 })
-module.exports=router;
+})
+
+module.exports=app;

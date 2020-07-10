@@ -256,6 +256,30 @@ catch(ex){
 httpMsgs.show500(req,resp,ex);
 }
 };
+exports.add6=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("Insert into User_Document (UserAccess_Headerkey,Emp_ID,Document_Name) Values('%d','%d','%s')",data.UserAccess_Headerkey,data.Emp_ID,data.Document_Name);
+      db.executeSql(sql,function(data,err){
+        if(err){ 
+         httpMsgs.show500(req,resp,err);
+        }
+        else{
+         httpMsgs.send200(req,resp);
+        }
+        });
+}
+else{
+     throw new Error("Input not valid");
+}
+}
+catch(ex){
+httpMsgs.show500(req,resp,ex);
+}
+};
 exports.login=function(req,resp,reqbody){
   try{
     var a;

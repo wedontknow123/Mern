@@ -10,5 +10,3 @@ exports.dbConfig={
 };
 exports.httpMsgsFormat="HTML";
 exports.webPort=5000;
-
-
