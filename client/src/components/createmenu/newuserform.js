@@ -14,6 +14,7 @@ import {addItem} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 var dateFormat = require('dateformat');
+var now = new Date();
 class newuserform extends Component{
     state={
         type:'New User Creation',
@@ -82,12 +83,13 @@ class newuserform extends Component{
        this.setState({
            filepath:res.data
        },()=>{
-           
+
            for(var x=0;x<this.state.filepath.length;x++){
            const new5={
                UserAccess_Headerkey:this.state.key,
                Emp_ID:this.state.empid,
-               Document_Name:this.state.filepath[x]
+               Document_Name:this.state.filepath[x],
+               Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
            }
            axios.post('/api/doc/rec',new5)
            .then(res=>{
@@ -110,7 +112,6 @@ class newuserform extends Component{
     
         
         if(this.state.empid){
-        var now = new Date();
         const newItem={
             Trans_Type:this.state.type,
             Location:this.state.branch,

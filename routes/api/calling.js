@@ -283,7 +283,7 @@ exports.add6=function(req,resp,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-      var sql=util.format("Insert into User_Document (UserAccess_Headerkey,Emp_ID,Document_Name) Values('%d','%d','%s')",data.UserAccess_Headerkey,data.Emp_ID,data.Document_Name);
+      var sql=util.format("Insert into User_Document (UserAccess_Headerkey,Emp_ID,Document_Name,Trans_Datetime) Values('%d','%d','%s','%s')",data.UserAccess_Headerkey,data.Emp_ID,data.Document_Name,data.Trans_Datetime);
       db.executeSql(sql,function(data,err){
         if(err){ 
          httpMsgs.show500(req,resp,err);

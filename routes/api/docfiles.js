@@ -27,12 +27,12 @@ app.post('/',function(req,res){
         }
         else if(err){
             res.status(503).json(err)
-            console.log(err);
         }
         var arr=[];
         for(var x=0;x<req.files.length;x++){
-        arr[x]=req.files[x].path
-     } console.log(arr);
+        arr[x]=req.files[x].filename
+     } 
+     //console.log(arr);
      return res.status(200).send(arr) 
     })
 
