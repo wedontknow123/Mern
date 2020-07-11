@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+//import screens_test_d from './screens_test_d';
 import {
     Button,
     Label,
@@ -6,22 +7,24 @@ import {
     FormGroup,
     Input,
     Col,
-    CustomInput,
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
 import {addItem} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
+//import screens from './screens';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 var dateFormat = require('dateformat');
-class newuserform extends Component{
+class changes_required extends Component{
     state={
-        type:'New User Creation',
+        type:'Changes Required',
         branch:'',
         name:'',
         desig:"",
         depart:"",
-        empid:null,
+        empid:"",
         email:'',
         doj:'',
         emptype:'Permanent',
@@ -29,18 +32,83 @@ class newuserform extends Component{
         reason:'',
         key:'',
         done:'',
-        file:null,
-        filepath:[],
-        status:'draft'    
+        status:'',
+        items: []
     }
-   
+
+    handlechange = (values,event) => {        // for combobox till the next @
+        if(event!==null){
+         var a=event.Emp_ID;
+         console.log(a)
+      this.setState({
+        empid: a
+      }, () => {
+        axios.post('/api/changes_required',this.state)
+        .then(res=>{
+            console.log(res.data)
+              var r = res.data;
+              var x = r[0];
+              console.log(r);
+              this.setState({
+                branch:x.Location,
+                name:x.Emp_Name,
+                desig:x.Emp_Designation,
+                depart:x.Emp_Department,
+                empid:x.Emp_ID,
+                email:x.Emp_Email,
+                doj:dateFormat(x.DOJ, "yyyy-mm-dd"),
+                emptype:x.Employee_Type,
+                software:x.Software,
+                reason:x.Reason,
+                key:x.UserAccess_Headerkey,
+                status:x.Status
+            })
+             
+            console.log(this.state)
+            this.getheader() 
+        })
+
+      });
+  }
+      if(event==null){
+          this.setState({
+             branch:'',
+             name:'',
+             desig:"",
+             depart:"",
+             empid:"",
+             email:'',
+             doj:'',
+             emptype:'Permanent',
+             software:'FS',
+             reason:'',
+             key:'',
+             done:'',
+             status:'draft',
+             boola:'true'
+          })
+      }
+
+  }
+
+    componentDidMount(){
+        axios.get('/api/changes_required')
+        .then(res=>{
+            this.setState({
+                items:res.data
+            })
+            console.log(this.state.item)
+        })
+
+    }        // @
+
     handlechange1=(e)=>{
         const value=e.target.value;
         this.setState({[e.target.name]:value});
-        console.log(value);
-        
+        console.log(value); 
+               
     }
-   
+
     getheader=()=>{
         var v='';
         axios.get('/api/items/key')
@@ -58,93 +126,68 @@ class newuserform extends Component{
                     key:v
                 })
             }
-            this.handlechange3();
+            console.log(this.state.key)
         })
     }
-    handlechange2=(e)=>{
 
-        this.setState({
-            file:e.target.files
-        })
-    }
-    
-    handlechange4=(e)=>{
-        e.preventDefault();
-        if(this.state.file!==null){
-        const data=new FormData();
-        console.log(this.state)
-       for(var x=0;x<this.state.file.length;x++){
-           data.append('file',this.state.file[x]);
-       }
-       axios.post('/api/doc',data,{}).
-       then(res=>{
-       console.log(res.data);
-       this.setState({
-           filepath:res.data
-       },()=>{
-           
-           for(var x=0;x<this.state.filepath.length;x++){
-           const new5={
-               UserAccess_Headerkey:this.state.key,
-               Emp_ID:this.state.empid,
-               Document_Name:this.state.filepath[x]
-           }
-           axios.post('/api/doc/rec',new5)
-           .then(res=>{
-              console.log(res);
-              if(this.state.empid!==null){
-                this.getheader()
-            }
-           })
-       }
-       })
-       })
-    }
-    else{
-        if(this.state.empid!==null){
-            this.getheader()
-        }
-    }
-    }
-    handlechange3=(event)=>{
-    
-        
-        if(this.state.empid){
+
+    onSubmit=(event)=>{
+
+               
+        event.preventDefault();
         var now = new Date();
+        console.log(this.state.key)
         const newItem={
             Trans_Type:this.state.type,
             Location:this.state.branch,
             Emp_Name:this.state.name,
             Emp_Designation:this.state.desig,
             Emp_Department:this.state.depart,
-            Emp_ID:this.state.empid,
             Emp_Email:this.state.email,
             DOJ:this.state.doj,
             Employee_Type:this.state.emptype,
             Software:this.state.software,
             Reason:this.state.reason,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-            UserAccess_Headerkey:this.state.key,
-            Status:this.state.status
+            Status:'sent for approval',            
+            Emp_ID:this.state.empid,
+            UserAccess_Headerkey:this.state.key
         }
-        
-        this.props.addItem(newItem);
-        console.log(newItem.Trans_Datetime);
-        this.setState({
-            done:'yes'
-        })
-        }
-   
+
+        axios.post('/api/changes_required/save',newItem)
+          .then(res=>{
+            console.log(res);
+            this.setState({
+                done:'yes',
+                // draft:'false'
+              })
+          })
     }
-    
+
     render(){
-        if(this.state.empid&&this.state.done=='yes'){
-            //return <Redirect to='/options/newuser/screens'/>
-            return <Redirect to='/options/newuser/screens_test'/>
+        if(this.state.done=='yes'){
+            return (
+            <Redirect to='/changes_required/changes_screen'/>
+            // <div><screens_test_d empid = {this.state.empid}/></div>
+             )
         }
+        const filterOptions1 = createFilterOptions({   //for combo box till the next @
+            matchFrom: 'start',
+            stringify: (option) => option.Emp_ID,
+          });
         return(
             <div className="container">
-                <Form onSubmit={this.handlechange4}>
+            <Autocomplete
+            id="EmpId"
+            options={this.state.items}
+            getOptionLabel={(option)=>option.Emp_ID}
+            filterOptions={filterOptions1}
+            style={{width:300}}
+            onChange={this.handlechange}
+            renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
+            />                                        {/* @ */}
+           
+                <Form onSubmit={this.onSubmit} disabled={true}>
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -177,40 +220,35 @@ class newuserform extends Component{
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="name" id="name" onChange={this.handlechange1} />
+                             <Input type="text" name="name" id="name" value={this.state.name} onChange={this.handlechange1} />
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="desig" sm={3}>Designation:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="desig" id="desig" onChange={this.handlechange1}/>
+                             <Input type="text" name="desig" id="desig" value={this.state.desig} onChange={this.handlechange1}/>
                               </Col>
-                         </FormGroup>  
+                         </FormGroup>
                          <FormGroup row>
                           <Label for="depart" sm={3}>Department:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="depart" id="depart" onChange={this.handlechange1}/>
+                             <Input type="text" name="depart" id="depart" value={this.state.depart} onChange={this.handlechange1}/>
                               </Col>
-                         </FormGroup>  
-                         <FormGroup row>
-                          <Label for="emp_id" sm={3}>Employee Id:</Label>
-                           <Col sm={5}>
-                             <Input type="text" name="empid" id="empid" onChange={this.handlechange1}/>
-                              </Col>
-                         </FormGroup> 
+                         </FormGroup>
                          <FormGroup row>
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
-                             <Input type="email" name="email" id="email" onChange={this.handlechange1}/>
+                             <Input type="email" name="email" id="email" value={this.state.email} onChange={this.handlechange1}/>
                               </Col>
-                         </FormGroup> 
+                         </FormGroup>
                          <FormGroup row>
                              <Label for="doj"sm={3}>Date of Joining</Label>
                              <Col sm={5}>
-                                   <Input
+                                   <Input                                     
                                      type="date"
                                       name="doj"
                                       id="doj"
+                                      value={this.state.doj}
                                       onChange={this.handlechange1}
                                     />
                                     </Col>
@@ -229,7 +267,7 @@ class newuserform extends Component{
                             <FormGroup row>
                             <Label for="software"sm={3}>Software</Label>
                             <Col sm={5}>
-                            <Input type="select" name="software" id="Software" onChange={this.handlechange1} value={this.state.software}>                              
+                            <Input type="select" name="software" id="Software" onChange={this.handlechange1} value={this.state.software}>
                                <option value='FS'>FS</option>
                                <option value='SS'>SS</option>
                                <option value='Focus'>Focus</option>
@@ -241,31 +279,18 @@ class newuserform extends Component{
                             <FormGroup row>
                                <Label for="exampleText"sm={3}>Reason</Label>
                                <Col sm={5}>
-                               <Input type="textarea" name="reason" id="reason" onChange={this.handlechange1}/>
+                               <Input type="textarea" name="reason" id="reason" value={this.state.reason} onChange={this.handlechange1}/>
                                </Col>
                             </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
-                               <Col sm={5}>
-                               <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Select the required files" multiple onChange={this.handlechange2}/>
-                               </Col>
-                             </FormGroup>
                             <FormGroup check row>
-                                <Col sm={{ size: 10, offset: 3 }}>
+                               <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save and Next</Button>
-                                </Col>
-                                {/* <Col sm={{ size: 10, offset: 3 }}>
-                                 <Button >Save as Draft</Button>
-                                </Col> */}
-                            </FormGroup>
-
-
-                </Form>            
+                                   </Col>
+                                 </FormGroup>
+                          </Form>
             </div>
         );
     }
 }
-const mapStateToProps=state=>({
-    item:state.item
-  });
-  export default connect(mapStateToProps,{addItem})(newuserform);
+
+  export default (changes_required);

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import screens_test_d from './screens_test_d';
+//import screens_test_d from './screens_test_d';
 import {
     Button,
     Label,
@@ -13,7 +13,7 @@ import {connect} from 'react-redux';
 import {addItem} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
-import screens from './screens';
+//import screens from './screens';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 var dateFormat = require('dateformat');
@@ -32,7 +32,7 @@ class editdraftform extends Component{
         key:'',
         done:'',
         status:'draft',
-        item: []
+        items: []
     }
 
     handlechange = (values,event) => {        // for combobox till the next @
@@ -153,15 +153,17 @@ class editdraftform extends Component{
           });
         return(
             <div className="container">
-            <Autocomplete
-            id="EmpId"
-            options={this.state.items}
-            getOptionLabel={(option)=>option.Emp_ID}
-            filterOptions={filterOptions1}
-            style={{width:300}}
-            onChange={this.handlechange}
-            renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
-            />                                        {/* @ */}
+                
+                    <Autocomplete
+                    id="EmpId"
+                    options={this.state.items}
+                    getOptionLabel={(option)=>option.Emp_ID}
+                    filterOptions={filterOptions1}
+                    style={{width:300}}
+                    onChange={this.handlechange}
+                    renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
+                    />
+                                                      {/* @ */}
            
                 <Form onSubmit={this.onSubmit} disabled={true}>
                         <FormGroup tag="fieldset" row>

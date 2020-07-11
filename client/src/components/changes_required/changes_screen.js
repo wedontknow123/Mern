@@ -31,7 +31,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 var a='';
 var dateFormat = require('dateformat');
 
-class screens_test extends Component{
+class changes_screen extends Component{
 
 
         state = {
@@ -55,7 +55,7 @@ class screens_test extends Component{
               this.setState({
                   empid: a
               }, () => {
-              axios.post('/api/screens_test_d/hkey',this.state)
+              axios.post('/api/changes_screen/hkey',this.state)
                 .then(res=>{
                     console.log(res.data)
                     var r = res.data;
@@ -67,22 +67,22 @@ class screens_test extends Component{
                     })
                     console.log(this.state)
                     //do smthng abt data: [] here, to fill the table
-                    axios.post('/api/screens_test_d/data',this.state)
+                    axios.post('/api/changes_screen/data',this.state)
                       .then(res=>{
                         console.log(res.data)
                         var datas =[];
                         var i;
-                        for (i=1;i<res.data.length+1;i++){
-                            var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
+                        for (i=0;i<res.data.length;i++){
+                            var x ={ mo: res.data[i].Module , sc: res.data[i].Screens };
                             console.log(x)
-                            datas[i-1] = x
+                            datas[i] = x
                             console.log(datas)
                         }                        
                         this.setState({
                             data : datas,                 
                             })
-                        
-                        console.log(this.state)
+                        this.getheader();
+                        console.log(this.state.key)
                       })              
                 })
 
@@ -104,30 +104,26 @@ class screens_test extends Component{
         this.setState({
           module: a
         }, () => {
-          axios.post('/api/screens_test_d',this.state)
+          axios.post('/api/changes_screen',this.state)
           .then(res=>{
-              //here
-              var x=res.data             
-              if(this.state.data.length!==0)
-              {              
-                var d = (this.state.data).map(da => {                                    
-                    return da.sc
-                })
-                console.log(x)  
-                console.log(d)                    
-                const z = x.filter(function(item) {
-                  return !d.includes(item.Screens); 
-                })              
-                console.log(z)
-                this.setState({
-                    screens:z 
-                })      
-             }              
-              else              
+            var x=res.data             
+            if(this.state.data.length!==0)
+            {              
+              var d = (this.state.data).map(da => {                                    
+                  return da.sc
+              })                                 
+              const z = x.filter(function(item) {
+                return !d.includes(item.Screens); 
+              })              
               this.setState({
-                  screens:x 
-              })
-              
+                  screens:z 
+              })      
+           }              
+            else              
+            this.setState({
+                screens:x 
+            })
+
               console.log(this.state.screens)
           })
 
@@ -161,18 +157,31 @@ class screens_test extends Component{
            })
        }
 
-    }  
+    } 
+    
+    getheader=()=>{
+        axios.get('/api/items/key')
+        .then(res=>{
+          this.setState({
+            key:res.data[0]['']
+          })
+          console.log(this.state.key)
+        })
+      }
+    
   //this will save the data to the database 
    handleclick=(e)=>{
 
     var now = new Date();
     var i;
     console.log(this.state.key);
-    var x ={ UserAccess_Headerkey:this.state.key }
-    axios.post('/api/screens_test_d/del',x)    
-    .then(res=>{
-      console.log(res);
-    })
+    
+    console.log(this.state.key);
+    // var x ={ UserAccess_Headerkey:this.state.key }
+    // axios.post('/api/changes_screen/del',x)    
+    // .then(res=>{
+    //   console.log(res);
+    // })
     for (i=0;i<this.state.data.length;i++){
        const new2={
            Module:this.state.data[i].mo,
@@ -180,7 +189,7 @@ class screens_test extends Component{
            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
            UserAccess_Headerkey:this.state.key
           }         
-          axios.post('/api/screens_test_d/save',new2)
+          axios.post('/api/changes_screen/save',new2)
           .then(res=>{
             console.log(res);
           })
@@ -209,12 +218,11 @@ class screens_test extends Component{
         datas[i] = x
         console.log(datas)
     }
-    console.log(datas);
     var dataf = [...this.state.data].concat(datas)
     this.setState({
         data : dataf ,
         screens:[],
-        // module:'', 
+        module:'',
         selectedscreen:[],
         boola:false
         })
@@ -222,13 +230,13 @@ class screens_test extends Component{
    }
 
     componentDidMount(){
-      axios.get('/api/screens_test_d')
+      axios.get('/api/changes_screen')
         .then(res=>{
           this.setState({
               items:res.data
        })
     })
-      axios.get('/api/screens_test_d/empid')
+      axios.get('/api/changes_screen/empid')
         .then(res=>{
            this.setState({
                items1:res.data
@@ -240,7 +248,7 @@ class screens_test extends Component{
     render(){
         if(this.state.done=='yes'){
             //return <Redirect to='/options/newuser/screens'/>
-            return <Redirect to='/options'/>
+            return <Redirect to='/'/>
         }
 
         const tableIcons = {
@@ -322,6 +330,7 @@ class screens_test extends Component{
         )
 
 
+
         return(
           <div>
             <Autocomplete
@@ -389,4 +398,4 @@ class screens_test extends Component{
     }
 }
 
-export default (screens_test);
+export default (changes_screen);

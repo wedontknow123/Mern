@@ -12,11 +12,12 @@ import newuserform from './components/createmenu/newuserform';
 import editdraftform from './components/createmenu/editdraftform';
 import deleteform from './components/createmenu/deleteform';
 import {loadUser} from './actions/authActions';
-import screens from './components/createmenu/screens';
+
 import PropTypes from 'prop-types';
 import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
-
+import changes_required from './components/changes_required/changes_required'
+import changes_screen from './components/changes_required/changes_screen'
 import GlobalContextProvider from './components/contexts/GlobalContext';
 import deactivate from './components/deactivate/deactivate';
 import screens_test from './components/createmenu/screens_test';
@@ -35,7 +36,7 @@ class App extends Component{
       <GlobalContextProvider>
        <AppNavbar/>
 
-      {/* <Route exact path ='/options/newuser/screens' component={screens}/> */}
+      
       <Route exact path ='/options/newuser/screens_test' component={screens_test}/>
       <Route exact path ='/options/editdraftform/screens_test_d' component={screens_test_d}/>
       <Route exact path='/options/newuser' component={newuserform}/> 
@@ -44,6 +45,10 @@ class App extends Component{
       <Route exact path='/' component={home}/>
       <Route exact path='/options' component={createmenu}/>
       <Route exact path='/deactivate' component={deactivate}/>
+      <Route exact path='/changes_required' component={changes_required}/>
+      <Route exact path='/changes_required/changes_screen' component={changes_screen}/>
+
+
     </GlobalContextProvider>
     </div>
 

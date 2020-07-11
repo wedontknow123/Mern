@@ -5,7 +5,7 @@ exports.dbConfig={
     user:"tejasp",
     //user:"sourish",
     password:"tejasp@2000",
-   // password:"sourish@123",
+    //password:"sourish@123",
     port:1433
 };
 exports.httpMsgsFormat="HTML";
