@@ -114,13 +114,10 @@ class newuserform extends Component{
     }
    
     handlechange3=(event)=>{
-<<<<<<< HEAD
         
         console.log(this.state)
-=======
     
         console.log(this.props)
->>>>>>> 62a2e0fae323bdec9fa82de2f587cb1c9d45f22f
         if(this.state.empid){
         const newItem={
             Trans_Type:this.state.type,
@@ -282,13 +279,10 @@ class newuserform extends Component{
     }
 }
 const mapStateToProps=state=>({
-<<<<<<< HEAD
     item:state.item,
-    auth:state.auth
-=======
+    auth:state.auth,
     item:state.item.items,
     hkey:state.item.hkey,
     eid:state.item.eid,
->>>>>>> 62a2e0fae323bdec9fa82de2f587cb1c9d45f22f
   });
   export default connect(mapStateToProps,{addItem,getEmpid,getHeaderkey})(newuserform);
