@@ -4,7 +4,7 @@ const call= require('./calling');
 
 router.post('/',function(req,res){
     var reqbody=JSON.stringify(req.body);
-    console.log(reqbody);
+    //console.log(reqbody);
     call.add6(req,res,reqbody);
 })
 module.exports=router;

@@ -13,6 +13,8 @@ import {connect} from 'react-redux';
 import {addItem} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 var dateFormat = require('dateformat');
 var now = new Date();
 class newuserform extends Component{
@@ -32,16 +34,19 @@ class newuserform extends Component{
         done:'',
         file:null,
         filepath:[],
+        username:'',
         status:'draft'    
     }
-   
+    static propTypes={
+        auth:PropTypes.object.isRequired
+    }
     handlechange1=(e)=>{
         const value=e.target.value;
         this.setState({[e.target.name]:value});
         console.log(value);
         
     }
-   
+
     getheader=()=>{
         var v='';
         axios.get('/api/items/key')
@@ -73,13 +78,13 @@ class newuserform extends Component{
         e.preventDefault();
         if(this.state.file!==null){
         const data=new FormData();
-        console.log(this.state)
+        //console.log(this.state)
        for(var x=0;x<this.state.file.length;x++){
            data.append('file',this.state.file[x]);
        }
        axios.post('/api/doc',data,{}).
        then(res=>{
-       console.log(res.data);
+       //console.log(res.data);
        this.setState({
            filepath:res.data
        },()=>{
@@ -93,7 +98,6 @@ class newuserform extends Component{
            }
            axios.post('/api/doc/rec',new5)
            .then(res=>{
-              console.log(res);
               if(this.state.empid!==null){
                 this.getheader()
             }
@@ -108,9 +112,10 @@ class newuserform extends Component{
         }
     }
     }
+   
     handlechange3=(event)=>{
-    
         
+        console.log(this.state)
         if(this.state.empid){
         const newItem={
             Trans_Type:this.state.type,
@@ -139,6 +144,8 @@ class newuserform extends Component{
     }
     
     render(){
+        const{isAuthenticated,user}=this.props.auth;
+
         if(this.state.empid&&this.state.done=='yes'){
             //return <Redirect to='/options/newuser/screens'/>
             return <Redirect to='/options/newuser/screens_test'/>
@@ -267,6 +274,7 @@ class newuserform extends Component{
     }
 }
 const mapStateToProps=state=>({
-    item:state.item
+    item:state.item,
+    auth:state.auth
   });
   export default connect(mapStateToProps,{addItem})(newuserform);
