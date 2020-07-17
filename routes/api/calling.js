@@ -155,8 +155,8 @@ exports.add=function(req,resp,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-        var sql="INSERT INTO UserAccess_Header(Trans_Type,Location,Reason,Emp_ID,Emp_Name,Emp_Designation,Emp_Department,Emp_Email,DOJ,Employee_Type,Software,Trans_Datetime,UserAccess_Headerkey,Status) VALUES";
-        sql+= util.format("('%s','%s','%s','%d','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s')",data.Trans_Type,data.Location,data.Reason,data.Emp_ID,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.UserAccess_Headerkey,data.Status);
+        var sql="INSERT INTO UserAccess_Header(Trans_Type,Location,Reason,Emp_ID,Emp_Name,Emp_Designation,Emp_Department,Emp_Email,DOJ,Employee_Type,Software,Trans_Datetime,UserAccess_Headerkey,Status,User_Email) VALUES";
+        sql+= util.format("('%s','%s','%s','%d','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%s')",data.Trans_Type,data.Location,data.Reason,data.Emp_ID,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.UserAccess_Headerkey,data.Status,data.User_Email);
         db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
@@ -256,10 +256,9 @@ exports.add4=function(req,resp,reqbody){
 exports.add5=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");
-    
     var data = JSON.parse(reqbody);
     if(data){
-      var sql=util.format("Insert into UserAccess_Header (Trans_Type,Reason,Trans_Datetime,UserAccess_Headerkey,Emp_ID,Status) Values('%s','%s','%s','%d','%d','%s')",data.Trans_Type,data.Reason,data.Trans_Datetime,data.UserAccess_Headerkey,data.Emp_ID,data.Status);
+      var sql=util.format("Insert into UserAccess_Header (Trans_Type,Reason,Trans_Datetime,UserAccess_Headerkey,Emp_ID,Status,User_Email) Values('%s','%s','%s','%d','%d','%s','%s')",data.Trans_Type,data.reason,data.Trans_Datetime,data.UserAccess_Headerkey,data.Emp_ID,data.Status,data.User_Email);
       db.executeSql(sql,function(data,err){
         if(err){ 
          httpMsgs.show500(req,resp,err);

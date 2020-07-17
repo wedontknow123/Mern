@@ -128,7 +128,7 @@ class editdraftform extends Component{
             Reason:this.state.reason,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Status:this.state.status,            
-            Emp_ID:this.state.empid,
+            Emp_ID:this.state.empid
         }
         this.props.getEmpid(this.state.empid);
         this.props.getHeaderkey(this.state.key);
@@ -280,7 +280,7 @@ class editdraftform extends Component{
 const mapStateToProps=state=>({
     item:state.item.items,
     hkey:state.item.hkey,
-    eid:state.item.eid,
+    eid:state.item.eid
   });
   export default connect(mapStateToProps,{getEmpid,getHeaderkey})(editdraftform);  
 //export default (editdraftform);

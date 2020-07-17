@@ -34,7 +34,6 @@ class newuserform extends Component{
         done:'',
         file:null,
         filepath:[],
-        username:'',
         status:'draft'    
     }
     static propTypes={
@@ -78,13 +77,11 @@ class newuserform extends Component{
         e.preventDefault();
         if(this.state.file!==null){
         const data=new FormData();
-        //console.log(this.state)
        for(var x=0;x<this.state.file.length;x++){
            data.append('file',this.state.file[x]);
        }
        axios.post('/api/doc',data,{}).
        then(res=>{
-       //console.log(res.data);
        this.setState({
            filepath:res.data
        },()=>{
@@ -133,9 +130,10 @@ class newuserform extends Component{
             Reason:this.state.reason,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             UserAccess_Headerkey:this.state.key,
-            Status:this.state.status
+            Status:this.state.status,
+            User_Email:this.props.auth.user.Email
         }
-        
+        console.log(newItem)
         this.props.addItem(newItem);
         this.props.getEmpid(this.state.empid);
         this.props.getHeaderkey(this.state.key);
@@ -149,8 +147,6 @@ class newuserform extends Component{
     }
     
     render(){
-        const{isAuthenticated,user}=this.props.auth;
-
         if(this.state.empid&&this.state.done=='yes'){
             //return <Redirect to='/options/newuser/screens'/>
             return <Redirect to='/options/newuser/screens_test'/>
@@ -285,4 +281,4 @@ const mapStateToProps=state=>({
     hkey:state.item.hkey,
     eid:state.item.eid,
   });
-  export default connect(mapStateToProps,{addItem,getEmpid,getHeaderkey})(newuserform);
+export default connect(mapStateToProps,{addItem,getEmpid,getHeaderkey})(newuserform);

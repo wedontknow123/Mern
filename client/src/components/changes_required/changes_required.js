@@ -153,7 +153,8 @@ class changes_required extends Component{
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Status:'sent for approval',            
             Emp_ID:this.state.empid,
-            UserAccess_Headerkey:this.state.key
+            UserAccess_Headerkey:this.state.key,
+            User_Email:this.props.auth.user.Email
         }
         this.props.getEmpid(this.state.empid);
         this.props.getHeaderkey(this.state.key);
@@ -302,5 +303,6 @@ const mapStateToProps=state=>({
     hkey:state.item.hkey,
     okey:state.item.okey,
     eid:state.item.eid,
+    auth:state.auth
   });
   export default connect(mapStateToProps,{getEmpid,getHeaderkey,getOldkey})(changes_required); 

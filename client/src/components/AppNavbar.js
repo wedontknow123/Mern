@@ -16,7 +16,6 @@ import RegisterModal from './auth/RegisterModal';
 import Logout from './auth/Logout';
 import LoginModal from './auth/LoginModal';
 import Trelleborglogo from '../Trelleborg2.jpeg';
-import { GlobalContext } from './contexts/GlobalContext';
 var a='';
 class AppNavbar extends Component{
     state={
@@ -26,7 +25,6 @@ class AppNavbar extends Component{
      static propTypes={
          auth:PropTypes.object.isRequired
      }
-     static contextType=GlobalContext;
 toggle=()=>{
     this.setState({
     isOpen:!this.state.isOpen
@@ -35,24 +33,12 @@ toggle=()=>{
  
  render(){
     const{isAuthenticated,user}=this.props.auth;
-    const {gety}=this.context; 
-    
-    const hmmm= ()=>
-    {if(user!==null){
-        a=user.Username;
-       this.setState({
-           mail:a
-       },()=>{
-           console.log(this.state.mail)
-       })
-    }};
-    
-     
+
     const authLinks=(
         <Fragment>
           <NavItem>
               <span className="navbar-text mr-3">
-                  <strong>{user?[`Welcome ${user.Username}`]:``}</strong>
+                  <strong>{user?`Welcome ${user.Username}`:``}</strong>
               </span>
           </NavItem>
           <NavItem>
@@ -60,7 +46,6 @@ toggle=()=>{
          </NavItem>
         </Fragment>
     );
-    console.log(user);
      const guestLinks=(
         <Fragment>
            <NavItem>
@@ -80,7 +65,7 @@ toggle=()=>{
                  <NavbarToggler onClick={this.toggle}/>
                  <Collapse isOpen={this.state.isOpen} navbar>
                      <Nav className="ml-auto" navbar>
-                         {isAuthenticated?[authLinks]:guestLinks}                        
+                         {isAuthenticated?authLinks:guestLinks}                        
                      </Nav>
                  </Collapse>
              </Container>

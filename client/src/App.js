@@ -18,7 +18,6 @@ import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
 import changes_required from './components/changes_required/changes_required'
 import changes_screen from './components/changes_required/changes_screen'
-import GlobalContextProvider from './components/contexts/GlobalContext';
 import deactivate from './components/deactivate/deactivate';
 import screens_test from './components/createmenu/screens_test';
 import screens_test_d from './components/createmenu/screens_test_d';
@@ -33,7 +32,7 @@ class App extends Component{
       <BrowserRouter>
       
     <div className="App">
-      <GlobalContextProvider>
+      
        <AppNavbar/>
 
       
@@ -47,9 +46,6 @@ class App extends Component{
       <Route exact path='/deactivate' component={deactivate}/>
       <Route exact path='/changes_required' component={changes_required}/>
       <Route exact path='/changes_required/changes_screen' component={changes_screen}/>
-
-
-    </GlobalContextProvider>
     </div>
 
     </BrowserRouter>

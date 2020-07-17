@@ -9,8 +9,13 @@ import {
     Input,
     Col,
     NavItem
-} from 'reactstrap';import axios from 'axios';
+} from 'reactstrap';
+import axios from 'axios';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
 var dateFormat = require('dateformat');
+
 
 class deactivate extends Component{
     state={
@@ -33,6 +38,9 @@ class deactivate extends Component{
         this.setState({
             reason:event.target.value
         })
+    }
+    static propTypes={
+        auth:PropTypes.object.isRequired
     }
     getheader=()=>{
         var v='';
@@ -66,7 +74,9 @@ class deactivate extends Component{
           reason:this.state.reason,
           Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
           UserAccess_Headerkey:this.state.UserAccess_Headerkey,
-          Trans_Type:this.state.Trans_Type
+          Trans_Type:this.state.Trans_Type,
+          User_Email:this.props.auth.user.Email
+
       }
       console.log(this.state);
       axios.post('/api/deactivate/cont',newitem)
@@ -115,5 +125,7 @@ class deactivate extends Component{
         )
     }
 }
-
-export default deactivate;
+const mapStateToProps=state=>({
+    auth:state.auth
+});
+export default connect(mapStateToProps)(deactivate);
