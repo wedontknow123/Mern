@@ -1,11 +1,35 @@
-import {GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
+import {GET_empid,GET_oldkey,GET_headerkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
 const initialState={
     items:[],
+    eid:"",
+    hkey:"",
+    okey:"",
     loading:false
 };
 
 export default function(state=initialState, action){
     switch(action.type){
+        case GET_empid:
+            return{
+                
+                ...state,
+                eid:action.payload,
+                loading:false
+            };
+        case GET_headerkey:
+        return{
+            
+            ...state,
+            hkey:action.payload,
+            loading:false
+        };
+        case GET_oldkey:
+        return{
+            
+            ...state,
+            okey:action.payload,
+            loading:false
+        };
         case GET_ITEMS:
             return{
                 

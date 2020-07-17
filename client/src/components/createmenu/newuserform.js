@@ -10,7 +10,7 @@ import {
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {addItem} from '../../actions/itemActions';
+import {addItem,getEmpid,getHeaderkey} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 var dateFormat = require('dateformat');
@@ -110,7 +110,7 @@ class newuserform extends Component{
     }
     handlechange3=(event)=>{
     
-        
+        console.log(this.props)
         if(this.state.empid){
         const newItem={
             Trans_Type:this.state.type,
@@ -130,6 +130,9 @@ class newuserform extends Component{
         }
         
         this.props.addItem(newItem);
+        this.props.getEmpid(this.state.empid);
+        this.props.getHeaderkey(this.state.key);
+        console.log(this.props)
         console.log(newItem.Trans_Datetime);
         this.setState({
             done:'yes'
@@ -267,6 +270,8 @@ class newuserform extends Component{
     }
 }
 const mapStateToProps=state=>({
-    item:state.item
+    item:state.item.items,
+    hkey:state.item.hkey,
+    eid:state.item.eid,
   });
-  export default connect(mapStateToProps,{addItem})(newuserform);
+  export default connect(mapStateToProps,{addItem,getEmpid,getHeaderkey})(newuserform);

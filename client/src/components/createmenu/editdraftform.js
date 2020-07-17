@@ -10,7 +10,7 @@ import {
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {addItem} from '../../actions/itemActions';
+import {getEmpid,getHeaderkey} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 //import screens from './screens';
@@ -37,13 +37,14 @@ class editdraftform extends Component{
 
     handlechange = (values,event) => {        // for combobox till the next @
         if(event!==null){
+         
          var a=event.Emp_ID;
          console.log(a)
       this.setState({
         empid: a
       }, () => {
         axios.post('/api/draft',this.state)
-        .then(res=>{
+        .then(res=>{            
             console.log(res.data)
               var r = res.data;
               var x = r[0];
@@ -62,7 +63,8 @@ class editdraftform extends Component{
                 key:x.UserAccess_Headerkey,
                 status:x.Status
             })
-             
+           
+            console.log(this.props)
             console.log(this.state)
         })
 
@@ -89,7 +91,9 @@ class editdraftform extends Component{
 
   }
 
-            componentDidMount(){
+    componentDidMount(){
+             
+        console.log(this.props)
                 axios.get('/api/draft')
             .then(res=>{
             this.setState({
@@ -126,7 +130,9 @@ class editdraftform extends Component{
             Status:this.state.status,            
             Emp_ID:this.state.empid,
         }
-
+        this.props.getEmpid(this.state.empid);
+        this.props.getHeaderkey(this.state.key);
+        console.log(this.props)
         axios.post('/api/draft/save',newItem)
           .then(res=>{
             console.log(res);
@@ -271,4 +277,10 @@ class editdraftform extends Component{
     }
 }
 
-  export default (editdraftform);
+const mapStateToProps=state=>({
+    item:state.item.items,
+    hkey:state.item.hkey,
+    eid:state.item.eid,
+  });
+  export default connect(mapStateToProps,{getEmpid,getHeaderkey})(editdraftform);  
+//export default (editdraftform);

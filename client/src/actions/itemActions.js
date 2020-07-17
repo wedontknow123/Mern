@@ -1,4 +1,4 @@
-import {GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
+import {GET_empid,GET_headerkey,GET_oldkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
 import axios from 'axios';
 
 export const getItems=()=>dispatch=>{
@@ -7,10 +7,29 @@ export const getItems=()=>dispatch=>{
     .then(res=>dispatch({
         type:GET_ITEMS,
         payload: res.data
-    })
-
-    
+    })    
     )
+};
+
+export const getEmpid=(eid)=>dispatch=>{   
+    dispatch({
+        type:GET_empid,
+        payload: eid
+    })    
+};
+
+export const getHeaderkey=(hkey)=>dispatch=>{
+    dispatch({
+        type:GET_headerkey,
+        payload: hkey
+    })     
+};
+
+export const getOldkey=(okey)=>dispatch=>{
+    dispatch({
+        type:GET_oldkey,
+        payload: okey
+    })     
 };
 
 

@@ -209,8 +209,8 @@ exports.add3=function(req,resp,reqbody){
     var data = JSON.parse(reqbody);
     console.log(data);
     if(data){
-        var sql="INSERT INTO UserAccess_Detail(Module,Screens,Trans_Datetime,UserAccess_Headerkey) VALUES";
-        sql+= util.format("('%s','%s','%s','%d')",data.Module,data.Screens,data.Trans_Datetime,data.UserAccess_Headerkey);
+        var sql="INSERT INTO UserAccess_Detail(Emp_ID,Module,Screens,Trans_Datetime,UserAccess_Headerkey) VALUES";
+        sql+= util.format("('%d','%s','%s','%s','%d')",data.Emp_ID,data.Module,data.Screens,data.Trans_Datetime,data.UserAccess_Headerkey);
         db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);

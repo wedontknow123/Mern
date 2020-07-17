@@ -10,7 +10,7 @@ import {
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {addItem} from '../../actions/itemActions';
+import {getEmpid,getHeaderkey,getOldkey} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 //import screens from './screens';
@@ -63,7 +63,7 @@ class changes_required extends Component{
                 key:x.UserAccess_Headerkey,
                 status:x.Status
             })
-             
+            this.props.getOldkey(x.UserAccess_Headerkey); 
             console.log(this.state)
             this.getheader() 
         })
@@ -92,6 +92,8 @@ class changes_required extends Component{
   }
 
     componentDidMount(){
+        
+        console.log(this.props)
         axios.get('/api/changes_required')
         .then(res=>{
             this.setState({
@@ -153,7 +155,9 @@ class changes_required extends Component{
             Emp_ID:this.state.empid,
             UserAccess_Headerkey:this.state.key
         }
-
+        this.props.getEmpid(this.state.empid);
+        this.props.getHeaderkey(this.state.key);
+        console.log(this.props)
         axios.post('/api/changes_required/save',newItem)
           .then(res=>{
             console.log(res);
@@ -293,4 +297,10 @@ class changes_required extends Component{
     }
 }
 
-  export default (changes_required);
+const mapStateToProps=state=>({
+    item:state.item.items,
+    hkey:state.item.hkey,
+    okey:state.item.okey,
+    eid:state.item.eid,
+  });
+  export default connect(mapStateToProps,{getEmpid,getHeaderkey,getOldkey})(changes_required); 
