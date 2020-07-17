@@ -48,54 +48,55 @@ class screens_test extends Component{
         };
         
         // for getting the empid selected and the key and accordingly set the table
-        handlechange2 = (values,event) => {        // for combobox till the next @
-          if(event!==null){                        //gotta fix backend
-              var a=event.Emp_ID;
-              console.log(a)
-              this.setState({
-                  empid: a
-              }, () => {
-              axios.post('/api/screens_test_d/hkey',this.state)
-                .then(res=>{
-                    console.log(res.data)
-                    var r = res.data;
-                    var x = r[0];
-                    console.log(r);
-                    this.setState({
-                      empid:x.Emp_ID,
-                      key:x.UserAccess_Headerkey,
-                    })
-                    console.log(this.state)
-                    //do smthng abt data: [] here, to fill the table
-                    axios.post('/api/screens_test_d/data',this.state)
-                      .then(res=>{
-                        console.log(res.data)
-                        var datas =[];
-                        var i;
-                        for (i=1;i<res.data.length+1;i++){
-                            var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
-                            console.log(x)
-                            datas[i-1] = x
-                            console.log(datas)
-                        }                        
-                        this.setState({
-                            data : datas,                 
-                            })
+         //handlechange2 = (values,event) => {        // for combobox till the next @
+        //   if(event!==null){                        //gotta fix backend
+        //       //var a=event.Emp_ID;
+              
+        //       this.setState({
+        //           empid: a,
+        //           key:b
+        //       }, () => {
+        //       // axios.post('/api/screens_test_d/hkey',this.state)
+        //       //   .then(res=>{
+        //       //       console.log(res.data)
+        //       //       var r = res.data;
+        //       //       var x = r[0];
+        //       //       console.log(r);
+        //       //       this.setState({
+        //       //         empid:x.Emp_ID,
+        //       //         key:x.UserAccess_Headerkey,
+        //       //       })
+        //             console.log(this.state)
+        //             //do smthng abt data: [] here, to fill the table
+        //             axios.post('/api/screens_test_d/data',this.state)
+        //               .then(res=>{
+        //                 console.log(res.data)
+        //                 var datas =[];
+        //                 var i;
+        //                 for (i=1;i<res.data.length+1;i++){
+        //                     var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
+        //                     console.log(x)
+        //                     datas[i-1] = x
+        //                     console.log(datas)
+        //                 }                        
+        //                 this.setState({
+        //                     data : datas,                 
+        //                     })
                         
-                        console.log(this.state)
-                      })              
-                })
+        //                 console.log(this.state)
+        //               })              
+        //         })
 
-              });
-           }
-          if(event==null){
-              this.setState({
-                empid:"",
-                key:'',
-              })
-          }
+        //       // });
+        //    }
+        //   if(event==null){
+        //       this.setState({
+        //         empid:"",
+        //         key:'',
+        //       })
+        //   }
 
-         }                                  // @
+        //  }                                  // @
 
       //controls the box that shows the screens in a selected module
       handlechange = (values,event) => {
@@ -167,18 +168,19 @@ class screens_test extends Component{
 
     var now = new Date();
     var i;
-    console.log(this.state.key);
-    var x ={ UserAccess_Headerkey:this.state.key }
+    console.log(this.props.hkey);
+    var x ={ UserAccess_Headerkey:this.props.hkey }
     axios.post('/api/screens_test_d/del',x)    
     .then(res=>{
       console.log(res);
     })
     for (i=0;i<this.state.data.length;i++){
        const new2={
+           Emp_ID:this.props.eid, 
            Module:this.state.data[i].mo,
            Screens:this.state.data[i].sc,
            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-           UserAccess_Headerkey:this.state.key
+           UserAccess_Headerkey:this.props.hkey
           }         
           axios.post('/api/screens_test_d/save',new2)
           .then(res=>{
@@ -222,18 +224,47 @@ class screens_test extends Component{
    }
 
     componentDidMount(){
+      console.log(this.props)
       axios.get('/api/screens_test_d')
         .then(res=>{
           this.setState({
               items:res.data
        })
     })
-      axios.get('/api/screens_test_d/empid')
-        .then(res=>{
-           this.setState({
-               items1:res.data
+      var a=this.props.eid;
+      var b=this.props.hkey;
+      console.log(a)
+      console.log(b)
+      this.setState({
+          empid: a,
+          key:b
+      }, () => {
+        console.log(this.state)
+        //do smthng abt data: [] here, to fill the table
+        axios.post('/api/screens_test_d/data',this.state)
+          .then(res=>{
+            console.log(res.data)
+            var datas =[];
+            var i;
+            for (i=1;i<res.data.length+1;i++){
+                var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
+                console.log(x)
+                datas[i-1] = x
+                console.log(datas)
+            }                        
+            this.setState({
+                data : datas,                 
+                })
+            
+            console.log(this.state)
+          })              
     })
-    })
+//   axios.get('/api/screens_test_d/empid')
+    //     .then(res=>{
+    //        this.setState({
+    //            items1:res.data
+    // })
+    // })
     }
 
 
@@ -324,7 +355,7 @@ class screens_test extends Component{
 
         return(
           <div>
-            <Autocomplete
+            {/* <Autocomplete
             id="EmpId"
             options={this.state.items1}
             getOptionLabel={(option)=>option.Emp_ID}
@@ -333,8 +364,8 @@ class screens_test extends Component{
             onChange={this.handlechange2}
             renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
             />
-            <br/>
-            {(this.state.empid != '' )?list5:''}
+            <br/> */}
+            {/* {(this.state.empid != '' )?list5:''} */list5}
             <br></br>
             {(this.state.screens.length&&this.state.module)?list2:''}
             {(this.state.selectedscreen.length)?list3:''}
@@ -389,4 +420,10 @@ class screens_test extends Component{
     }
 }
 
-export default (screens_test);
+const mapStateToProps=state=>({
+  item:state.item.items,
+  hkey:state.item.hkey,
+  eid:state.item.eid,
+});
+export default connect(mapStateToProps)(screens_test);
+//export default (screens_test);

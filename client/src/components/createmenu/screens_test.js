@@ -40,8 +40,8 @@ class screens_test extends Component{
           screens: [],
           selectedscreen: [],
           boola:false,
-          key:'',
-          
+          //key:'',
+          //empid:this.props.eid,
           data:[],
           done : ''
         };
@@ -55,9 +55,27 @@ class screens_test extends Component{
         }, () => {
           axios.post('/api/screens_test',this.state)
           .then(res=>{
-              this.setState({
-                  screens:res.data
+            var x=res.data             
+            if(this.state.data.length!==0)
+            {              
+              var d = (this.state.data).map(da => {                                    
+                  return da.sc
               })
+              console.log(x)  
+              console.log(d)                    
+              const z = x.filter(function(item) {
+                return !d.includes(item.Screens); 
+              })              
+              console.log(z)
+              this.setState({
+                  screens:z 
+              })      
+           }              
+            else              
+            this.setState({
+                screens:x 
+            })
+
               console.log(this.state.screens)
           })
           
@@ -79,7 +97,7 @@ class screens_test extends Component{
            selectedscreen:event
          }, () => {
            console.log(this.state.selectedscreen)
-           this.getheader();
+           //this.getheader();
          });
          
      }
@@ -92,32 +110,35 @@ class screens_test extends Component{
 
     }
 
-  getheader=()=>{
-    axios.get('/api/items/key')
-    .then(res=>{
-      this.setState({
-        key:res.data[0]['']
-      })
-    })
-  }
+  // getheader=()=>{
+  //   axios.get('/api/items/key')
+  //   .then(res=>{
+  //     this.setState({
+  //       key:res.data[0]['']
+  //     })
+  //     console.log(this.state.key)
+  //   })
+  // }
 
   //this will save the data to the database
    handleclick=(e)=>{
      
     var now = new Date();
     var i;
-    console.log(this.state.key);
+    //console.log(this.state.key);
     for (i=0;i<this.state.data.length;i++){
        const new2={
+           Emp_ID:this.props.eid,
            Module:this.state.data[i].mo,
            Screens:this.state.data[i].sc,
            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-           UserAccess_Headerkey:this.state.key
+           UserAccess_Headerkey:this.props.hkey
           }
           axios.post('/api/screens_test/save',new2)
           .then(res=>{
-            console.log(res);
+            console.log(res);            
           })
+          
 
         }
       this.setState({
@@ -138,7 +159,7 @@ class screens_test extends Component{
      var d = 1
     var datas =[];
     var z = 'table.id'
-    console.log(this.state.key);
+    //console.log(this.state.key);
     for (i=0;i<this.state.selectedscreen.length;i++){ 
 
         var x ={ mo: this.state.module , sc: this.state.selectedscreen[i].Screens };
@@ -158,6 +179,7 @@ class screens_test extends Component{
    }
 
     componentDidMount(){
+      console.log(this.props)
         axios.get('/api/screens_test')
     .then(res=>{
        this.setState({
@@ -304,4 +326,10 @@ class screens_test extends Component{
     }
 }
 
-export default (screens_test);
+const mapStateToProps=state=>({
+  item:state.item.items,
+  hkey:state.item.hkey,
+  eid:state.item.eid,
+});
+export default connect(mapStateToProps)(screens_test);
+//export default (screens_test);

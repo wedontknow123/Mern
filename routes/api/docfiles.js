@@ -3,12 +3,13 @@ const call= require('./calling');
 const app=express();
 var multer=require('multer');
 var cors=require('cors');
-var a='';
+var a="";
 app.use(cors())
 
 app.post('/',function(req,res){
     call.get9(req,res,function(data){
         a=data;
+        console.log(a)
      
     multer({storage:multer.diskStorage(
          
@@ -27,6 +28,7 @@ app.post('/',function(req,res){
         }
         else if(err){
             res.status(503).json(err)
+            console.log(err)
         }
         var arr=[];
         for(var x=0;x<req.files.length;x++){
