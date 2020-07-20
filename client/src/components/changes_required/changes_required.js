@@ -16,7 +16,11 @@ import { Redirect,NavLink } from 'react-router-dom';
 //import screens from './screens';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
+import PropTypes from 'prop-types';
+
 var dateFormat = require('dateformat');
+var n = 1
+
 class changes_required extends Component{
     state={
         type:'Changes Required',
@@ -33,7 +37,12 @@ class changes_required extends Component{
         key:'',
         done:'',
         status:'',
-        items: []
+        items: [],
+        useremail:"",
+        r : ""
+    }
+    static propTypes={
+        auth:PropTypes.object.isRequired
     }
 
     handlechange = (values,event) => {        // for combobox till the next @
@@ -43,7 +52,7 @@ class changes_required extends Component{
       this.setState({
         empid: a
       }, () => {
-        axios.post('/api/changes_required',this.state)
+        axios.post('/api/changes_required/emp',this.state)
         .then(res=>{
             console.log(res.data)
               var r = res.data;
@@ -92,17 +101,57 @@ class changes_required extends Component{
   }
 
     componentDidMount(){
+        // this.setState({
+        //     useremail:this.props.auth.user.Email
+        // })
         
-        console.log(this.props)
-        axios.get('/api/changes_required')
-        .then(res=>{
-            this.setState({
-                items:res.data
-            })
-            console.log(this.state.item)
-        })
+        // console.log(this.props)
+        // if(this.props.auth.user !== null){
+        // axios.get('/api/changes_required')
+        // .then(res=>{
+        //     this.setState({
+        //         items:res.data
+        //     })
+        //     console.log(this.state.items)
+        // })}
+
+        // axios.post('/api/changes_required',this.state)
+        // .then(res=>{
+        //     this.setState({
+        //         items:res.data
+        //     })
+        //     console.log(this.state.item)
+        // })
 
     }        // @
+
+    componentDidUpdate(prevProps){
+        if(this.state.r === ""){
+        if(this.props.auth.user !== null){
+          //console.log(this.props)
+          if(this.state.useremail===""){
+            var e = this.props.auth.user.Email
+            console.log(e)
+            this.setState({
+                useremail: this.props.auth.user.Email
+              }) 
+            console.log(this.state.useremail)} 
+           else if(n==1){ 
+            console.log(this.props)
+            axios.post('/api/changes_required',this.state)
+              .then(res=>{
+              this.setState({
+                  items:res.data,
+                  r : "yes"
+              })
+                console.log(this.state.items)
+                console.log(this.state)//}                       
+              })
+              n = n+1
+          }
+        }
+      }
+    }
 
     handlechange1=(e)=>{
         const value=e.target.value;

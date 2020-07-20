@@ -16,7 +16,11 @@ import { Redirect,NavLink } from 'react-router-dom';
 //import screens from './screens';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
+import PropTypes from 'prop-types';
+
 var dateFormat = require('dateformat');
+var n = 1
+
 class editdraftform extends Component{
     state={
         branch:'',
@@ -32,18 +36,23 @@ class editdraftform extends Component{
         key:'',
         done:'',
         status:'draft',
-        items: []
+        items: [],
+        useremail:"",
+        r : ""
+    }    
+    static propTypes={
+      auth:PropTypes.object.isRequired
     }
-
+    
     handlechange = (values,event) => {        // for combobox till the next @
         if(event!==null){
-         
+         console.log(this.props)
          var a=event.Emp_ID;
          console.log(a)
       this.setState({
         empid: a
       }, () => {
-        axios.post('/api/draft',this.state)
+        axios.post('/api/draft/emp',this.state)
         .then(res=>{            
             console.log(res.data)
               var r = res.data;
@@ -61,7 +70,8 @@ class editdraftform extends Component{
                 software:x.Software,
                 reason:x.Reason,
                 key:x.UserAccess_Headerkey,
-                status:x.Status
+                status:x.Status,
+                useremail:x.User_Email
             })
            
             console.log(this.props)
@@ -85,24 +95,73 @@ class editdraftform extends Component{
              key:'',
              done:'',
              status:'draft',
-             boola:'true'
+             boola:'true',
+             //c : 'true'
           })
       }
 
   }
 
     componentDidMount(){
-             
-        console.log(this.props)
-                axios.get('/api/draft')
+      // if(n == 1){
+        // var e = this.props.auth.user.Email
+          // this.setState({
+          //   useremail: this.props.auth.user
+          // }) 
+        //   console.log(n)
+        // console.log(this.state) 
+        //  console.log(this.props)
+        // axios.get('/api/draft')
+        //     .then(res=>{
+        //       if(n == 1){
+        //     console.log(n)    
+        //     this.setState({
+        //         items:res.data
+        //     })
+        //     console.log(this.state.items)//}
+        //     console.log(this.props)
+        //     n = n+1
+        //     console.log(n)}
+        //    })
+          // axios.post('/api/draft',this.state)
+          //   .then(res=>{
+          //   this.setState({
+          //       items:res.data
+          //   })
+          //   console.log(this.state.item)
+          //   })
+    //  n=n+1}
+    }        // @
+    
+    componentDidUpdate(){
+      if(this.state.r === ""){
+      if(this.props.auth.user !== null){
+        //console.log(this.props)
+        if(this.state.useremail===""){
+          var e = this.props.auth.user.Email
+          console.log(e)
+          this.setState({
+              useremail: this.props.auth.user.Email
+            }) 
+          console.log(this.state.useremail)} 
+         else if(n==1){ 
+          console.log(this.props)
+          axios.post('/api/draft',this.state)
             .then(res=>{
             this.setState({
-                items:res.data
+                items:res.data,
+                r : "yes"
             })
-            console.log(this.state.item)
+              console.log(this.state.items)
+              console.log(this.state)//}                       
             })
+            n = n+1
+        }
+      }
+    }
+  }
 
-            }        // @
+
 
     handlechange1=(e)=>{
         const value=e.target.value;
@@ -110,6 +169,23 @@ class editdraftform extends Component{
         console.log(value);
         
     }
+
+    // onClic=() =>{
+    //   console.log(this.props)
+    //   console.log(this.state) 
+    //   if(this.props.auth.user.Email !== null){
+
+    //     console.log(this.props)
+    //     axios.get('/api/draft')
+    //         .then(res=>{
+    //         this.setState({
+    //             items:res.data
+    //         })
+    //         console.log(this.state.items)
+    //         })
+    //   }
+
+    // }
 
 
     onSubmit=(event)=>{
@@ -128,7 +204,8 @@ class editdraftform extends Component{
             Reason:this.state.reason,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Status:this.state.status,            
-            Emp_ID:this.state.empid
+            Emp_ID:this.state.empid,
+            User_Email:this.props.auth.user.Email
         }
         this.props.getEmpid(this.state.empid);
         this.props.getHeaderkey(this.state.key);
@@ -147,6 +224,20 @@ class editdraftform extends Component{
     }
 
     render(){
+        //if(this.state.c == 'true'){
+          // console.log(this.props)
+          // axios.get('/api/draft')
+          //   .then(res=>{
+          //   this.setState({
+          //       items:res.data,
+          //       //c:'false'
+          //   })
+          //   console.log(this.state.items)
+          //   }) 
+
+        //}
+        
+        
         if(this.state.done=='yes'){
             return (
             <Redirect to='/options/editdraftform/screens_test_d'/>
@@ -159,14 +250,14 @@ class editdraftform extends Component{
           });
         return(
             <div className="container">
-                
+                   
                     <Autocomplete
                     id="EmpId"
-                    options={this.state.items}
+                    options={this.state.items}                      
                     getOptionLabel={(option)=>option.Emp_ID}
                     filterOptions={filterOptions1}
                     style={{width:300}}
-                    onChange={this.handlechange}
+                    onChange={this.handlechange}                    
                     renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
                     />
                                                       {/* @ */}
@@ -278,9 +369,12 @@ class editdraftform extends Component{
 }
 
 const mapStateToProps=state=>({
-    item:state.item.items,
-    hkey:state.item.hkey,
-    eid:state.item.eid
-  });
+  item:state.item.items,
+  hkey:state.item.hkey,
+  eid:state.item.eid,
+  auth:state.auth,
+  // uemail:state.auth.user
+});
+
   export default connect(mapStateToProps,{getEmpid,getHeaderkey})(editdraftform);  
 //export default (editdraftform);

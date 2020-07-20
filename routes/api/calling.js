@@ -75,7 +75,7 @@ exports.get5=function(req,res){
    });
 };
 exports.get6=function(req,res,empid){
-  db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+empid+"'",function(data,err){
+  db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+empid+"' ",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -84,8 +84,8 @@ exports.get6=function(req,res,empid){
     }
   });
 };
-exports.get7=function(req,res){
-  db.executeSql("SELECT Emp_ID FROM UserAccess_Header where Status='draft'",function(data,err){
+exports.get7=function(req,res,useremail){ //,useremail
+  db.executeSql("SELECT Emp_ID FROM UserAccess_Header where Status='draft' and User_Email ='"+useremail+"'  ",function(data,err){ //and User_Email ='"+useremail+"'
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -117,8 +117,8 @@ exports.get9=function(req,res,callback){
      }
   });
 };
-exports.get10=function(req,res){
-  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'sent for approval' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Status = 'inactive')",function(data,err){
+exports.get10=function(req,res,useremail){
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'sent for approval' and A.User_Email ='"+useremail+"' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Status = 'inactive')",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
      }
@@ -127,8 +127,9 @@ exports.get10=function(req,res){
      }
   });
 };
-exports.get11=function(req,res){
-  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'draft' and A.Trans_Type = 'New User Creation'",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+
+exports.get11=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+useremail+"'
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'draft' and A.Trans_Type = 'New User Creation' and A.User_Email ='"+useremail+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
     if(err){
      httpMsgs.show500(req,res,err);
     }

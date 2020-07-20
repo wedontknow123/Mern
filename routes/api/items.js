@@ -9,8 +9,9 @@ router.get('/',(req,res)=>{
 router.get('/key',(req,res)=>{
     call.get5(req,res);
 });
-router.get('/del',(req,res)=>{
-    call.get7(req,res);
+router.post('/del',(req,res)=>{
+    const useremail= req.body.useremail;
+    call.get7(req,res,useremail);
 })
 
 router.post('/delete',(req,res)=>{

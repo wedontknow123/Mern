@@ -3,12 +3,19 @@ const router =express.Router();
 const call= require('./calling');
 
 
-router.get('/',(req,res)=>{
-    //var reqbody=JSON.stringify(req.body);
-    call.get7(req,res);
+// router.get('/',(req,res)=>{ //post
+    
+//     //const useremail= req.body.useremail;
+//     call.get7(req,res);//,useremail
+// })
+router.post('/',(req,res)=>{ //post
+    
+    const useremail= req.body.useremail;
+    call.get7(req,res,useremail);//,useremail
 })
 
-router.post('/',(req,res)=>{
+router.post('/emp',(req,res)=>{
+    
     const empid= req.body.empid;
     call.get6(req,res,empid);
 })

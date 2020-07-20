@@ -3,13 +3,22 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import {Button} from 'reactstrap';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+var n = 1
 
 class deleteform extends Component{
     state={
         empid:[],
         selectid:'',
+        useremail:"",
+        r : "",
         boola: true
     }
+    static propTypes={
+        auth:PropTypes.object.isRequired
+      }
 
      handlechange=(value,event)=>{
          this.setState({
@@ -27,12 +36,40 @@ class deleteform extends Component{
         })
     }
     componentDidMount(){
-        axios.get('/api/items/del')
-        .then(res=>{
-            this.setState({
-                empid:res.data
-            })
-        })
+        // axios.get('/api/items/del')
+        // .then(res=>{
+        //     this.setState({
+        //         empid:res.data
+        //     })
+        // })
+    }
+
+    componentDidUpdate(prevProps){
+        if(this.state.r === ""){
+          if(this.props.auth.user !== null){
+            //console.log(this.props)
+            if(this.state.useremail===""){
+              var e = this.props.auth.user.Email
+              console.log(e)
+              this.setState({
+                  useremail: this.props.auth.user.Email
+                }) 
+              console.log(this.state.useremail)} 
+            else if(n==1){ 
+              console.log(this.props)
+              axios.post('/api/items/del',this.state)
+                .then(res=>{
+                this.setState({
+                    empid:res.data,
+                    r : "yes"
+                })
+                  console.log(this.state.items)
+                  console.log(this.state)//}                       
+                })
+                n = n+1
+            }
+          }
+      }
     }
 
     render(){
@@ -58,4 +95,12 @@ class deleteform extends Component{
     }
 }
 
-export default deleteform ;
+const mapStateToProps=state=>({
+    item:state.item.items,
+    hkey:state.item.hkey,
+    eid:state.item.eid,
+    auth:state.auth,
+    // uemail:state.auth.user
+  });
+  
+    export default connect(mapStateToProps)( deleteform) ;

@@ -15,7 +15,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 var dateFormat = require('dateformat');
-
+var n =1
 
 class deactivate extends Component{
     state={
@@ -26,6 +26,8 @@ class deactivate extends Component{
         Status:'inactive',
         UserAccess_Headerkey:'',
         Trans_Datetime:'',
+        useremail :"",
+        r : "" ,
         Trans_Type:"Deactivation"
     }
 
@@ -85,13 +87,42 @@ class deactivate extends Component{
       })
     }
     componentDidMount(){
-        axios.get('/api/deactivate')
-        .then(res=>{
-            this.setState({
-                empid:res.data
-            })
-        })
+        // axios.get('/api/deactivate')
+        // .then(res=>{
+        //     this.setState({
+        //         empid:res.data
+        //     })
+        // })
     }
+
+    componentDidUpdate(prevProps){
+        if(this.state.r === ""){
+        if(this.props.auth.user !== null){
+          //console.log(this.props)
+          if(this.state.useremail===""){
+            var e = this.props.auth.user.Email
+            console.log(e)
+            this.setState({
+                useremail: this.props.auth.user.Email
+              }) 
+            console.log(this.state.useremail)} 
+           else if(n==1){ 
+            console.log(this.props)
+            axios.post('/api/deactivate',this.state)
+              .then(res=>{
+              this.setState({
+                  empid:res.data,
+                  r : "yes"
+              })
+                console.log(this.state.items)
+                console.log(this.state)//}                       
+              })
+              n = n+1
+          }
+        }
+      }
+    }
+
     render(){
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',

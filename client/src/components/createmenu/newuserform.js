@@ -34,7 +34,8 @@ class newuserform extends Component{
         done:'',
         file:null,
         filepath:[],
-        status:'draft'    
+        status:'draft' ,
+        
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -45,7 +46,7 @@ class newuserform extends Component{
         console.log(value);
         
     }
-
+    
     getheader=()=>{
         var v='';
         axios.get('/api/items/key')
@@ -113,7 +114,7 @@ class newuserform extends Component{
     handlechange3=(event)=>{
         
         console.log(this.state)
-    
+        console.log(this.props.auth.user.Email)
         console.log(this.props)
         if(this.state.empid){
         const newItem={

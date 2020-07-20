@@ -3,15 +3,16 @@ const router =express.Router();
 const call= require('./calling');
 
 
-router.get('/empid',(req,res)=>{
-    //var reqbody=JSON.stringify(req.body);
-    call.get7(req,res);
-})
+// router.get('/empid',(req,res)=>{
+//     //var reqbody=JSON.stringify(req.body);
+//     call.get7(req,res);
+// })
 
-router.post('/hkey',(req,res)=>{
-    const empid= req.body.empid;
-    call.get6(req,res,empid);
-})
+// router.post('/hkey',(req,res)=>{
+//     const empid= req.body.empid;
+//     const useremail= req.body.empid;
+//     call.get6(req,res,empid,useremail);
+// })
 
 router.post('/data',(req,res)=>{
     const key= req.body.key;
