@@ -110,7 +110,9 @@ class changes_required extends Component{
         console.log(value); 
                
     }
-
+    see=()=>{
+        console.log("yesss");
+    }
     getheader=()=>{
         var v='';
         axios.get('/api/items/key')
@@ -170,6 +172,7 @@ class changes_required extends Component{
     }
 
     render(){
+        this.see();
         if(this.state.done=='yes'){
             return (
             <Redirect to='/changes_required/changes_screen'/>
@@ -180,6 +183,7 @@ class changes_required extends Component{
             matchFrom: 'start',
             stringify: (option) => option.Emp_ID,
           });
+          console.log(this.props)
         return(
             <div className="container">
             <Autocomplete
