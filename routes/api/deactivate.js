@@ -2,8 +2,9 @@ const express = require('express');
 const router =express.Router();
 const call= require('./calling');
 
-router.get('/',(req,res)=>{
-    call.get10(req,res);
+router.post('/',(req,res)=>{
+    const useremail= req.body.useremail;    
+    call.get10(req,res,useremail);
 })
 
 router.post('/cont',(req,res)=>{
