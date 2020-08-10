@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 //import screens_test_d from './screens_test_d';
+import DownloadLinks from './DownloadLinks'
 import {
     Button,
     Label,
@@ -17,11 +18,14 @@ import { Redirect,NavLink } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
+import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';    
 
 var dateFormat = require('dateformat');
 var n = 1
+var now = new Date();
 
 class editdraftform extends Component{
+  uploadObj = new UploaderComponent();
     state={
         branch:'',
         name:'',
@@ -38,11 +42,90 @@ class editdraftform extends Component{
         status:'draft',
         items: [],
         useremail:"",
-        r : ""
-    }    
+        filenames : [],
+        files:[],
+        filepath : "",
+        r : "",
+        
+        
+    }  
+
     static propTypes={
       auth:PropTypes.object.isRequired
     }
+
+    fileSave = (e) =>{
+      e.preventDefault();
+      console.log(this.uploadObj.getFilesData())
+        let v = this.uploadObj.getFilesData()
+        if(v!==null){//this.state.file            
+            const data=new FormData();
+            for(var x=0;x<v.length;x++){//v
+                data.append('file',v[x].rawFile);
+            }
+            console.log(data)
+            axios.post('/api/doc',data,{}).
+            then(res=>{                
+                console.log(res.data)
+                this.setState({
+                    files:res.data
+                },()=>{
+                    console.log(this.state.filepath)
+                    console.log(this.state.key)
+                        for(var x=0;x<this.state.files.length;x++){
+                        const new5={
+                            UserAccess_Headerkey:this.state.key,
+                            Emp_ID:this.state.empid,
+                            Document_Name:this.state.files[x],
+                            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
+                        }
+                        axios.post('/api/doc/rec',new5)                       
+                            }
+                            this.onSubmit()
+                            
+                    })
+            })
+     }
+   
+    }
+
+    deleteFile = (ikey,name,bid) =>{
+      var fileName = this.state.filenames[ikey].Document_Name
+      console.log(fileName) 
+      console.log(this.state.key)      
+      var a = {fname : fileName, fpath:this.state.filepath, hkey:this.state.key}
+      axios.post('/api/download/del', a )
+      // .then(res=>{
+        
+      // }) 
+      console.log(ikey)
+        //console.log(res)
+        document.getElementById(ikey).innerHTML = "DELETED!";
+        //document.getElementById(name).remove()
+        document.getElementById(bid).remove() 
+        console.log(this.state.filenames)              
+    }
+
+    onClic = (key) =>{      //download file
+      console.log(key)
+      var fileName = this.state.filenames[key].Document_Name
+      console.log(fileName)      
+      var a = {fname : fileName, fpath:this.state.filepath}
+       axios.post('/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
+            .then(function(res){             
+              var data = new Blob([res.data]);              
+              var blob = data;
+              var link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.setAttribute('download',fileName);                 
+              document.body.appendChild(link);                          
+              link.click()             
+           })
+           .catch((error) => {
+            console.log(error);
+          });
+    }
+    
     
     handlechange = (values,event) => {        // for combobox till the next @
         if(event!==null){
@@ -72,12 +155,26 @@ class editdraftform extends Component{
                 key:x.UserAccess_Headerkey,
                 status:x.Status,
                 useremail:x.User_Email
-            })
-           
+            })  
+            axios.post('/api/download/fn',this.state)
+            .then(res => {              
+              this.setState({
+                filenames : res.data
+              })
+              console.log(this.state.filenames)
+            }) 
+            axios.get('/api/download/fp')
+            .then(res => {
+              var x = res.data
+              var y = x[0].Document_Path
+              this.setState({
+                filepath : y
+              })
+              console.log(this.state.filepath)
+            })                 
             console.log(this.props)
-            console.log(this.state)
+            console.log(this.state)            
         })
-
       });
   }
       if(event==null){
@@ -99,40 +196,8 @@ class editdraftform extends Component{
              //c : 'true'
           })
       }
-
   }
 
-    componentDidMount(){
-      // if(n == 1){
-        // var e = this.props.auth.user.Email
-          // this.setState({
-          //   useremail: this.props.auth.user
-          // }) 
-        //   console.log(n)
-        // console.log(this.state) 
-        //  console.log(this.props)
-        // axios.get('/api/draft')
-        //     .then(res=>{
-        //       if(n == 1){
-        //     console.log(n)    
-        //     this.setState({
-        //         items:res.data
-        //     })
-        //     console.log(this.state.items)//}
-        //     console.log(this.props)
-        //     n = n+1
-        //     console.log(n)}
-        //    })
-          // axios.post('/api/draft',this.state)
-          //   .then(res=>{
-          //   this.setState({
-          //       items:res.data
-          //   })
-          //   console.log(this.state.item)
-          //   })
-    //  n=n+1}
-    }        // @
-    
     componentDidUpdate(){
       if(this.state.r === ""){
       if(this.props.auth.user !== null){
@@ -170,27 +235,9 @@ class editdraftform extends Component{
         
     }
 
-    // onClic=() =>{
-    //   console.log(this.props)
-    //   console.log(this.state) 
-    //   if(this.props.auth.user.Email !== null){
-
-    //     console.log(this.props)
-    //     axios.get('/api/draft')
-    //         .then(res=>{
-    //         this.setState({
-    //             items:res.data
-    //         })
-    //         console.log(this.state.items)
-    //         })
-    //   }
-
-    // }
-
-
-    onSubmit=(event)=>{
-
-        event.preventDefault();
+    onSubmit=()=>{
+        
+        // event.preventDefault();
         var now = new Date();
         const newItem={
             Location:this.state.branch,
@@ -210,6 +257,7 @@ class editdraftform extends Component{
         this.props.getEmpid(this.state.empid);
         this.props.getHeaderkey(this.state.key);
         console.log(this.props)
+        
         axios.post('/api/draft/save',newItem)
           .then(res=>{
             console.log(res);
@@ -250,7 +298,7 @@ class editdraftform extends Component{
           });
         return(
             <div className="container">
-                   
+                        
                     <Autocomplete
                     id="EmpId"
                     options={this.state.items}                      
@@ -262,7 +310,7 @@ class editdraftform extends Component{
                     />
                                                       {/* @ */}
            
-                <Form onSubmit={this.onSubmit} disabled={true}>
+                <Form onSubmit={this.fileSave} disabled={true}>
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -351,6 +399,20 @@ class editdraftform extends Component{
                              </Input>
                              </Col>
                             </FormGroup>
+                            <FormGroup row>
+                               <Label for="uploaded_files"sm={3}>Uploaded Files:</Label>
+                               <Col sm={5}>
+                                
+                                <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic} deleteFile={this.deleteFile} />
+                                
+                               </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                               <Col sm={5}>
+                                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />
+                               </Col>
+                             </FormGroup>
                             <FormGroup row>
                                <Label for="exampleText"sm={3}>Reason</Label>
                                <Col sm={5}>

@@ -68,7 +68,7 @@ class RegisterModal extends Component{
        //const {name,email,password}=this.state;
 
        const newUser={
-           Username:this.state.name,
+           name:this.state.name,
            email:this.state.email,
            password:this.state.password
        };

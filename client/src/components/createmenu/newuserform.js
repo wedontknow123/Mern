@@ -14,10 +14,17 @@ import {addItem,getEmpid,getHeaderkey} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';
 
 var dateFormat = require('dateformat');
 var now = new Date();
+
 class newuserform extends Component{
+    uploadObj = new UploaderComponent();
+     path = {
+        // removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove',
+        // saveUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Save'
+    }
     state={
         type:'New User Creation',
         branch:'',
@@ -64,51 +71,62 @@ class newuserform extends Component{
                     key:v
                 })
             }
-            this.handlechange3();
+            //this.handlechange3();
         })
     }
-    handlechange2=(e)=>{
+    // handlechange2=(e)=>{
+    //     console.log(e.target.files)
+    //     this.setState({
+    //         file:e.target.files
+    //     })
+    //     console.log(this.state.file)
+    // }
 
-        this.setState({
-            file:e.target.files
-        })
-    }
+    //  uploadAll=()=> {
+    //     console.log(this.uploadObj.getFilesData());
+    //     //this.uploadObj.upload(this.uploadObj.getFilesData())
+    //   }
     
     handlechange4=(e)=>{
-        e.preventDefault();
-        if(this.state.file!==null){
-        const data=new FormData();
-       for(var x=0;x<this.state.file.length;x++){
-           data.append('file',this.state.file[x]);
-       }
-       axios.post('/api/doc',data,{}).
-       then(res=>{
-       this.setState({
-           filepath:res.data
-       },()=>{
-
-           for(var x=0;x<this.state.filepath.length;x++){
-           const new5={
-               UserAccess_Headerkey:this.state.key,
-               Emp_ID:this.state.empid,
-               Document_Name:this.state.filepath[x],
-               Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
-           }
-           axios.post('/api/doc/rec',new5)
-           .then(res=>{
-              if(this.state.empid!==null){
-                this.getheader()
-            }
-           })
-       }
-       })
-       })
-    }
-    else{
-        if(this.state.empid!==null){
+        e.preventDefault();            
+       console.log(this.uploadObj.getFilesData())
+        let v = this.uploadObj.getFilesData()
+        if(v!==null){//this.state.file
+            if(this.state.empid!==null){
             this.getheader()
-        }
-    }
+            console.log(this.state.key)
+             }
+            const data=new FormData();
+            for(var x=0;x<v.length;x++){//v
+                data.append('file',v[x].rawFile);
+            }
+            console.log(data)
+            axios.post('/api/doc',data,{}).
+            then(res=>{
+                // if(this.state.empid!==null){
+                //     this.getheader()
+                // }
+                console.log(res.data)
+                this.setState({
+                    filepath:res.data
+                },()=>{
+                    console.log(this.state.filepath)
+                    console.log(this.state.key)
+                        for(var x=0;x<this.state.filepath.length;x++){
+                        const new5={
+                            UserAccess_Headerkey:this.state.key,
+                            Emp_ID:this.state.empid,
+                            Document_Name:this.state.filepath[x],
+                            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
+                        }
+                        axios.post('/api/doc/rec',new5)
+                        
+                            }
+                            this.handlechange3()
+                    })
+            })
+     }
+   
     }
    
     handlechange3=(event)=>{
@@ -149,12 +167,13 @@ class newuserform extends Component{
     
     render(){
         if(this.state.empid&&this.state.done=='yes'){
+            //onSubmit={this.handlechange4}
             //return <Redirect to='/options/newuser/screens'/>
             return <Redirect to='/options/newuser/screens_test'/>
         }
         return(
             <div className="container">
-                <Form onSubmit={this.handlechange4}>
+                <Form onSubmit={this.handlechange4} >
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -257,14 +276,19 @@ class newuserform extends Component{
                             <FormGroup row>
                                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
                                <Col sm={5}>
-                               <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Select the required files" multiple onChange={this.handlechange2}/>
+                               {/* <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Select the required files" multiple onChange={this.handlechange2}/> */}
+                               <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />
+                               {/* <span className="upload-buttons"> */}
+                                {/* <Button id='full' className='e-btn e-control' onClick={this.uploadAll = this.uploadAll.bind(this)}>Upload all files</Button> */}
+                               {/* </span> */}
                                </Col>
                              </FormGroup>
                             <FormGroup check row>
                                 <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save and Next</Button>
                                 </Col>
-                                {/* <Col sm={{ size: 10, offset: 3 }}>
+                                {/* type="submit" onClick={this.handlechange4}
+                                <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save as Draft</Button>
                                 </Col> */}
                             </FormGroup>
