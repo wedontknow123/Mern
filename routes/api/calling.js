@@ -85,7 +85,7 @@ exports.get6=function(req,res,empid){
   });
 };
 exports.get7=function(req,res,useremail){ //,useremail
-  db.executeSql("SELECT Emp_ID FROM UserAccess_Header where Status='draft' and User_Email ='"+useremail+"'  ",function(data,err){ //and User_Email ='"+useremail+"'
+  db.executeSql("SELECT Emp_ID FROM UserAccess_Header where Status='draft' and Trans_Type = 'New User Creation' and User_Email ='"+useremail+"'  ",function(data,err){ //and User_Email ='"+useremail+"'
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -361,6 +361,46 @@ exports.finalApprover=function(req,resp,reqbody){
     httpMsgs.show500(req,resp,ex);
   }
 };
+exports.get13=function(req,res,key,callback){//,useremail  //and A.User_Email ='"+useremail+"'
+  db.executeSql("SELECT  Document_Name FROM User_Document where UserAccess_Headerkey = '"+key+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+    if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+      if(data){
+        return callback(data)
+      }
+      else{
+        return callback(null);
+      }
+    }
+  });
+};
+
+exports.get14=function(req,res,key){
+  db.executeSql("SELECT  Document_Name FROM User_Document where UserAccess_Headerkey = '"+key+"' ",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
+
+exports.get15=function(req,res){
+  db.executeSql("Select Document_Path from Org_details",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
+
+
+
 exports.add=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");
@@ -465,6 +505,32 @@ exports.add4=function(req,resp,reqbody){
     httpMsgs.show500(req,resp,ex);
   }
 };
+
+exports.add7=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("UPDATE User_Document SET UserAccess_Headerkey ='%d' WHERE UserAccess_Headerkey ='%d'",data.key,data.okey);
+      db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
 exports.add5=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");
@@ -664,6 +730,32 @@ exports.del3=function(req,res,reqbody){
     var data = JSON.parse(reqbody);
     if(data){
       var sql="delete from UserAccess_Detail where UserAccess_Headerkey = "+data.UserAccess_Headerkey;
+      db.executeSql(sql,function(data,err){
+        if(err){
+          httpMsgs.show500(req,res,err);
+        }
+        else{
+          httpMsgs.send200(req,res);
+        }
+      })
+    }
+    else{
+      throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,res,ex);
+  }
+};
+
+exports.del4=function(req,res,reqbody,fname){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var key = JSON.parse(reqbody);
+    var fn = JSON.parse(fname);
+    if(key&&fn){
+      var sql=util.format("delete from User_Document where UserAccess_Headerkey ='%d' and Document_Name ='%s'",key,fn) ;
       db.executeSql(sql,function(data,err){
         if(err){
           httpMsgs.show500(req,res,err);

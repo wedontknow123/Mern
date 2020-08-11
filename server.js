@@ -16,6 +16,7 @@ app.use('/api/apmaster',require('./routes/api/Approval_master'));
 app.use('/api/draft',require('./routes/api/draft'));
 app.use('/api/doc/rec',require('./routes/api/docfile_rec'));
 app.use('/api/doc',require('./routes/api/docfiles'));
+app.use('/api/download',require('./routes/api/downloadfile'))
 app.use('/api/screens_test_d',require('./routes/api/screens_test_d'));
 
 app.use('/api/changes_required',require('./routes/api/changes_required'));

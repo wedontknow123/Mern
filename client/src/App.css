@@ -1,3 +1,6 @@
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-inputs/styles/material.css";
 .remove-btn {
   margin-right:0.5rem;
 }
@@ -19,3 +22,5 @@
   opacity:0.01;
   transition: opacity 1000ms ease-in;
 }
+
+.exp{visibility: hidden;}
