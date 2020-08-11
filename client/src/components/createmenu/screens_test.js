@@ -66,9 +66,6 @@ class screens_test extends Component{
         //   console.log(info);
         //   this.props.approval1(info);
         //  }
-        static propTypes={
-          auth:PropTypes.object.isRequired
-      }
          componentDidUpdate(){
            console.log("1");
            if(this.state.itr===""){
