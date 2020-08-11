@@ -19,7 +19,12 @@ class home extends Component{
                 <br></br>
                 <br></br>
                 <Button href='/deactivate'>Deactivation</Button>
-
+                <br></br>
+                <br></br>
+                <Button href="/requests">Pending Requests</Button>
+                <br></br>
+                <br></br>
+                <Button href="/rejected">Rejected Requests</Button>
             </div>
         )
     }

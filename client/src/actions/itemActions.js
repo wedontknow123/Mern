@@ -1,4 +1,4 @@
-import {GET_empid,GET_headerkey,GET_oldkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
+import {GET_Department,send_for_approval,GET_empid,GET_headerkey,GET_oldkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
 import axios from 'axios';
 
 export const getItems=()=>dispatch=>{
@@ -24,7 +24,12 @@ export const getHeaderkey=(hkey)=>dispatch=>{
         payload: hkey
     })     
 };
-
+export const getdepartment=(department)=>dispatch=>{
+    dispatch({
+        type:GET_Department,
+        payload: department
+    })     
+};
 export const getOldkey=(okey)=>dispatch=>{
     dispatch({
         type:GET_oldkey,
@@ -32,6 +37,29 @@ export const getOldkey=(okey)=>dispatch=>{
     })     
 };
 
+export const approval1=(info)=>dispatch=>{
+     axios.post('/api/apmaster/submit',info)
+     .then(res=>{
+         console.log(res);
+     })
+};
+
+export const getapprovalinfo=(info)=>dispatch=>{
+    axios.post('/api/apmaster',info)
+    .then(res=>{console.log(res.data[0].Approver_Name)
+        dispatch({
+        type:send_for_approval,
+        payload:res.data
+    })})
+};
+
+
+export const approval2=(info)=>dispatch=>{
+    axios.post('/api/apmaster/approval',info)
+    .then(res=>{
+        console.log(res);
+    })
+};
 
 export const addItem2=(item)=>dispatch=>{
     axios.post('/api/screens',item)

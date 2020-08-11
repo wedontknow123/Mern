@@ -38,10 +38,11 @@ export const register=({name,email,password})=>dispatch=>{
     const body=({name,email,password});
 
     axios.post('/api/users',body,config)
-    .then(res=>dispatch({
+    .then(res=>{console.log(res);
+        dispatch({
         type:REGISTER_SUCCESS,
         payload:res.data
-    }))
+    })})
     .catch(err=>{
         console.log(err);
         dispatch(returnErrors(err.response.data,err.response.status,'REGISTER_FAIL'));

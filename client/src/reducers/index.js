@@ -7,6 +7,4 @@ export default combineReducers({
     item:itemReducer,
     error:errorReducer,
     auth:authReducer
-
-
 });

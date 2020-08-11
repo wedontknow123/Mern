@@ -23,5 +23,7 @@ router.post('/',(req,res)=>{
     var reqbody=JSON.stringify(req.body);               
     call.add(req,res,reqbody);               
 })
-
+router.get('/department',(req,res)=>{
+    call.getdepartment(req,res);
+})
 module.exports= router;

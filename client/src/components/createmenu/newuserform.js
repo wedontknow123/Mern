@@ -10,10 +10,12 @@ import {
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {addItem,getEmpid,getHeaderkey} from '../../actions/itemActions';
+import {addItem,getEmpid,getHeaderkey,getdepartment} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 var dateFormat = require('dateformat');
 var now = new Date();
@@ -35,6 +37,7 @@ class newuserform extends Component{
         file:null,
         filepath:[],
         status:'draft' ,
+        department_options:[]
         
     }
     static propTypes={
@@ -73,7 +76,15 @@ class newuserform extends Component{
             file:e.target.files
         })
     }
-    
+    componentDidMount(){
+        axios.get('/api/items/department')
+        .then(res=>{
+            this.setState({
+               department_options:res.data
+            })
+            console.log(this.state.department_options)
+        })
+    }
     handlechange4=(e)=>{
         e.preventDefault();
         if(this.state.file!==null){
@@ -138,6 +149,7 @@ class newuserform extends Component{
         this.props.addItem(newItem);
         this.props.getEmpid(this.state.empid);
         this.props.getHeaderkey(this.state.key);
+        this.props.getdepartment(this.state.depart);
         console.log(this.props)
         console.log(newItem.Trans_Datetime);
         this.setState({
@@ -146,12 +158,28 @@ class newuserform extends Component{
         }
    
     }
-    
+    handlechange6=(value,event)=>{
+        if(event!==null){ 
+            
+         this.setState({
+           depart:event.Department
+         }, () => {
+           console.log(this.state.depart)
+           //this.getheader();
+         });
+         
+     }
+
+    }
     render(){
         if(this.state.empid&&this.state.done=='yes'){
             //return <Redirect to='/options/newuser/screens'/>
             return <Redirect to='/options/newuser/screens_test'/>
         }
+        const filterOptions1 = createFilterOptions({
+            matchFrom: 'start',
+            stringify: (option) => option.Department,
+          });
         return(
             <div className="container">
                 <Form onSubmit={this.handlechange4}>
@@ -196,12 +224,26 @@ class newuserform extends Component{
                              <Input type="text" name="desig" id="desig" onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>  
-                         <FormGroup row>
+                         {/* <FormGroup row>
                           <Label for="depart" sm={3}>Department:</Label>
                            <Col sm={5}>
                              <Input type="text" name="depart" id="depart" onChange={this.handlechange1}/>
                               </Col>
-                         </FormGroup>  
+                         </FormGroup>   */}
+                         <FormGroup row>
+                         <Label for="depart" sm={3}>Department:</Label>
+                         <Col sm={5}>
+                         <Autocomplete
+                           id="Module"
+                            options={this.state.department_options}
+                              getOptionLabel={(option)=>option.Department}
+                                 filterOptions={filterOptions1}
+                              style={{width:300}}
+                              onChange={this.handlechange6}
+                              renderInput={(params)=><TextField {...params} label="Department" variant="outlined"/>}
+                               />
+                               </Col>
+                         </FormGroup>
                          <FormGroup row>
                           <Label for="emp_id" sm={3}>Employee Id:</Label>
                            <Col sm={5}>
@@ -281,5 +323,6 @@ const mapStateToProps=state=>({
     item:state.item.items,
     hkey:state.item.hkey,
     eid:state.item.eid,
+    department:state.item.department
   });
-export default connect(mapStateToProps,{addItem,getEmpid,getHeaderkey})(newuserform);
+export default connect(mapStateToProps,{addItem,getEmpid,getHeaderkey,getdepartment})(newuserform);

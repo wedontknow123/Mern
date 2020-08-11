@@ -19,7 +19,7 @@ class createmenu extends Component{
                 <br></br>
                 <br></br>
                 <Button href="/options/deleteform">Delete</Button>
-
+                
             </div>
         )
     }

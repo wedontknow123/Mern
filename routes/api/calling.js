@@ -12,9 +12,7 @@ else{
 });
 };
 exports.get=function(req,resp,empno,callback){
-    db.executeSql("SELECT SL_NO, Username, Email FROM [User] where SL_NO="+empno,function(data,err){
-              
-  
+    db.executeSql("SELECT SL_NO, Username, Email FROM [User] where SL_NO="+empno,function(data,err){  
                 if(err){
                   throw err;
                  }
@@ -64,6 +62,7 @@ exports.get4=function(req,resp){
      }
   });
 };
+
 exports.get5=function(req,res){
    db.executeSql("SELECT max (UserAccess_Headerkey) from UserAccess_Header",function(data,err){
     if(err){
@@ -74,6 +73,7 @@ exports.get5=function(req,res){
      }
    });
 };
+
 exports.get6=function(req,res,empid){
   db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+empid+"' ",function(data,err){
    if(err){
@@ -105,7 +105,7 @@ exports.get8=function(req,res,key){
   });
 };
 exports.get9=function(req,res,callback){
-  db.executeSql("Select Document_Path from Org_details",function(data,err){
+  db.executeSql("Select Top 1 Document_Path from Org_details",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
      }
@@ -150,6 +150,217 @@ exports.get12=function(req,res,empid){
   });
 };
 
+exports.getdepartment=function(req,res){
+  db.executeSql("Select distinct Department from Approval_Master",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
+exports.checkITorNot=function(req,resp,reqbody,callback){
+
+  db.executeSql("Select IT_Notification from Org_details where IT_Notification='"+reqbody.Approver_Email+"'",function(data,err){
+      
+    if(err){
+       throw err;
+      }
+    if(data){
+      return callback(data.recordset);
+    }
+    else{
+      return callback(null);
+    }
+       });
+};
+
+exports.checkITorNot2=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+      db.executeSql("Select IT_Notification from Org_details where IT_Notification='"+data.Approver_Email+"'",function(data,err){
+        if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+exports.get_to_display=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+            db.executeSql("SELECT * from UserAccess_Header where Emp_ID='"+data.Emp_ID+"' and UserAccess_Headerkey='"+data.UserAccess_Headerkey+"'",function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.getapmaster=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    console.log(reqbody);
+    var data = JSON.parse(reqbody);
+    if(data){
+            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Approver_Name not in (SELECT B.Approver_Name from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"')and A.Email not in (Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"')",function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.getpending_requests=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+            db.executeSql("SELECT Emp_ID,UserAccess_Headerkey from Email_Workflow where Approver_Email='"+data.Approver_Email+"' and (Status is null or Status ='')",function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.getpending_requests_IT=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+            db.executeSql("Select A.Emp_ID,A.UserAccess_Headerkey from Email_Workflow A where A.Status='AF' AND A.Emp_ID not in (Select B.Emp_ID from User_Credentials B) ",function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+exports.getrejected_emp_id=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+            db.executeSql("Select distinct A.Emp_ID,A.UserAccess_Headerkey from UserAccess_Header A inner join Email_Workflow B on A.UserAccess_Headerkey=B.UserAccess_Headerkey where A.User_Email='"+data.User_Email+"' and B.Status='R'",function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+//db.executeSql("update Email_Workflow set Status='RA' where Status ='R' and Approver_Email='"+data.Approver_Email+"' and UserAccess_Headerkey='"+data.UserAccess_Headerkey+"'",function(data,err){
+  exports.changePreviousRejected=function(req,resp,reqbody){
+    try{
+      if(!reqbody) throw new Error("Input not valid");
+      
+      var data = JSON.parse(reqbody);
+      if(data){
+        var sql=util.format("update Email_Workflow set Status ='RA' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='R'",data.UserAccess_Headerkey,data.Approver_Email);
+        db.executeSql(sql,function(data,err){
+              if(err){ 
+               httpMsgs.show500(req,resp,err);
+              }
+              else{
+               httpMsgs.send200(req,resp);
+              }
+              });
+      }
+      else{
+           throw new Error("Input not valid");
+      }
+    }
+    catch(ex){
+      httpMsgs.show500(req,resp,ex);
+    }
+  };
+exports.finalApprover=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("update Email_Workflow set Status ='AF' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='A'",data.UserAccess_Headerkey,data.Approver_Email);
+      db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
 exports.add=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");
@@ -300,6 +511,57 @@ else{
 catch(ex){
 httpMsgs.show500(req,resp,ex);
 }
+};
+exports.addapmaster=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      //var sql=util.format("Insert into Email_Workflow (Emp_ID) Values('%d')",data.Emp_ID);
+
+        var sql=util.format("Insert into Email_Workflow (Emp_ID,UserAccess_Headerkey,Approver_Name,Approver_Email) Values('%d','%d','%s','%s')",data.Emp_ID,data.UserAccess_Headerkey,data.Approver_Name,data.Approver_Email);
+        db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+}
+
+exports.addapmaster2=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("UPDATE Email_Workflow SET Status ='%s',Reasons ='%s', Trans_Datetime='%s' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Emp_ID='%s' and (Status is null or Status ='')",data.Status,data.Reason,data.Trans_Datetime,data.UserAccess_Headerkey,data.Approver_Email,data.Emp_ID);
+      db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
 };
 exports.login=function(req,resp,reqbody){
   try{

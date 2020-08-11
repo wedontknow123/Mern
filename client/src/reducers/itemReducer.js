@@ -1,17 +1,31 @@
-import {GET_empid,GET_oldkey,GET_headerkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
+import {GET_Department,send_for_approval,GET_empid,GET_oldkey,GET_headerkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
 const initialState={
     items:[],
     eid:"",
     hkey:"",
     okey:"",
-    loading:false
+    loading:false,
+    approver_name:'',
+    approver_email:'',
+    department:''
 };
 
 export default function(state=initialState, action){
     switch(action.type){
-        case GET_empid:
+        case send_for_approval:
+            console.log(action.payload)
             return{
-                
+                ...state,
+                approver_name:action.payload[0].Approver_Name,
+                approver_email:action.payload[0].Email
+            };
+        case GET_Department:
+            return{               
+                    ...state,
+                    department:action.payload
+            };
+        case GET_empid:
+            return{               
                 ...state,
                 eid:action.payload,
                 loading:false

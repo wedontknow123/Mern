@@ -12,7 +12,6 @@ import newuserform from './components/createmenu/newuserform';
 import editdraftform from './components/createmenu/editdraftform';
 import deleteform from './components/createmenu/deleteform';
 import {loadUser} from './actions/authActions';
-
 import PropTypes from 'prop-types';
 import home from './components/home';
 import createmenu from './components/createmenu/createmenu';
@@ -21,6 +20,9 @@ import changes_screen from './components/changes_required/changes_screen'
 import deactivate from './components/deactivate/deactivate';
 import screens_test from './components/createmenu/screens_test';
 import screens_test_d from './components/createmenu/screens_test_d';
+import pending_requests from './components/createmenu/pending_requests';
+import displaying1 from './components/createmenu/displaying';
+import Rejected_req from './components/createmenu/Rejected_req';
 class App extends Component{
   componentDidMount(){
     store.dispatch(loadUser());
@@ -46,6 +48,11 @@ class App extends Component{
       <Route exact path='/deactivate' component={deactivate}/>
       <Route exact path='/changes_required' component={changes_required}/>
       <Route exact path='/changes_required/changes_screen' component={changes_screen}/>
+      <Route exact path='/requests' component={pending_requests}/>
+      <Route exact path='/requests/display' component={displaying1}/>
+      <Route exact path='/rejected' component={Rejected_req}/>
+
+
     </div>
 
     </BrowserRouter>

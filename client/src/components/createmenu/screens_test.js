@@ -27,7 +27,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-
+import {getapprovalinfo,approval1} from '../../actions/itemActions';
 var a='';
 var dateFormat = require('dateformat');
 
@@ -43,10 +43,54 @@ class screens_test extends Component{
           //key:'',
           //empid:this.props.eid,
           data:[],
-          done : ''
+          done : '',
+          itr:''
         };
    
-         
+         handleclick2=()=>{
+           console.log(this.props);
+           const info={
+            UserAccess_Headerkey:this.props.hkey,
+            Department:this.props.department
+           }
+            this.props.getapprovalinfo(info);
+
+         }
+        //  sendforapproval=()=>{
+        //   const info={
+        //     UserAccess_Headerkey:this.props.hkey,
+        //     Employee_ID:this.props.eid,
+        //     Approver_Name:this.props.approver_name,
+        //     Approver_Email:this.props.approver_email
+        //   }
+        //   console.log(info);
+        //   this.props.approval1(info);
+        //  }
+        static propTypes={
+          auth:PropTypes.object.isRequired
+      }
+         componentDidUpdate(){
+           console.log("1");
+           if(this.state.itr===""){
+            console.log("2");
+
+             if(this.props.approver_name!==""){
+              console.log("3");
+
+              const info={
+                UserAccess_Headerkey:this.props.hkey,
+                Emp_ID:this.props.eid,
+                Approver_Name:this.props.approver_name,
+                Approver_Email:this.props.approver_email
+              }
+              console.log(info);
+              this.props.approval1(info);
+              this.setState({
+                itr:"yes"
+              })
+             }
+           }
+         }
       handlechange = (values,event) => {
           if(event!==null){
            a=event.Module;   
@@ -125,7 +169,7 @@ class screens_test extends Component{
      
     var now = new Date();
     var i;
-    //console.log(this.state.key);
+    console.log(this.props);
     for (i=0;i<this.state.data.length;i++){
        const new2={
            Emp_ID:this.props.eid,
@@ -319,7 +363,7 @@ class screens_test extends Component{
             <br/>
             {(this.state.data.length)?list4:''}            
             
-            
+            <Button onClick={this.handleclick2}>Send for approval</Button>
            </div>
            
         )
@@ -330,6 +374,9 @@ const mapStateToProps=state=>({
   item:state.item.items,
   hkey:state.item.hkey,
   eid:state.item.eid,
+  department:state.item.department,
+  approver_name:state.item.approver_name,
+  approver_email:state.item.approver_email
 });
-export default connect(mapStateToProps)(screens_test);
+export default connect(mapStateToProps,{getapprovalinfo,approval1})(screens_test);
 //export default (screens_test);
