@@ -31,7 +31,7 @@ import {getapprovalinfo,approval1} from '../../actions/itemActions';
 var a='';
 var dateFormat = require('dateformat');
 
-class screens_test extends Component{
+class Screens_test extends Component{
    
        
         state = {
@@ -50,11 +50,12 @@ class screens_test extends Component{
          handleclick2=()=>{
            console.log(this.props);
            const info={
-            UserAccess_Headerkey:this.props.hkey,
-            Department:this.props.department
+            UserAccess_Headerkey:this.props.Hkey,
+            Department:this.props.Department
            }
+           
             this.props.getapprovalinfo(info);
-
+            this.handleclick()
          }
         //  sendforapproval=()=>{
         //   const info={
@@ -75,16 +76,19 @@ class screens_test extends Component{
               console.log("3");
 
               const info={
-                UserAccess_Headerkey:this.props.hkey,
-                Emp_ID:this.props.eid,
+                UserAccess_Headerkey:this.props.Hkey,
+                Emp_ID:this.props.Eid,
                 Approver_Name:this.props.approver_name,
                 Approver_Email:this.props.approver_email
               }
               console.log(info);
               this.props.approval1(info);
+              var s = {sa:'sent for approval',id:this.props.Eid,key:this.props.Hkey}
+              axios.post('/api/screens_test/upstat',s)
               this.setState({
                 itr:"yes"
               })
+              window.location.reload(false);
              }
            }
          }
@@ -162,18 +166,20 @@ class screens_test extends Component{
   // }
 
   //this will save the data to the database
-   handleclick=(e)=>{
-     
+   handleclick=()=>{
+    //  e.preventDefault()
+    
+    this.props.FSubmit();
     var now = new Date();
     var i;
     console.log(this.props);
     for (i=0;i<this.state.data.length;i++){
        const new2={
-           Emp_ID:this.props.eid,
+           Emp_ID:this.props.Eid,
            Module:this.state.data[i].mo,
            Screens:this.state.data[i].sc,
            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-           UserAccess_Headerkey:this.props.hkey
+           UserAccess_Headerkey:this.props.Hkey
           }
           axios.post('/api/screens_test/save',new2)
           .then(res=>{
@@ -232,10 +238,10 @@ class screens_test extends Component{
     
       
     render(){  
-        if(this.state.done=='yes'){
-            //return <Redirect to='/options/newuser/screens'/>
-            return <Redirect to='/options'/>
-        }
+        // if(this.state.done=='yes'){
+        //     //return <Redirect to='/options/newuser/screens'/>
+        //     return <Redirect to='/options'/>
+        // }
 
         
         
@@ -293,7 +299,7 @@ class screens_test extends Component{
         );
         const list4=(
             <Fragment>
-             <Button onClick={this.handleclick} >Save </Button>
+             <Button type="submit" onClick={this.handleclick} style={{margin:5}} >Save as Draft</Button>
             </Fragment>
         );
         const filterOptions1 = createFilterOptions({
@@ -358,8 +364,8 @@ class screens_test extends Component{
             }}
             /> 
             <br/>
-            {(this.state.data.length)?list4:''}            
-            
+            {/* {(this.state.data.length)?list4:''}             */}
+            {list4}            
             <Button onClick={this.handleclick2}>Send for approval</Button>
            </div>
            
@@ -375,5 +381,5 @@ const mapStateToProps=state=>({
   approver_name:state.item.approver_name,
   approver_email:state.item.approver_email
 });
-export default connect(mapStateToProps,{getapprovalinfo,approval1})(screens_test);
+export default connect(mapStateToProps,{getapprovalinfo,approval1})(Screens_test);
 //export default (screens_test);

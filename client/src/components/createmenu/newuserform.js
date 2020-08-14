@@ -17,16 +17,14 @@ import PropTypes from 'prop-types';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';
+import Screens_test from './screens_test';
 
 var dateFormat = require('dateformat');
 var now = new Date();
 
 class newuserform extends Component{
     uploadObj = new UploaderComponent();
-     path = {
-        // removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove',
-        // saveUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Save'
-    }
+     
     state={
         type:'New User Creation',
         branch:'',
@@ -96,6 +94,8 @@ class newuserform extends Component{
                department_options:res.data
             })
             console.log(this.state.department_options)
+            this.getheader()
+            console.log(this.state.key)
         })
     }
     //  uploadAll=()=> {
@@ -103,13 +103,13 @@ class newuserform extends Component{
     //     //this.uploadObj.upload(this.uploadObj.getFilesData())
     //   }
     
-    handlechange4=(e)=>{
-        e.preventDefault();            
+    handlechange4=(sa)=>{
+        // e.preventDefault();            
        console.log(this.uploadObj.getFilesData())
         let v = this.uploadObj.getFilesData()
         if(v!==null){//this.state.file
             if(this.state.empid!==null){
-            this.getheader()
+            //this.getheader()
             console.log(this.state.key)
              }
             const data=new FormData();
@@ -138,14 +138,17 @@ class newuserform extends Component{
                         axios.post('/api/doc/rec',new5)
                         
                             }
-                            this.handlechange3()
+                            
                     })
             })
      }
+    
+    
+    this.handlechange3()
    
     }
    
-    handlechange3=(event)=>{
+    handlechange3=()=>{
         
         console.log(this.state)
         console.log(this.props.auth.user.Email)
@@ -195,18 +198,18 @@ class newuserform extends Component{
 
     }
     render(){
-        if(this.state.empid&&this.state.done=='yes'){
-            //onSubmit={this.handlechange4}
-            //return <Redirect to='/options/newuser/screens'/>
-            return <Redirect to='/options/newuser/screens_test'/>
-        }
+        // if(this.state.empid&&this.state.done=='yes'){
+        //     //onSubmit={this.handlechange4}
+        //     //return <Redirect to='/options/newuser/screens'/>
+        //     return <Redirect to='/options/newuser/screens_test'/>
+        // }
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Department,
           });
         return(
             <div className="container">
-                <Form onSubmit={this.handlechange4} >
+                <Form  > {/*onSubmit={this.handlechange4} */}
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -330,7 +333,16 @@ class newuserform extends Component{
                                {/* </span> */}
                                </Col>
                              </FormGroup>
-                            <FormGroup check row>
+                             <br/>
+                             <hr width="90%" size="15" ></hr>
+                             <br/>
+                             <FormGroup >
+                             <Screens_test Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.handlechange4}/>
+                             {/* <Screens_test/>  */}
+                             </FormGroup>
+                             {/* <Button >Save as Draft</Button> */}
+
+                            {/* <FormGroup check row>
                                 <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save and Next</Button>
                                 </Col>
@@ -338,7 +350,7 @@ class newuserform extends Component{
                                 <Col sm={{ size: 10, offset: 3 }}>
                                  <Button >Save as Draft</Button>
                                 </Col> */}
-                            </FormGroup>
+                            {/* </FormGroup> */}
 
 
                 </Form>            

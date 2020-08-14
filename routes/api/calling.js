@@ -506,6 +506,31 @@ exports.add4=function(req,resp,reqbody){
   }
 };
 
+exports.upstat=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("UPDATE UserAccess_Header SET Status ='%s' WHERE Emp_ID ='%d' and UserAccess_Headerkey ='%d'",data.sa,data.id,data.key);
+      db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
 exports.add7=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");

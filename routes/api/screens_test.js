@@ -18,4 +18,8 @@ router.post('/save',(req,res)=>{
      call.add3(req,res,JSON.stringify(req.body));
 })
 
+router.post('/upstat',(req,res)=>{
+    call.upstat(req,res,JSON.stringify(req.body));
+})
+
 module.exports=router;
