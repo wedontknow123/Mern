@@ -27,6 +27,7 @@ class deleteform extends Component{
          })
      }
     handlesubmit=(value,event)=>{
+      document.getElementById("delete").disabled=true;
         const new1={
             Emp_ID:this.state.selectid
         };
@@ -88,7 +89,7 @@ class deleteform extends Component{
             onChange={this.handlechange}
             renderInput={(params)=><TextField {...params} label="Delete" variant="outlined"/>}
             /><br></br>
-            <Button type="button" onClick={this.handlesubmit} disabled={this.state.boola}>Delete</Button>
+            <Button type="button" onClick={this.handlesubmit} disabled={this.state.boola} id="delete">Delete</Button>
 
             </div>
         )

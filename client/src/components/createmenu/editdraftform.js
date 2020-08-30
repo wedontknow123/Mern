@@ -11,18 +11,21 @@ import {
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {getEmpid,getHeaderkey} from '../../actions/itemActions';
+import {getEmpid,getHeaderkey,getdepartment} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
-//import screens from './screens';
+import Screens_test_d from './screens_test_d';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
 import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';    
 
 var dateFormat = require('dateformat');
-var n = 1
+var n = 1;
 var now = new Date();
+var c=0 ;
+const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+
 
 class editdraftform extends Component{
   uploadObj = new UploaderComponent();
@@ -37,6 +40,7 @@ class editdraftform extends Component{
         emptype:'Permanent',
         software:'FS',
         reason:'',
+        reasonl:'',
         key:'',
         done:'',
         status:'draft',
@@ -46,63 +50,64 @@ class editdraftform extends Component{
         files:[],
         filepath : "",
         r : "",
-        
-        
+        department_options:[],
+        errors: {
+          name:'',          
+          email:'',
+          doj:'',                     
+        }        
     }  
 
     static propTypes={
       auth:PropTypes.object.isRequired
     }
 
-    fileSave = (e) =>{
-      e.preventDefault();
-      console.log(this.uploadObj.getFilesData())
+    fileSave = (itr) =>{ 
         let v = this.uploadObj.getFilesData()
-        if(v!==null){//this.state.file            
+        var x;
+        if(v!==null){           
             const data=new FormData();
-            for(var x=0;x<v.length;x++){//v
-                data.append('file',v[x].rawFile);
+            for(var y=0;y<v.length;y++){//v
+                data.append('file',v[y].rawFile);
             }
-            console.log(data)
             axios.post('/api/doc',data,{}).
             then(res=>{                
-                console.log(res.data)
+              console.log("now gettin new files")
                 this.setState({
                     files:res.data
                 },()=>{
-                    console.log(this.state.filepath)
-                    console.log(this.state.key)
-                        for(var x=0;x<this.state.files.length;x++){
+                        for(x=0;x<this.state.files.length;x++){
                         const new5={
                             UserAccess_Headerkey:this.state.key,
                             Emp_ID:this.state.empid,
                             Document_Name:this.state.files[x],
                             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
                         }
-                        axios.post('/api/doc/rec',new5)                       
-                            }
-                            this.onSubmit()
-                            
+                        axios.post('/api/doc/rec',new5)
+                        .then(res=>{                          
+                          console.log("now saving new files"); 
+                           c=c+1;                                                      
+                           console.log(c)                   
+                         })                     
+                        } 
+                        console.log("lol")
+                        if(this.state.filepath.length>=0){                                 
+                          this.onSubmit(itr) 
+                        }                             
                     })
             })
-     }
-   
+     }     
     }
 
-    deleteFile = (ikey,name,bid) =>{
+    deleteFile = (ikey,name) =>{
       var fileName = this.state.filenames[ikey].Document_Name
       console.log(fileName) 
       console.log(this.state.key)      
       var a = {fname : fileName, fpath:this.state.filepath, hkey:this.state.key}
-      axios.post('/api/download/del', a )
-      // .then(res=>{
-        
-      // }) 
+      axios.post('/api/download/del', a ).then(res=>{console.log(res)})       
       console.log(ikey)
-        //console.log(res)
         document.getElementById(ikey).innerHTML = "DELETED!";
-        //document.getElementById(name).remove()
-        document.getElementById(bid).remove() 
+        document.getElementById(name).remove() 
         console.log(this.state.filenames)              
     }
 
@@ -192,11 +197,20 @@ class editdraftform extends Component{
              key:'',
              done:'',
              status:'draft',
-             boola:'true',
-             //c : 'true'
+             boola:'true',             
           })
       }
   }
+  componentDidMount(){
+    axios.get('/api/items/department')
+    .then(res=>{
+        this.setState({
+           department_options:res.data
+        })
+        console.log("now gettin depart options")
+        console.log(this.state.department_options)        
+    })
+}
 
     componentDidUpdate(){
       if(this.state.r === ""){
@@ -226,18 +240,52 @@ class editdraftform extends Component{
     }
   }
 
-
-
     handlechange1=(e)=>{
-        const value=e.target.value;
-        this.setState({[e.target.name]:value});
-        console.log(value);
+      const { name, value } = e.target;        
+      //console.log(value);        
+      let errors = this.state.errors;
+      let reasonl=this.state.reasonl;    
+      switch (name) {
+          case 'name': 
+              errors.name = 
+              (value.length < 5 && value.length >0)
+                    ? 'Character limit >5 and <10 '
+                  : '';
+              break;
+          case 'email': 
+              errors.email = 
+              validEmailRegex.test(value)
+                  ? ''
+                  : 'Email is not valid';
+              break;
+          case 'doj': 
+              errors.doj = 
+              value < now
+              ? 'Enter a valid date'
+              : '';
+              break;
+          case 'reason': 
+              reasonl = `${value.length}/150`;                
+              break;                
+          default:
+              break;
+      }    
+      this.setState({errors,reasonl, [name]: value})
         
     }
 
-    onSubmit=()=>{
-        
-        // event.preventDefault();
+  //   handlechange2=(value,event)=>{
+  //     if(event!==null){           
+  //      this.setState({
+  //        depart:event.Department
+  //      }, () => {
+  //        console.log(this.state.depart)
+  //      });       
+  //  }
+  // }
+
+    onSubmit=(itr)=>{
+      this.props.getdepartment(this.state.depart);
         var now = new Date();
         const newItem={
             Location:this.state.branch,
@@ -253,44 +301,28 @@ class editdraftform extends Component{
             Status:this.state.status,            
             Emp_ID:this.state.empid,
             User_Email:this.props.auth.user.Email
-        }
-        this.props.getEmpid(this.state.empid);
-        this.props.getHeaderkey(this.state.key);
-        console.log(this.props)
-        
+        }       
         axios.post('/api/draft/save',newItem)
-          .then(res=>{
-            console.log(res);
-            this.setState({
-                done:'yes',
-                // draft:'false'
+          .then(res=>{            
+            console.log("now saving form")
+            if(itr=="yes"){
+              console.log("changing state")
+              var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
+              axios.post('/api/screens_test/upstat',s)
+            }          
+            setTimeout(() => {
+              this.setState({
+                  done:'yes'
               })
+          },3000)
           })
+        }
 
-
-
-    }
-
-    render(){
-        //if(this.state.c == 'true'){
-          // console.log(this.props)
-          // axios.get('/api/draft')
-          //   .then(res=>{
-          //   this.setState({
-          //       items:res.data,
-          //       //c:'false'
-          //   })
-          //   console.log(this.state.items)
-          //   }) 
-
-        //}
-        
-        
+    render(){ 
+        const {errors} = this.state;       
         if(this.state.done=='yes'){
-            return (
-            <Redirect to='/options/editdraftform/screens_test_d'/>
-            // <div><screens_test_d empid = {this.state.empid}/></div>
-             )
+          console.log("ALL DONE!!!")
+          return  <Redirect to='/options'/>            
         }
         const filterOptions1 = createFilterOptions({   //for combo box till the next @
             matchFrom: 'start',
@@ -310,7 +342,8 @@ class editdraftform extends Component{
                     />
                                                       {/* @ */}
            
-                <Form onSubmit={this.fileSave} disabled={true}>
+                <Form >{/*onSubmit={this.fileSave} disabled={true}*/}
+                        
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -343,25 +376,41 @@ class editdraftform extends Component{
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="name" id="name" value={this.state.name} onChange={this.handlechange1} />
+                             <Input type="text" name="name" maxLength='100' id="name" value={this.state.name} onChange={this.handlechange1} />
+                             {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="desig" sm={3}>Designation:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="desig" id="desig" value={this.state.desig} onChange={this.handlechange1}/>
+                             <Input type="text" name="desig" maxLength='100' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>
-                         <FormGroup row>
+                         {/* <FormGroup row>
                           <Label for="depart" sm={3}>Department:</Label>
                            <Col sm={5}>
                              <Input type="text" name="depart" id="depart" value={this.state.depart} onChange={this.handlechange1}/>
                               </Col>
-                         </FormGroup>
+                         </FormGroup> */}
+                         {/* <FormGroup row>
+                         <Label for="depart" sm={3}>Department:</Label>
+                         <Col sm={5}>
+                         <Autocomplete
+                            id="Module"                                                     
+                            options={this.state.department_options}
+                            getOptionLabel={(option)=>option.Department}
+                                filterOptions={filterOptions2}
+                            style={{width:300}}
+                            onChange={this.handlechange2}
+                            renderInput={(params)=><TextField {...params}  label="Department" variant="outlined"/>}
+                          />
+                         </Col>
+                         </FormGroup> */}
                          <FormGroup row>
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
-                             <Input type="email" name="email" id="email" value={this.state.email} onChange={this.handlechange1}/>
+                             <Input type="email" name="email" maxLength='150' id="email" value={this.state.email} onChange={this.handlechange1}/>
+                             {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>} 
                               </Col>
                          </FormGroup>
                          <FormGroup row>
@@ -374,6 +423,7 @@ class editdraftform extends Component{
                                       value={this.state.doj}
                                       onChange={this.handlechange1}
                                     />
+                                    {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>}
                                     </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -416,14 +466,17 @@ class editdraftform extends Component{
                             <FormGroup row>
                                <Label for="exampleText"sm={3}>Reason</Label>
                                <Col sm={5}>
-                               <Input type="textarea" name="reason" id="reason" value={this.state.reason} onChange={this.handlechange1}/>
+                               <Input type="textarea" name="reason" id="reason"  maxLength='150' value={this.state.reason} onChange={this.handlechange1}/>
+                               {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                                </Col>
                             </FormGroup>
-                            <FormGroup check row>
-                               <Col sm={{ size: 10, offset: 3 }}>
-                                 <Button >Save and Next</Button>
-                                   </Col>
-                                 </FormGroup>
+                             <br/>
+                             <hr width="90%" size="15" ></hr>
+                             <br/>
+                             <FormGroup >
+                             <Screens_test_d Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.fileSave} Errors={this.state.errors} Fields={this.state}/>                             
+                             </FormGroup>
+                             <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
                           </Form>
             </div>
         );
@@ -431,12 +484,14 @@ class editdraftform extends Component{
 }
 
 const mapStateToProps=state=>({
+  item:state.item,
   item:state.item.items,
   hkey:state.item.hkey,
   eid:state.item.eid,
   auth:state.auth,
+  department:state.item.department
   // uemail:state.auth.user
 });
 
-  export default connect(mapStateToProps,{getEmpid,getHeaderkey})(editdraftform);  
+  export default connect(mapStateToProps,{getEmpid,getHeaderkey,getdepartment})(editdraftform);  
 //export default (editdraftform);

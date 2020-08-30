@@ -10,7 +10,7 @@ import {
     NavItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {addItem,getEmpid,getHeaderkey,getdepartment} from '../../actions/itemActions';
+import {getEmpid,getHeaderkey,getdepartment} from '../../actions/itemActions';//addItem,
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -21,10 +21,14 @@ import Screens_test from './screens_test';
 
 var dateFormat = require('dateformat');
 var now = new Date();
+// var lol =0;
+// var rd =0;
+var c=0 
+const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
 class newuserform extends Component{
-    uploadObj = new UploaderComponent();
-     
+
+    uploadObj = new UploaderComponent();     
     state={
         type:'New User Creation',
         branch:'',
@@ -37,22 +41,69 @@ class newuserform extends Component{
         emptype:'Permanent',
         software:'FS',
         reason:'',
+        reasonl:'',
         key:'',
         done:'',
         file:null,
         filepath:[],
         status:'draft' ,
-        department_options:[]
-        
+        department_options:[],
+        errors: {
+            name:'',
+            empid:'',
+            email:'',
+            doj:'',                      
+          }
+               
     }
     static propTypes={
         auth:PropTypes.object.isRequired
     }
     handlechange1=(e)=>{
-        const value=e.target.value;
-        this.setState({[e.target.name]:value});
-        console.log(value);
-        
+        const { name, value } = e.target;        
+        //console.log(value);        
+        let errors = this.state.errors; 
+        let reasonl = this.state.reasonl;   
+        switch (name) {
+            case 'name': 
+                errors.name = 
+                (value.length < 5 && value.length >0)
+                    ? 'Character limit >5 and <10 '
+                    : '';
+                break;
+            case 'email': 
+                errors.email = 
+                (validEmailRegex.test(value))
+                    ? ''
+                    : 'Email is not valid';
+                break;            
+            case 'empid': 
+                errors.empid = 
+                (value.length < 10 && value.length >0) 
+                ? 'Employee ID must be less than or equal to 10 characters'
+                : '';
+                break;
+            case 'doj': 
+                errors.doj = 
+                value < now
+                ? 'Enter a valid date'
+                : '';
+                break;
+            case 'reason': 
+                reasonl = `${value.length}/150`                
+                break;                
+            default:
+                break;
+        }    
+        this.setState({errors,reasonl, [name]: value})
+    }
+
+    handlechange6=(value,event)=>{
+        if(event!==null){                                     
+         this.setState({
+           depart:event.Department
+         }) 
+        }   
     }
     
     getheader=()=>{
@@ -68,67 +119,41 @@ class newuserform extends Component{
             }
             else {
                 v=v+1
+                console.log("now getting header key")
                 this.setState({
                     key:v
                 })
             }
-            //this.handlechange3();
         })
     }
-    // handlechange2=(e)=>{
-    //     console.log(e.target.files)
-    //     this.setState({
-    //         file:e.target.files
-    //     })
-    //     console.log(this.state.file)
-    // }
-
-    //     this.setState({
-    //         file:e.target.files
-    //     })
-    // }
+   
     componentDidMount(){
         axios.get('/api/items/department')
         .then(res=>{
             this.setState({
                department_options:res.data
             })
-            console.log(this.state.department_options)
+            console.log("now getting departments")
             this.getheader()
-            console.log(this.state.key)
+            //console.log(this.state.key)
         })
     }
-    //  uploadAll=()=> {
-    //     console.log(this.uploadObj.getFilesData());
-    //     //this.uploadObj.upload(this.uploadObj.getFilesData())
-    //   }
-    
-    handlechange4=(sa)=>{
-        // e.preventDefault();            
-       console.log(this.uploadObj.getFilesData())
+       
+    handlechange4=(itr)=>{         
         let v = this.uploadObj.getFilesData()
-        if(v!==null){//this.state.file
-            if(this.state.empid!==null){
-            //this.getheader()
-            console.log(this.state.key)
-             }
+        var x;
+        if(v!==null){
             const data=new FormData();
-            for(var x=0;x<v.length;x++){//v
-                data.append('file',v[x].rawFile);
-            }
-            console.log(data)
+            for(var y=0;y<v.length;y++){//v
+                data.append('file',v[y].rawFile);
+            }            
             axios.post('/api/doc',data,{}).
-            then(res=>{
-                // if(this.state.empid!==null){
-                //     this.getheader()
-                // }
-                console.log(res.data)
+            then(res=>{                
+                console.log("now gettin new files")                
                 this.setState({
-                    filepath:res.data
-                },()=>{
-                    console.log(this.state.filepath)
-                    console.log(this.state.key)
-                        for(var x=0;x<this.state.filepath.length;x++){
+                    filepath:res.data,                    
+                },()=>{                  
+                        for(x=0;x<this.state.filepath.length;x++){
                         const new5={
                             UserAccess_Headerkey:this.state.key,
                             Emp_ID:this.state.empid,
@@ -136,23 +161,25 @@ class newuserform extends Component{
                             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
                         }
                         axios.post('/api/doc/rec',new5)
-                        
-                            }
-                            
+                        .then(res=>{                            
+                            console.log("now saving new files"); 
+                             c=c+1;
+                             console.log(c)
+                            //  if(c==this.state.filepath.length){                                 
+                            //     this.handlechange3(itr) 
+                            // }                      
+                           })                                                
+                        }
+                        if(this.state.filepath.length>=0){                                 
+                            this.handlechange3(itr) 
+                        }                                                                   
                     })
             })
-     }
-    
-    
-    this.handlechange3()
-   
+     }     
     }
    
-    handlechange3=()=>{
-        
-        console.log(this.state)
-        console.log(this.props.auth.user.Email)
-        console.log(this.props)
+    handlechange3=(itr)=>{          
+        this.props.getdepartment(this.state.depart);
         if(this.state.empid){
         const newItem={
             Trans_Type:this.state.type,
@@ -170,46 +197,40 @@ class newuserform extends Component{
             UserAccess_Headerkey:this.state.key,
             Status:this.state.status,
             User_Email:this.props.auth.user.Email
-        }
-        console.log(newItem)
-        this.props.addItem(newItem);
-        this.props.getEmpid(this.state.empid);
-        this.props.getHeaderkey(this.state.key);
-        this.props.getdepartment(this.state.depart);
-        console.log(this.props)
-        console.log(newItem.Trans_Datetime);
-        this.setState({
-            done:'yes'
-        })
-        }
-   
-    }
-    handlechange6=(value,event)=>{
-        if(event!==null){ 
+        }        
+        axios.post('/api/items',newItem)
+       .then(res=>{
+            console.log("now saving newuserform")
+            if(itr=="yes"){
+                console.log("changing state")
+            var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
+            axios.post('/api/screens_test/upstat',s)
+            }
+            setTimeout(() => {
+                this.setState({
+                    done:'yes'
+                })
+            }, 3000)
             
-         this.setState({
-           depart:event.Department
-         }, () => {
-           console.log(this.state.depart)
-           //this.getheader();
-         });
-         
-     }
-
+       })        
+        }   
     }
+
+
     render(){
-        // if(this.state.empid&&this.state.done=='yes'){
-        //     //onSubmit={this.handlechange4}
-        //     //return <Redirect to='/options/newuser/screens'/>
-        //     return <Redirect to='/options/newuser/screens_test'/>
-        // }
+        const {errors} = this.state;
+        if(this.state.done=='yes'){            
+            console.log("ALL DONE !!")
+            return <Redirect to='/options'/>     //the final return should be inside an else ....         
+        }
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Department,
           });
-        return(
+        return( //
             <div className="container">
-                <Form  > {/*onSubmit={this.handlechange4} */}
+                <Form  > {/*onSubmit={this.handlechange4} // should have a onsubmit attribute to disable bothe buttons */} 
+                        
                         <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch</legend>
                             <Col sm={10}>
@@ -242,13 +263,14 @@ class newuserform extends Component{
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="name" id="name" onChange={this.handlechange1} />
+                             <Input type="text" name="name" id="name" maxLength='100' onChange={this.handlechange1} />
+                             {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="desig" sm={3}>Designation:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="desig" id="desig" onChange={this.handlechange1}/>
+                             <Input type="text" name="desig" id="desig" maxLength='100' onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>  
                          {/* <FormGroup row>
@@ -258,7 +280,7 @@ class newuserform extends Component{
                               </Col>
                          </FormGroup>   */}
                          <FormGroup row>
-                         <Label for="depart" sm={3}>Department:</Label>
+                         <Label for="depart" sm={3}>Department <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
                          <Col sm={5}>
                          <Autocomplete
                            id="Module"
@@ -272,16 +294,18 @@ class newuserform extends Component{
                                </Col>
                          </FormGroup>
                          <FormGroup row>
-                          <Label for="emp_id" sm={3}>Employee Id:</Label>
+                          <Label for="emp_id" sm={3}>Employee Id <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="empid" id="empid" onChange={this.handlechange1}/>
+                             <Input type="text" name="empid" id="empid" maxLength='10' onChange={this.handlechange1}/>
+                             {errors.empid.length > 0 && <span className='error' style={{color:"red"}}>{errors.empid}</span>}
                               </Col>
                          </FormGroup> 
                          <FormGroup row>
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
-                             <Input type="email" name="email" id="email" onChange={this.handlechange1}/>
-                              </Col>
+                             <Input type="email" name="email" id="email" maxLength='150' onChange={this.handlechange1}/>
+                             {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>}   
+                           </Col>
                          </FormGroup> 
                          <FormGroup row>
                              <Label for="doj"sm={3}>Date of Joining</Label>
@@ -292,6 +316,7 @@ class newuserform extends Component{
                                       id="doj"
                                       onChange={this.handlechange1}
                                     />
+                                    {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>}
                                     </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -318,28 +343,26 @@ class newuserform extends Component{
                              </Col>
                             </FormGroup>
                             <FormGroup row>
-                               <Label for="exampleText"sm={3}>Reason</Label>
-                               <Col sm={5}>
-                               <Input type="textarea" name="reason" id="reason" onChange={this.handlechange1}/>
-                               </Col>
-                            </FormGroup>
-                            <FormGroup row>
                                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
                                <Col sm={5}>
-                               {/* <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile" label="Select the required files" multiple onChange={this.handlechange2}/> */}
-                               <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />
-                               {/* <span className="upload-buttons"> */}
-                                {/* <Button id='full' className='e-btn e-control' onClick={this.uploadAll = this.uploadAll.bind(this)}>Upload all files</Button> */}
-                               {/* </span> */}
+                               <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                                </Col>
                              </FormGroup>
+                            <FormGroup row>
+                               <Label for="exampleText"sm={3}>Reason</Label>
+                               <Col sm={5}>
+                               <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange1}/>
+                               {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
+                               </Col>
+                            </FormGroup>                            
                              <br/>
                              <hr width="90%" size="15" ></hr>
                              <br/>
                              <FormGroup >
-                             <Screens_test Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.handlechange4}/>
+                             <Screens_test Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.handlechange4} Errors={this.state.errors} Fields={this.state}/>
                              {/* <Screens_test/>  */}
                              </FormGroup>
+                             <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
                              {/* <Button >Save as Draft</Button> */}
 
                             {/* <FormGroup check row>
@@ -366,4 +389,4 @@ const mapStateToProps=state=>({
     eid:state.item.eid,
     department:state.item.department
   });
-export default connect(mapStateToProps,{addItem,getEmpid,getHeaderkey,getdepartment})(newuserform);
+export default connect(mapStateToProps,{getdepartment})(newuserform);//addItem,

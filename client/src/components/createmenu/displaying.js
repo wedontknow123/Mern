@@ -155,8 +155,8 @@ class displaying1 extends Component{
         console.log(this.props.eid);
         const list2=(console.log(this.state.depart),
             <Fragment>
-             <Button onClick={this.handleclick1}>Approve</Button>
-               <Button onClick={this.handle_rejection}>Reject</Button>
+             <Button onClick={this.handleclick1} id="approve">Approve</Button>
+               <Button onClick={this.handle_rejection} id="reject">Reject</Button>
             </Fragment>
             
         );

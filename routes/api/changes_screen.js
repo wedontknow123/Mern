@@ -15,7 +15,7 @@ router.post('/hkey',(req,res)=>{
 })
 
 router.post('/data',(req,res)=>{
-    const key= req.body.key;
+    const key= req.body.key;    
     call.get8(req,res,key);
 })
 
@@ -34,6 +34,16 @@ router.post('/save',(req,res)=>{
     
     //call.del3(req,res,JSON.stringify(req.body));
     call.add3(req,res,JSON.stringify(req.body));   
+})
+
+router.post('/upstat',(req,res)=>{
+    call.upstat(req,res,JSON.stringify(req.body));
+})
+
+router.post('/fn',(req,res)=>{ //post
+    
+    const key= req.body.okey;
+    call.get14(req,res,key);//,useremail
 })
 
 module.exports=router;

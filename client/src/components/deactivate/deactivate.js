@@ -10,6 +10,7 @@ import {
     Col,
     NavItem
 } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -23,11 +24,13 @@ class deactivate extends Component{
         selectedid:'',
         boola:true,
         reason:'',
+        reasonl:'',
         Status:'inactive',
         UserAccess_Headerkey:'',
         Trans_Datetime:'',
         useremail :"",
         r : "" ,
+        done:"",
         Trans_Type:"Deactivation"
     }
 
@@ -36,16 +39,27 @@ class deactivate extends Component{
             selectedid:event.Emp_ID
         })
     }
-    handlechange1=(event)=>{
-        this.setState({
-            reason:event.target.value
-        })
+    handlechange1=(e)=>{
+        const { name, value } = e.target;
+        let reasonl = this.state.reasonl;   
+        switch (name) {            
+            case 'reason': 
+                reasonl = `${value.length}/150`                
+                break;                
+            default:
+                break;
+        }    
+        this.setState({reasonl, [name]: value})    
     }
+
     static propTypes={
         auth:PropTypes.object.isRequired
     }
     getheader=()=>{
-        var v='';
+        if(this.state.reason.length==0){//
+            alert("Fill all the * (Required) fields !")
+           }
+        else{var v='';
         axios.get('/api/items/key')
         .then(res=>{
             v=res.data[0][''];
@@ -60,15 +74,16 @@ class deactivate extends Component{
                 this.setState({
                     UserAccess_Headerkey:v
                 },()=>{
+                    document.getElementById("submit").disabled=true;
                     this.handlesubmit();
                 })
             }
-        })
+        })}
     }
     
     handlesubmit=(e)=>{
        var now=new Date();
-      
+       
       const newitem={
 
           Emp_ID:this.state.selectedid,
@@ -83,6 +98,9 @@ class deactivate extends Component{
       console.log(this.state);
       axios.post('/api/deactivate/cont',newitem)
       .then(res=>{
+          this.setState({
+              done:"yes"
+          })
           console.log(res);
       })
     }
@@ -128,9 +146,16 @@ class deactivate extends Component{
             matchFrom: 'start',
             stringify: (option) => option.Emp_ID,
           });
+          if(this.state.done=='yes'){
+            console.log("ALL DONEE!!!")
+              return (
+              <Redirect to='/'/>
+               )
+            }
         return(
             <div className='container'>
             <Form>
+            <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
               <Autocomplete
               id="deactivate"
               options={this.state.empid}
@@ -141,14 +166,15 @@ class deactivate extends Component{
               renderInput={(params)=><TextField {...params} label="Delete" variant="outlined"/>}
               /><br></br>
               <FormGroup row>
-                <Label for="exampleText"sm={1}>Reason</Label>
+                <Label for="exampleText"sm={1}>Reason <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
                <Col sm={5}>
-                  <Input type="textarea" name="reason" id="reason" onChange={this.handlechange1}/>
+                  <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange1}/>
+                  {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                   </Col>
                  </FormGroup>
               <FormGroup row>
                   <Col sm={{ size: 6, offset: 1 }}>
-                  <Button onClick={this.getheader}>Submit</Button>
+                  <Button onClick={this.getheader} id="submit">Submit</Button>
                   </Col>
               </FormGroup>
             </Form>

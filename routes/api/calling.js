@@ -95,6 +95,7 @@ exports.get7=function(req,res,useremail){ //,useremail
   });
 };
 exports.get8=function(req,res,key){
+  
   db.executeSql("SELECT * FROM UserAccess_Detail where UserAccess_Headerkey='"+key+"'",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
@@ -129,7 +130,7 @@ exports.get10=function(req,res,useremail){
 };
 
 exports.get11=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+useremail+"'
-  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'draft' and A.Trans_Type = 'New User Creation' and A.User_Email ='"+useremail+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'sent for approval' and A.Trans_Type = 'New User Creation' and A.User_Email ='"+useremail+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
     if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -408,7 +409,7 @@ exports.add=function(req,resp,reqbody){
     var data = JSON.parse(reqbody);
     if(data){
         var sql="INSERT INTO UserAccess_Header(Trans_Type,Location,Reason,Emp_ID,Emp_Name,Emp_Designation,Emp_Department,Emp_Email,DOJ,Employee_Type,Software,Trans_Datetime,UserAccess_Headerkey,Status,User_Email) VALUES";
-        sql+= util.format("('%s','%s','%s','%d','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%s')",data.Trans_Type,data.Location,data.Reason,data.Emp_ID,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.UserAccess_Headerkey,data.Status,data.User_Email);
+        sql+= util.format("('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%s')",data.Trans_Type,data.Location,data.Reason,data.Emp_ID,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.UserAccess_Headerkey,data.Status,data.User_Email);
         db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
@@ -462,7 +463,7 @@ exports.add3=function(req,resp,reqbody){
     console.log(data);
     if(data){
         var sql="INSERT INTO UserAccess_Detail(Emp_ID,Module,Screens,Trans_Datetime,UserAccess_Headerkey) VALUES";
-        sql+= util.format("('%d','%s','%s','%s','%d')",data.Emp_ID,data.Module,data.Screens,data.Trans_Datetime,data.UserAccess_Headerkey);
+        sql+= util.format("('%s','%s','%s','%s','%d')",data.Emp_ID,data.Module,data.Screens,data.Trans_Datetime,data.UserAccess_Headerkey);
         db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
@@ -487,7 +488,7 @@ exports.add4=function(req,resp,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-      var sql=util.format("UPDATE UserAccess_Header SET Location ='%s',Reason ='%s',Emp_Name ='%s',Emp_Designation ='%s',Emp_Department ='%s',Emp_Email ='%s',DOJ ='%s',Employee_Type ='%s',Software ='%s',Trans_Datetime ='%s',Status ='%s' WHERE Emp_ID ='%d'",data.Location,data.Reason,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.Status,data.Emp_ID);
+      var sql=util.format("UPDATE UserAccess_Header SET Location ='%s',Reason ='%s',Emp_Name ='%s',Emp_Designation ='%s',Emp_Department ='%s',Emp_Email ='%s',DOJ ='%s',Employee_Type ='%s',Software ='%s',Trans_Datetime ='%s',Status ='%s' WHERE Emp_ID ='%s'",data.Location,data.Reason,data.Emp_Name,data.Emp_Designation,data.Emp_Department,data.Emp_Email,data.DOJ,data.Employee_Type,data.Software,data.Trans_Datetime,data.Status,data.Emp_ID);
       db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
@@ -512,7 +513,7 @@ exports.upstat=function(req,resp,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-      var sql=util.format("UPDATE UserAccess_Header SET Status ='%s' WHERE Emp_ID ='%d' and UserAccess_Headerkey ='%d'",data.sa,data.id,data.key);
+      var sql=util.format("UPDATE UserAccess_Header SET Status ='%s' WHERE Emp_ID ='%s' and UserAccess_Headerkey ='%d'",data.sa,data.id,data.key);
       db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
@@ -561,7 +562,7 @@ exports.add5=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-      var sql=util.format("Insert into UserAccess_Header (Trans_Type,Reason,Trans_Datetime,UserAccess_Headerkey,Emp_ID,Status,User_Email) Values('%s','%s','%s','%d','%d','%s','%s')",data.Trans_Type,data.reason,data.Trans_Datetime,data.UserAccess_Headerkey,data.Emp_ID,data.Status,data.User_Email);
+      var sql=util.format("Insert into UserAccess_Header (Trans_Type,Reason,Trans_Datetime,UserAccess_Headerkey,Emp_ID,Status,User_Email) Values('%s','%s','%s','%d','%s','%s','%s')",data.Trans_Type,data.reason,data.Trans_Datetime,data.UserAccess_Headerkey,data.Emp_ID,data.Status,data.User_Email);
       db.executeSql(sql,function(data,err){
         if(err){ 
          httpMsgs.show500(req,resp,err);
@@ -585,7 +586,7 @@ exports.add6=function(req,resp,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-      var sql=util.format("Insert into User_Document (UserAccess_Headerkey,Emp_ID,Document_Name,Trans_Datetime) Values('%d','%d','%s','%s')",data.UserAccess_Headerkey,data.Emp_ID,data.Document_Name,data.Trans_Datetime);
+      var sql=util.format("Insert into User_Document (UserAccess_Headerkey,Emp_ID,Document_Name,Trans_Datetime) Values('%d','%s','%s','%s')",data.UserAccess_Headerkey,data.Emp_ID,data.Document_Name,data.Trans_Datetime);
       db.executeSql(sql,function(data,err){
         if(err){ 
          httpMsgs.show500(req,resp,err);
@@ -611,7 +612,7 @@ exports.addapmaster=function(req,resp,reqbody){
     if(data){
       //var sql=util.format("Insert into Email_Workflow (Emp_ID) Values('%d')",data.Emp_ID);
 
-        var sql=util.format("Insert into Email_Workflow (Emp_ID,UserAccess_Headerkey,Approver_Name,Approver_Email) Values('%d','%d','%s','%s')",data.Emp_ID,data.UserAccess_Headerkey,data.Approver_Name,data.Approver_Email);
+        var sql=util.format("Insert into Email_Workflow (Emp_ID,UserAccess_Headerkey,Approver_Name,Approver_Email) Values('%s','%d','%s','%s')",data.Emp_ID,data.UserAccess_Headerkey,data.Approver_Name,data.Approver_Email);
         db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);

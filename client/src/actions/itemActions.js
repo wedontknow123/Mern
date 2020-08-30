@@ -40,13 +40,13 @@ export const getOldkey=(okey)=>dispatch=>{
 export const approval1=(info)=>dispatch=>{
      axios.post('/api/apmaster/submit',info)
      .then(res=>{
-         console.log(res);
+         console.log("now submitted approval data to master");
      })
 };
 
 export const getapprovalinfo=(info)=>dispatch=>{
     axios.post('/api/apmaster',info)
-    .then(res=>{console.log(res.data[0].Approver_Name)
+    .then(res=>{console.log("now getting approval info")//res.data[0].Approver_Name
         dispatch({
         type:send_for_approval,
         payload:res.data
@@ -80,13 +80,15 @@ export const deleteItem=(id)=>dispatch=>{
  
 };
 
-export const addItem=(item)=>dispatch=>{
-    axios.post('/api/items',item)
-    .then(res=>dispatch({
-        type:ADD_ITEM,
-        payload:res.data
-    }))
-}; 
+// export const addItem=(item)=>dispatch=>{
+//     //axios.post('/api/items',item)
+//     //.then(res=>{console.log(res)        
+//     //console.log("now saving newuserform")
+//         dispatch({
+//         type:ADD_ITEM,
+//         payload: "lol"
+//     })//})res.data
+// }; 
 
 export const setItemsLoading=()=>{
     return{
