@@ -1,6 +1,6 @@
 import React, { Component,Fragment} from 'react';
 import { Redirect,NavLink } from 'react-router-dom';
-import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
+import {Container,ListGroup,ListGroupItem,Button,Label} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {connect} from 'react-redux';
 import {getItems,addItem2} from '../../actions/itemActions';
@@ -27,15 +27,35 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-
+import {getapprovalinfo,approval1} from '../../actions/itemActions';
 var a='';
 var dateFormat = require('dateformat');
+var n=1;
+// const validateForm = (errors) => {
+//   let valid = "Valid";
+//   Object.values(errors).forEach(
+//     (val) => val.length > 0 && (valid = "Invalid")
+//   );
+//   return valid;
+// }
 
-class screens_test extends Component{
+class Screens_test_d extends Component{
 
+        // validate=()=>{
+        //   if(validateForm(this.props.Errors)=="Valid") {
+        //     console.log("bruh")
+        //     this.setState({
+        //         valid:'Valid'
+        //     })
+        //   }else{
+        //     console.log("bruh wtf")
+        //     this.setState({
+        //         valid:'InValid'
+        //     })
+        //   }
+        // }
 
-        state = {
-          items1: [],
+        state = {          
           items: [],
           empid: '',
           module: '',
@@ -44,59 +64,82 @@ class screens_test extends Component{
           boola:false,
           key:'',
           data:[],
-          done : ''
+          done : '',
+          itr : '',
+          r : '',
+          valid:''
         };
         
-        // for getting the empid selected and the key and accordingly set the table
-         //handlechange2 = (values,event) => {        // for combobox till the next @
-        //   if(event!==null){                        //gotta fix backend
-        //       //var a=event.Emp_ID;
+        handleclick2=()=>{
+          console.log("Approval button clicked");
+          // this.validate()
+          let fields = this.props.Fields
+          if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 || fields.branch==="" || fields.name==="" || fields.desig==="" || fields.email===null || fields.filepath===null || fields.dog===""){//
+            //
+            alert("Fill all the fields !")
+           }
+           else
+           {let errors=this.props.Errors
+            if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+              alert("Correct the errors (in red) and try again !")}
+           else{
+          const info={
+           UserAccess_Headerkey:this.props.Hkey,
+           Department:this.props.Department
+          }
+          document.getElementById("approval").disabled=true;          
+          this.props.getapprovalinfo(info);}}          
+        }
+
+        componentDidUpdate(){          
+          if(this.state.itr===""){
+            if(this.state.r===""){            
+              if(this.props.Hkey!==""){            
+                if(this.state.key===""){
+                  var a=this.props.Eid;
+                  var b=this.props.Hkey;              
+                  this.setState({
+                      empid: a,
+                      key:b
+                  })} 
+                else if(n==1){
+                  //do smthng abt data: [] here, to fill the table
+                  axios.post('/api/screens_test_d/data',this.state)
+                    .then(res=>{
+                      var datas =[];
+                      var i;
+                      for (i=1;i<res.data.length+1;i++){
+                          var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
+                          datas[i-1] = x
+                      } 
+                      n=n+1                       
+                      this.setState({
+                        data : datas,
+                        r : '0'                 
+                       })                  
+                        console.log("now getting data for table")
+                    })                
+                 }         
+              }
+          }
+
+            if(this.props.approver_name!==""){
               
-        //       this.setState({
-        //           empid: a,
-        //           key:b
-        //       }, () => {
-        //       // axios.post('/api/screens_test_d/hkey',this.state)
-        //       //   .then(res=>{
-        //       //       console.log(res.data)
-        //       //       var r = res.data;
-        //       //       var x = r[0];
-        //       //       console.log(r);
-        //       //       this.setState({
-        //       //         empid:x.Emp_ID,
-        //       //         key:x.UserAccess_Headerkey,
-        //       //       })
-        //             console.log(this.state)
-        //             //do smthng abt data: [] here, to fill the table
-        //             axios.post('/api/screens_test_d/data',this.state)
-        //               .then(res=>{
-        //                 console.log(res.data)
-        //                 var datas =[];
-        //                 var i;
-        //                 for (i=1;i<res.data.length+1;i++){
-        //                     var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
-        //                     console.log(x)
-        //                     datas[i-1] = x
-        //                     console.log(datas)
-        //                 }                        
-        //                 this.setState({
-        //                     data : datas,                 
-        //                     })
-                        
-        //                 console.log(this.state)
-        //               })              
-        //         })
-
-        //       // });
-        //    }
-        //   if(event==null){
-        //       this.setState({
-        //         empid:"",
-        //         key:'',
-        //       })
-        //   }
-
-        //  }                                  // @
+             const info={
+               UserAccess_Headerkey:this.props.Hkey,
+               Emp_ID:this.props.Eid,
+               Approver_Name:this.props.approver_name,
+               Approver_Email:this.props.approver_email
+             }
+             //console.log(info);
+             this.props.approval1(info);            
+             this.setState({
+               itr:"yes"
+             },()=>{console.log("now savin into approve master");this.handleclick()})
+             
+            }
+          }
+        }
 
       //controls the box that shows the screens in a selected module
       handlechange = (values,event) => {
@@ -166,36 +209,45 @@ class screens_test extends Component{
   //this will save the data to the database 
    handleclick=(e)=>{
 
-    var now = new Date();
-    var i;
-    console.log(this.props.hkey);
-    var x ={ UserAccess_Headerkey:this.props.hkey }
-    axios.post('/api/screens_test_d/del',x)    
-    .then(res=>{
-      console.log(res);
-    })
-    for (i=0;i<this.state.data.length;i++){
-       const new2={
-           Emp_ID:this.props.eid, 
-           Module:this.state.data[i].mo,
-           Screens:this.state.data[i].sc,
-           Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-           UserAccess_Headerkey:this.props.hkey
-          }         
-          axios.post('/api/screens_test_d/save',new2)
-          .then(res=>{
-            console.log(res);
-          })
-        }
-      this.setState({
-        data:[],
-        screens:[],
-        module:'',
-        selectedscreen:[],
-        boola:false ,
-        done : 'yes'
-      })
-
+    //document.getElementById("draft").disabled=true;
+    //this.props.FSubmit();
+      // this.validate()
+      if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0){//
+        alert("Fill all the * (Required) fields !")
+       }
+       else
+       {let errors=this.props.Errors
+        if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+          alert("Correct the errors (in red) and try again !")}
+       else{ 
+        document.getElementById("approval").disabled=true;
+        document.getElementById("draft").disabled=true;  
+        var now = new Date();
+        var i;
+        var w=0;
+        console.log(this.props.Hkey);
+        var x ={ UserAccess_Headerkey:this.props.Hkey }
+        axios.post('/api/screens_test_d/del',x)    
+        .then(res=>{
+          console.log("deleted previos entries of screens");
+          for (i=0;i<this.state.data.length;i++){
+            const new2={
+                Emp_ID:this.props.Eid, 
+                Module:this.state.data[i].mo,
+                Screens:this.state.data[i].sc,
+                Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
+                UserAccess_Headerkey:this.props.Hkey
+              }         
+              axios.post('/api/screens_test_d/save',new2)
+              .then(res=>{
+                console.log("now saving screens");             
+              })
+            }
+            this.props.FSubmit(this.state.itr);      
+        })
+    }}
+    
+        
    }
 
    //this will save the data into the table
@@ -230,49 +282,49 @@ class screens_test extends Component{
           this.setState({
               items:res.data
        })
-    })
-      var a=this.props.eid;
-      var b=this.props.hkey;
-      console.log(a)
-      console.log(b)
-      this.setState({
-          empid: a,
-          key:b
-      }, () => {
-        console.log(this.state)
-        //do smthng abt data: [] here, to fill the table
-        axios.post('/api/screens_test_d/data',this.state)
-          .then(res=>{
-            console.log(res.data)
-            var datas =[];
-            var i;
-            for (i=1;i<res.data.length+1;i++){
-                var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
-                console.log(x)
-                datas[i-1] = x
-                console.log(datas)
-            }                        
-            this.setState({
-                data : datas,                 
-                })
+    })}
+//       var a=this.props.Eid;
+//       var b=this.props.Hkey;
+//       console.log(a)
+//       console.log(b)
+//       this.setState({
+//           empid: a,
+//           key:b
+//       }, () => {
+//         console.log(this.state)
+//         //do smthng abt data: [] here, to fill the table
+//         axios.post('/api/screens_test_d/data',this.state)
+//           .then(res=>{
+//             console.log(res.data)
+//             var datas =[];
+//             var i;
+//             for (i=1;i<res.data.length+1;i++){
+//                 var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
+//                 console.log(x)
+//                 datas[i-1] = x
+//                 console.log(datas)
+//             }                        
+//             this.setState({
+//                 data : datas,                 
+//                 })
             
-            console.log(this.state)
-          })              
-    })
-//   axios.get('/api/screens_test_d/empid')
-    //     .then(res=>{
-    //        this.setState({
-    //            items1:res.data
-    // })
-    // })
-    }
+//             console.log(this.state)
+//           })              
+//     })
+// //   axios.get('/api/screens_test_d/empid')
+//     //     .then(res=>{
+//     //        this.setState({
+//     //            items1:res.data
+//     // })
+//     // })
+//     }
 
 
     render(){
-        if(this.state.done=='yes'){
-            //return <Redirect to='/options/newuser/screens'/>
-            return <Redirect to='/options'/>
-        }
+        // if(this.state.done=='yes'){
+        //     //return <Redirect to='/options/newuser/screens'/>
+        //     return <Redirect to='/options'/>
+        // }
 
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -327,19 +379,19 @@ class screens_test extends Component{
             </Fragment>
         );
         const list4=(
-            <Fragment>
-             <Button onClick={this.handleclick} >Save </Button>
-            </Fragment>
-        );
+          <Fragment>
+           <Button  onClick={this.handleclick} style={{margin:5}} id="draft" >Save as Draft</Button>
+          </Fragment>
+      );
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Module,
           });
-        const filterOptions3 = createFilterOptions({   //for combo box till the next @
-          matchFrom: 'start',
-          stringify: (option) => option.Emp_ID,
-        });
-        const list5=(
+        // const filterOptions3 = createFilterOptions({   //for combo box till the next @
+        //   matchFrom: 'start',
+        //   stringify: (option) => option.Emp_ID,
+        // });
+        const list5=(          
           <Autocomplete
             id="Module"
             options={this.state.items}
@@ -355,17 +407,8 @@ class screens_test extends Component{
 
         return(
           <div>
-            {/* <Autocomplete
-            id="EmpId"
-            options={this.state.items1}
-            getOptionLabel={(option)=>option.Emp_ID}
-            filterOptions={filterOptions3}
-            style={{width:300}}
-            onChange={this.handlechange2}
-            renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
-            />
-            <br/> */}
-            {/* {(this.state.empid != '' )?list5:''} */list5}
+            <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
+            {list5}
             <br></br>
             {(this.state.screens.length&&this.state.module)?list2:''}
             {(this.state.selectedscreen.length)?list3:''}
@@ -411,9 +454,9 @@ class screens_test extends Component{
             }}
             />
             <br/>
-            {(this.state.data.length)?list4:''}
-
-
+            {/* {(this.state.data.length)?list4:''}             */}
+            {list4}            
+            <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
            </div>
 
         )
@@ -424,6 +467,8 @@ const mapStateToProps=state=>({
   item:state.item.items,
   hkey:state.item.hkey,
   eid:state.item.eid,
+  department:state.item.department,
+  approver_name:state.item.approver_name,
+  approver_email:state.item.approver_email
 });
-export default connect(mapStateToProps)(screens_test);
-//export default (screens_test);
+export default connect(mapStateToProps,{getapprovalinfo,approval1})(Screens_test_d);

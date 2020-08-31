@@ -10,7 +10,7 @@ import {
     Input
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {addItem} from '../actions/itemActions';
+//import {addItem} from '../actions/itemActions';
 
 class ItemModal extends Component{
     
@@ -39,7 +39,7 @@ class ItemModal extends Component{
        }
         
       console.log(newItem.name)
-       this.props.addItem(newItem);
+      // this.props.addItem(newItem);
 
        this.toggle();
    }
@@ -85,4 +85,4 @@ class ItemModal extends Component{
 const mapStateToProps=state=>({
   item:state.item
 });
-export default connect(mapStateToProps,{addItem})(ItemModal);
+export default connect(mapStateToProps)(ItemModal);//,{addItem}

@@ -1,6 +1,6 @@
 import React, { Component,Fragment} from 'react';
 import { Redirect,NavLink } from 'react-router-dom';
-import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
+import {Container,ListGroup,ListGroupItem,Button,Label} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {connect} from 'react-redux';
 import {getItems,addItem2} from '../../actions/itemActions';
@@ -30,10 +30,29 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import {getapprovalinfo,approval1} from '../../actions/itemActions';
 var a='';
 var dateFormat = require('dateformat');
+// const validateForm = (errors) => {
+//   let valid = "Valid";
+//   Object.values(errors).forEach(
+//     (val) => val.length > 0 && (valid = "Invalid")
+//   );
+//   return valid;
+// }
 
-class screens_test extends Component{
-   
-       
+class Screens_test extends Component{
+        // validate=()=>{
+        //   if(validateForm(this.props.Errors)=="Valid") {
+        //     console.log("bruh")
+        //     this.setState({
+        //         valid:'Valid'
+        //     })
+        //   }else{
+        //     console.log("bruh wtf")
+        //     this.setState({
+        //         valid:'InValid'
+        //     })
+        //   }
+        // }
+
         state = {
           items: [],
           module: '',
@@ -44,82 +63,83 @@ class screens_test extends Component{
           //empid:this.props.eid,
           data:[],
           done : '',
-          itr:''
+          itr:'',
+          valid:''
         };
-   
+
          handleclick2=()=>{
-           console.log(this.props);
-           const info={
-            UserAccess_Headerkey:this.props.hkey,
-            Department:this.props.department
+           console.log("Approval button was pressed")
+           let fields = this.props.Fields
+          //  this.validate()
+           if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 || fields.branch==="" || fields.name==="" || fields.desig==="" || fields.email===null || fields.filepath===null || fields.dog===""){//
+            alert("Fill all the fields !")
            }
-            this.props.getapprovalinfo(info);
-
+           else
+           {let errors=this.props.Errors
+            if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+              alert("Correct the errors (in red) and try again !")}
+           else{console.log(this.props);
+           const info={
+            UserAccess_Headerkey:this.props.Hkey,
+            Department:this.props.Department
+           }
+           document.getElementById("approval").disabled=true;
+           this.props.getapprovalinfo(info); }}
          }
-        //  sendforapproval=()=>{
-        //   const info={
-        //     UserAccess_Headerkey:this.props.hkey,
-        //     Employee_ID:this.props.eid,
-        //     Approver_Name:this.props.approver_name,
-        //     Approver_Email:this.props.approver_email
-        //   }
-        //   console.log(info);
-        //   this.props.approval1(info);
-        //  }
+
          componentDidUpdate(){
-           console.log("1");
            if(this.state.itr===""){
-            console.log("2");
-
              if(this.props.approver_name!==""){
-              console.log("3");
-
               const info={
-                UserAccess_Headerkey:this.props.hkey,
-                Emp_ID:this.props.eid,
+                UserAccess_Headerkey:this.props.Hkey,
+                Emp_ID:this.props.Eid,
                 Approver_Name:this.props.approver_name,
                 Approver_Email:this.props.approver_email
               }
-              console.log(info);
               this.props.approval1(info);
               this.setState({
                 itr:"yes"
+              },()=>{
+                console.log("now savin into approve master");
+                this.handleclick()
               })
              }
            }
          }
+
+      //handles the screens-list
       handlechange = (values,event) => {
           if(event!==null){
-           a=event.Module;   
+           a=event.Module;
         this.setState({
           module: a
         }, () => {
           axios.post('/api/screens_test',this.state)
           .then(res=>{
-            var x=res.data             
+            var x=res.data
             if(this.state.data.length!==0)
-            {              
-              var d = (this.state.data).map(da => {                                    
+            {
+              var d = (this.state.data).map(da => {
                   return da.sc
               })
-              console.log(x)  
-              console.log(d)                    
+              console.log(x)
+              console.log(d)
               const z = x.filter(function(item) {
-                return !d.includes(item.Screens); 
-              })              
+                return !d.includes(item.Screens);
+              })
               console.log(z)
               this.setState({
-                  screens:z 
-              })      
-           }              
-            else              
+                  screens:z
+              })
+           }
+            else
             this.setState({
-                screens:x 
+                screens:x
             })
 
               console.log(this.state.screens)
           })
-          
+
         });
     }
         if(event==null){
@@ -128,11 +148,13 @@ class screens_test extends Component{
                 module:''
             })
         }
-    
+
     }
+
+     //handles the selected screen
      handlechange1=(value,event)=>{
-        if(event!==null){ 
-            
+        if(event!==null){
+
          this.setState({
            boola: true,
            selectedscreen:event
@@ -140,10 +162,9 @@ class screens_test extends Component{
            console.log(this.state.selectedscreen)
            //this.getheader();
          });
-         
+
      }
        if(event.length==0){
-           console.log("lol");
            this.setState({
                boola:false
            })
@@ -151,62 +172,54 @@ class screens_test extends Component{
 
     }
 
-  // getheader=()=>{
-  //   axios.get('/api/items/key')
-  //   .then(res=>{
-  //     this.setState({
-  //       key:res.data[0]['']
-  //     })
-  //     console.log(this.state.key)
-  //   })
-  // }
-
   //this will save the data to the database
-   handleclick=(e)=>{
+   handleclick=()=>{
      
-    var now = new Date();
-    var i;
-    console.log(this.props);
-    for (i=0;i<this.state.data.length;i++){
-       const new2={
-           Emp_ID:this.props.eid,
-           Module:this.state.data[i].mo,
-           Screens:this.state.data[i].sc,
-           Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-           UserAccess_Headerkey:this.props.hkey
-          }
-          axios.post('/api/screens_test/save',new2)
-          .then(res=>{
-            console.log(res);            
-          })
-          
-
+    if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 ){//
+      alert("Fill all the * (Required) fields !")
+    }    
+   else{
+     let errors=this.props.Errors
+     if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+       alert("Correct the errors(in red) and try again !")
+      }
+      else{
+        document.getElementById("approval").disabled=true;
+        document.getElementById("draft").disabled=true;        
+        var now = new Date();
+        var i;
+        for (i=0;i<this.state.data.length;i++){
+          const new2={
+              Emp_ID:this.props.Eid,
+              Module:this.state.data[i].mo,
+              Screens:this.state.data[i].sc,
+              Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
+              UserAccess_Headerkey:this.props.Hkey
+              }
+              axios.post('/api/screens_test/save',new2)
+              .then(res=>{
+                console.log("now saving screens");
+              })
+            }
+            this.props.FSubmit(this.state.itr); 
         }
-      this.setState({
-        data:[],
-        screens:[],
-        module:'',
-        selectedscreen:[],
-        boola:false ,
-        done : 'yes'
-      })
-        
+        }
    }
 
    //this will save the data into the table
-   handleclick1=(e)=>{    
-    
+   handleclick1=(e)=>{
+
     var i;
      var d = 1
     var datas =[];
     var z = 'table.id'
     //console.log(this.state.key);
-    for (i=0;i<this.state.selectedscreen.length;i++){ 
+    for (i=0;i<this.state.selectedscreen.length;i++){
 
         var x ={ mo: this.state.module , sc: this.state.selectedscreen[i].Screens };
         console.log(x)
         datas[i] = x
-        console.log(datas)      
+        console.log(datas)
     }
     var dataf = [...this.state.data].concat(datas)
     this.setState({
@@ -216,7 +229,7 @@ class screens_test extends Component{
         selectedscreen:[],
         boola:false
         })
-        
+
    }
 
     componentDidMount(){
@@ -227,18 +240,12 @@ class screens_test extends Component{
            items:res.data
        })
     })
-    
-    }
-    
-      
-    render(){  
-        if(this.state.done=='yes'){
-            //return <Redirect to='/options/newuser/screens'/>
-            return <Redirect to='/options'/>
-        }
 
-        
-        
+    }
+
+
+    render(){
+
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
             Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -263,7 +270,7 @@ class screens_test extends Component{
             matchFrom: 'start',
             stringify: (option) => option.Screens,
           });
-        const list2=(            
+        const list2=(
             <Fragment>
                <Autocomplete
                multiple
@@ -283,7 +290,7 @@ class screens_test extends Component{
                  />
                  )}
                  /><br></br>
-                          
+
                  </Fragment>
          );
         const list3=(
@@ -293,17 +300,18 @@ class screens_test extends Component{
         );
         const list4=(
             <Fragment>
-             <Button onClick={this.handleclick} >Save </Button>
+             <Button onClick={this.handleclick} style={{margin:5}} id="draft" >Save as Draft</Button>
             </Fragment>
         );
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Module,
           });
-         
-         
+
+
         return(
            <div>
+            <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
             <Autocomplete
             id="Module"
             options={this.state.items}
@@ -314,39 +322,37 @@ class screens_test extends Component{
             disabled={this.state.boola}
             renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
             /><br></br>
-            {(this.state.screens.length&&this.state.module)?list2:''}  
-            {(this.state.selectedscreen.length)?list3:''}            
-            
+            {(this.state.screens.length&&this.state.module)?list2:''}
+            {(this.state.selectedscreen.length)?list3:''}
             <br/>
-
             <MaterialTable
             title="Modules and Screens"
             style={{ width : "50%" }}
             columns={[
-                { title: 'S.No', field:'tableData.id'  ,filtering: false},  //  'tableData.id'                     
+                { title: 'S.No', field:'tableData.id'  ,filtering: false},  //  'tableData.id'
                 { title: 'Module', field: 'mo' },
-                { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }           
+                { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
                ]}
             icons={tableIcons}
-            data={this.state.data}            
-            localization={{                
+            data={this.state.data}
+            localization={{
                 header: {
                     actions: ''
-                }}}            
+                }}}
             editable={{
-                    
+
                 onRowDelete: oldData =>
                 new Promise((resolve, reject) => {
                     setTimeout(() => {
-                    const dataDelete = [...this.state.data];                    
+                    const dataDelete = [...this.state.data];
                     console.log(oldData)
-                    console.log(dataDelete)                    
+                    console.log(dataDelete)
                     const index = oldData.tableData.id;
                     console.log(index)
-                    dataDelete.splice(index, 1);                
+                    dataDelete.splice(index, 1);
                     this.setState({ data : [...dataDelete]});
                     console.log(this.state.data)
-                    
+
                     resolve()
                     }, 1000)
                 }),
@@ -356,13 +362,13 @@ class screens_test extends Component{
                 actionsColumnIndex: -1,
                 search : false,
             }}
-            /> 
+            />
             <br/>
-            {(this.state.data.length)?list4:''}            
-            
-            <Button onClick={this.handleclick2}>Send for approval</Button>
+            {/* {(this.state.data.length)?list4:''}             */}
+            {list4}
+            <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
            </div>
-           
+
         )
     }
 }
@@ -375,5 +381,5 @@ const mapStateToProps=state=>({
   approver_name:state.item.approver_name,
   approver_email:state.item.approver_email
 });
-export default connect(mapStateToProps,{getapprovalinfo,approval1})(screens_test);
+export default connect(mapStateToProps,{getapprovalinfo,approval1})(Screens_test);
 //export default (screens_test);

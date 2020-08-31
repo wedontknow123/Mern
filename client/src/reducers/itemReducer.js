@@ -1,6 +1,7 @@
 import {GET_Department,send_for_approval,GET_empid,GET_oldkey,GET_headerkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
+//items:[],
 const initialState={
-    items:[],
+    
     eid:"",
     hkey:"",
     okey:"",
@@ -13,7 +14,7 @@ const initialState={
 export default function(state=initialState, action){
     switch(action.type){
         case send_for_approval:
-            console.log(action.payload)
+            console.log("sent for approval")
             return{
                 ...state,
                 approver_name:action.payload[0].Approver_Name,
@@ -56,11 +57,11 @@ export default function(state=initialState, action){
                 ...state,
                 items:state.items.filter(item=>item.id!==action.payload)
             };
-        case ADD_ITEM:
-                return{
-                    ...state,
-                    items:[ ...state.items,action.payload]
-                };
+        // case ADD_ITEM:
+        //         return{
+        //             ...state,
+        //             items:[ ...state.items,action.payload]
+        //         };
         case ITEMS_LOADING:
             return{
                 ...state,
