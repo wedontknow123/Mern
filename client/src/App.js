@@ -23,6 +23,7 @@ import screens_test_d from './components/createmenu/screens_test_d';
 import pending_requests from './components/createmenu/pending_requests';
 import displaying1 from './components/createmenu/displaying';
 import Rejected_req from './components/createmenu/Rejected_req';
+import displaying_rejected from './components/createmenu/displaying_rejected';
 class App extends Component{
   componentDidMount(){
     store.dispatch(loadUser());
@@ -51,7 +52,7 @@ class App extends Component{
       <Route exact path='/requests' component={pending_requests}/>
       <Route exact path='/requests/display' component={displaying1}/>
       <Route exact path='/rejected' component={Rejected_req}/>
-
+      <Route exact path='/rejected/display' component={displaying_rejected}/>
 
     </div>
 

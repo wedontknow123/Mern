@@ -227,7 +227,7 @@ exports.getapmaster=function(req,resp,reqbody){
     console.log(reqbody);
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Approver_Name not in (SELECT B.Approver_Name from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"')and A.Email not in (Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"')",function(data,err){
+            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Email not in (SELECT B.Approver_Email from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and A.Email not in (Select D.Email from Approval_Master D where D.Approval_ID <= (Select E.Approval_ID from Approval_Master E where E.Email=(Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and E.Department='IT')) ",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -604,7 +604,31 @@ exports.addapmaster=function(req,resp,reqbody){
     httpMsgs.show500(req,resp,ex);
   }
 }
+exports.itcredentials=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
 
+        var sql=util.format("insert into User_Credentials (Emp_ID,UserAccess_Headerkey,FS_SS_UserID,Created_by,Created_on,Remarks,Trans_Datetime) values ('%s','%d','%s','%s','%s','%s','%s') ",data.Emp_ID,data.UserAccess_Headerkey,data.FS_SS_UserID,data.Created_by,data.Created_on,data.Remarks,data.Trans_Datetime);
+        db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
 exports.addapmaster2=function(req,resp,reqbody){
   try{
     if(!reqbody) throw new Error("Input not valid");

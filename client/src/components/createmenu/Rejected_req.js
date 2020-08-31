@@ -56,7 +56,7 @@ class Rejected_req extends Component{
     }
     render(){
         if(this.state.next==='yes'&&this.props.eid!==null){
-            return <Redirect to='/requests/rect'/>
+            return <Redirect to='/rejected/display'/>
         }
         const {empid}=this.state;
         return(

@@ -38,4 +38,7 @@ router.post('/checkingIT',(req,res)=>{
 router.post('/previous',(req,res)=>{
     call.changePreviousRejected(req,res,JSON.stringify(req.body))
 })
+router.post('/itcred',(req,res)=>{
+    call.itcredentials(req,res,JSON.stringify(req.body))
+})
 module.exports=router;

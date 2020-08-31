@@ -6,18 +6,29 @@ import PropTypes from 'prop-types';
 import {approval2} from '../../actions/itemActions';
 import { Alert } from 'reactstrap';
 import { Redirect,NavLink } from 'react-router-dom';
-
+import {
+    Label,
+    Form,
+    FormGroup,
+    Input,
+    Col,
+    CustomInput,
+    NavItem
+} from 'reactstrap';
 var dateFormat = require('dateformat');
 var now = new Date();
 var n=1;
 class displaying1 extends Component{
     state={
         info:[],
-        reason1:"",
+        reason:"",
         last:0,
         useremail:"",
         r:"",
-        depart:0
+        depart:0,
+        remark:'',
+        userid:'',
+        created_on:''
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -79,10 +90,10 @@ class displaying1 extends Component{
     handleclick1=()=>{
         const info={
           Status:'A',
-          Reason:this.state.reason1,
+          Reason:this.state.reason,
           UserAccess_Headerkey:String(this.props.hkey),
           Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-          Approver_Email: this.props.auth.user.Email,
+          Approver_Email:this.props.auth.user.Email,
           Emp_ID:this.props.eid
         }
         console.log(info);
@@ -143,7 +154,35 @@ class displaying1 extends Component{
               console.log(res);
           })
     }
+    handlechange1=(e)=>{
+        const value=e.target.value;
+        this.setState({[e.target.name]:value});
+        console.log(value);
+    }
+    handlesubmit=(e)=>{
+        e.preventDefault();
+        const info={
+            FS_SS_UserID:this.state.userid,
+            Created_on:this.state.created_on,
+            Remarks:this.state.remark,
+            Emp_ID:this.props.eid,
+            UserAccess_Headerkey:this.props.hkey,
+            Created_by:this.props.auth.user.Email,
+            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
+        }
+        console.log(info);
+        axios.post('/api/apmaster/itcred',info)
+          .then(res=>{
+              console.log(res);
+          })
+    }
     render(){
+        const defaultProps = {
+            bgcolor: 'background.paper',
+            m: 1,
+            style: { width: '5rem', height: '5rem' },
+            borderColor: 'text.primary',
+          };
         const list1=(
             <Fragment>
              <Alert color="success">
@@ -153,21 +192,55 @@ class displaying1 extends Component{
             
         );
         console.log(this.props.eid);
-        const list2=(console.log(this.state.depart),
+        const list2=(
             <Fragment>
-             <Button onClick={this.handleclick1}>Approve</Button>
+                <Label for="exampleText"sm={1}>Reason</Label>
+               <Col sm={5}>
+                  <Input type="textarea" name="reason" id="reason" onChange={this.handlechange1}/>
+                  </Col>
+               <Button onClick={this.handleclick1}>Approve</Button>
                <Button onClick={this.handle_rejection}>Reject</Button>
             </Fragment>
             
         );
         const list3=(
             <Fragment>
-             <h1>it fuck yeah man</h1>
+             <Form onSubmit={this.handlesubmit } >
+             <FormGroup row>
+                          <Label for="FS_SS User ID" sm={3}>FS_SS User ID</Label>
+                           <Col sm={5}>
+                             <Input type="text" name="userid" id="uerid" onChange={this.handlechange1}/>
+                           </Col>
+              </FormGroup> 
+              <FormGroup row>
+                             <Label for="Created on"sm={3}>Created On</Label>
+                             <Col sm={5}>
+                                   <Input
+                                     type="date"
+                                      name="created_on"
+                                      id="created_on"
+                                      onChange={this.handlechange1}
+                                    />
+                                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                               <Label for="exampleText"sm={3}>Remarks</Label>
+                               <Col sm={5}>
+                               <Input type="textarea" name="remark" id="remark" onChange={this.handlechange1}/>
+                               </Col>
+                </FormGroup>
+                <FormGroup>
+                <Col sm={{ size: 10, offset: 3 }}>
+                     <Button >Save</Button>
+                </Col>
+                </FormGroup>
+             </Form>
             </Fragment>
             
         );
         return(
             <div>
+                <h3>display disabled form here using the headerkey and empid...only they should be allowed to download the uploaded file and not make changes to anything else</h3>
                 <br></br>
                {(this.state.depart===1)?list3:list2}
                {(this.state.last===1)?list1:''}
