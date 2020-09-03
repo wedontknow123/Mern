@@ -228,7 +228,7 @@ exports.getapmaster=function(req,resp,reqbody){
     console.log(reqbody);
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Email not in (SELECT B.Approver_Email from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and A.Email not in (Select D.Email from Approval_Master D where D.Approval_ID <= (Select E.Approval_ID from Approval_Master E where E.Email=(Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and E.Department='IT')) ",function(data,err){
+            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Email not in (SELECT B.Approver_Email from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and A.Email not in (Select D.Email from Approval_Master D where D.Approval_ID <= (Select E.Approval_ID from Approval_Master E where E.Email=(Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and E.Department='"+data.Department+"')) ",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
