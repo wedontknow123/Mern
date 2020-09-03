@@ -253,12 +253,17 @@ class displaying_rejected extends Component{
                 console.log(info1);
                 axios.post('/api/apmaster/submit',info1)
                 .then(res=>{
-                    console.log(res);                                   
-                    setTimeout(() => {
-                        this.setState({
-                            done:'yes'
-                        })
-                    },3000)
+                    console.log(res); 
+                    axios.post('/api/apmaster/rejectedstatus',info1)
+                    .then(res=>{
+                        console.log(res);
+                        setTimeout(() => {
+                            this.setState({
+                                done:'yes'
+                            })
+                        },3000)
+                    })                             
+                    
                 })                
             })
           })

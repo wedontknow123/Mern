@@ -261,7 +261,7 @@ class newuserform extends Component{
                                     </Col>
                                 </FormGroup>
                        <FormGroup row>
-                          <Label for="name" sm={3}>FS Username:</Label>
+                          <Label for="name" sm={3}>Employee Name:</Label>
                            <Col sm={5}>
                              <Input type="text" name="name" id="name" maxLength='100' onChange={this.handlechange1} />
                              {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>}

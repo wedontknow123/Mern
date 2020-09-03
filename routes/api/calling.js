@@ -320,7 +320,31 @@ exports.getrejected_emp_id=function(req,resp,reqbody){
       
       var data = JSON.parse(reqbody);
       if(data){
-        var sql=util.format("update Email_Workflow set Status ='RA' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='R'",data.UserAccess_Headerkey,data.Approver_Email);
+        var sql=util.format("update Email_Workflow set Status ='RA' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='RIP'",data.UserAccess_Headerkey,data.Approver_Email);
+        db.executeSql(sql,function(data,err){
+              if(err){ 
+               httpMsgs.show500(req,resp,err);
+              }
+              else{
+               httpMsgs.send200(req,resp);
+              }
+              });
+      }
+      else{
+           throw new Error("Input not valid");
+      }
+    }
+    catch(ex){
+      httpMsgs.show500(req,resp,ex);
+    }
+  };
+  exports.changeRejectedStatus=function(req,resp,reqbody){
+    try{
+      if(!reqbody) throw new Error("Input not valid");
+      
+      var data = JSON.parse(reqbody);
+      if(data){
+        var sql=util.format("update Email_Workflow set Status ='RIP' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='R'",data.UserAccess_Headerkey,data.Approver_Email);
         db.executeSql(sql,function(data,err){
               if(err){ 
                httpMsgs.show500(req,resp,err);
