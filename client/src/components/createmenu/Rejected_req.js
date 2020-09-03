@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import {getEmpid,getHeaderkey} from '../../actions/itemActions';
+import {getEmpid,getHeaderkey,getReason} from '../../actions/itemActions';
 import { Redirect,NavLink } from 'react-router-dom';
 
 var n=1
@@ -47,9 +47,10 @@ class Rejected_req extends Component{
         }
       }
     }
-    handleclick=(emp,hkey)=>{
+    handleclick=(emp,hkey,reason)=>{
         this.props.getEmpid(emp);
         this.props.getHeaderkey(hkey);
+        this.props.getReason(reason)
         this.setState({
             next:"yes"
         })
@@ -64,9 +65,9 @@ class Rejected_req extends Component{
                 
                 <ListGroup>
                     <TransitionGroup className="shopping-list">
-                        {empid.map(({Emp_ID,UserAccess_Headerkey})=>(
+                        {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons})=>(
                             <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
-                                <ListGroupItem tag="button" onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey)}>
+                                <ListGroupItem tag="button" onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey,Reasons)}>
                                    
                                     {Emp_ID}
                                 </ListGroupItem>
@@ -84,6 +85,7 @@ class Rejected_req extends Component{
 const mapStateToProps=state=>({
     auth:state.auth,
     eid:state.item.eid,
-    hkey:state.item.hkey
+    hkey:state.item.hkey,
+    reason:state.item.reason
   });
-export default connect(mapStateToProps,{getEmpid,getHeaderkey})(Rejected_req);
+export default connect(mapStateToProps,{getEmpid,getHeaderkey,getReason})(Rejected_req);

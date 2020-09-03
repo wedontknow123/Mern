@@ -2,6 +2,11 @@ const express = require('express');
 const router =express.Router();
 const call= require('./calling');
 
+router.post('/emp',(req,res)=>{    
+    const eid= req.body.eid;
+    const hkey= req.body.hkey;
+    call.get16(req,res,eid,hkey);
+})
 router.post('/',(req,res)=>{
     call.getapmaster(req,res,JSON.stringify(req.body))
 })

@@ -296,7 +296,7 @@ exports.getrejected_emp_id=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("Select distinct A.Emp_ID,A.UserAccess_Headerkey from UserAccess_Header A inner join Email_Workflow B on A.UserAccess_Headerkey=B.UserAccess_Headerkey where A.User_Email='"+data.User_Email+"' and B.Status='R'",function(data,err){
+            db.executeSql("Select distinct A.Emp_ID,A.UserAccess_Headerkey,B.Reasons from UserAccess_Header A inner join Email_Workflow B on A.UserAccess_Headerkey=B.UserAccess_Headerkey where A.User_Email='"+data.User_Email+"' and B.Status='R'",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -391,6 +391,16 @@ exports.get14=function(req,res,key){
 
 exports.get15=function(req,res){
   db.executeSql("Select Document_Path from Org_details",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
+exports.get16=function(req,res,eid,hkey){
+  db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+eid+"' and UserAccess_Headerkey = '"+hkey+"' ",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }

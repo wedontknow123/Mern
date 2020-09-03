@@ -55,7 +55,8 @@ class editdraftform extends Component{
           name:'',          
           email:'',
           doj:'',                     
-        }        
+        },
+        dsb:''        
     }  
 
     static propTypes={

@@ -1,9 +1,10 @@
-import {GET_Department,send_for_approval,GET_empid,GET_oldkey,GET_headerkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
+import {GET_Department,GET_reason,send_for_approval,GET_empid,GET_oldkey,GET_headerkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
 //items:[],
 const initialState={
     
     eid:"",
     hkey:"",
+    reason:"",
     okey:"",
     loading:false,
     approver_name:'',
@@ -36,6 +37,13 @@ export default function(state=initialState, action){
             
             ...state,
             hkey:action.payload,
+            loading:false
+        };
+        case GET_reason:
+        return{
+            
+            ...state,
+            reason:action.payload,
             loading:false
         };
         case GET_oldkey:
