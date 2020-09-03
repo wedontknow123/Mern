@@ -79,7 +79,7 @@ class Changes_screen extends Component{
            }
            else
            {let errors=this.props.Errors
-            if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+            if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
               alert("Correct the errors (in red) and try again !")}
            else{
           const info={
@@ -228,7 +228,7 @@ class Changes_screen extends Component{
      }
      else
      {let errors=this.props.Errors
-      if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+      if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
         alert("Correct the errors (in red) and try again !")}
      else{
     var now = new Date();

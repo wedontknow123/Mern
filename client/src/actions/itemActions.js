@@ -1,4 +1,4 @@
-import {GET_Department,send_for_approval,GET_empid,GET_headerkey,GET_oldkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
+import {GET_Department,GET_reason,send_for_approval,GET_empid,GET_headerkey,GET_oldkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
 import axios from 'axios';
 
 export const getItems=()=>dispatch=>{
@@ -24,6 +24,14 @@ export const getHeaderkey=(hkey)=>dispatch=>{
         payload: hkey
     })     
 };
+
+export const getReason=(reason)=>dispatch=>{
+    dispatch({
+        type:GET_reason,
+        payload: reason
+    })     
+};
+
 export const getdepartment=(department)=>dispatch=>{
     dispatch({
         type:GET_Department,

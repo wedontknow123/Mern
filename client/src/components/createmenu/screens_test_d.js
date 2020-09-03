@@ -28,6 +28,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {getapprovalinfo,approval1} from '../../actions/itemActions';
+
 var a='';
 var dateFormat = require('dateformat');
 var n=1;
@@ -80,7 +81,7 @@ class Screens_test_d extends Component{
            }
            else
            {let errors=this.props.Errors
-            if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+            if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
               alert("Correct the errors (in red) and try again !")}
            else{
           const info={
@@ -217,11 +218,15 @@ class Screens_test_d extends Component{
        }
        else
        {let errors=this.props.Errors
-        if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
+        if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
           alert("Correct the errors (in red) and try again !")}
        else{ 
-        document.getElementById("approval").disabled=true;
-        document.getElementById("draft").disabled=true;  
+        if(this.props.Fields.dsb==""){
+          document.getElementById("approval").disabled=true;
+          document.getElementById("draft").disabled=true;
+        }
+        else{document.getElementById("submit").disabled=true;}
+        document.getElementById("submit").disabled=true;  
         var now = new Date();
         var i;
         var w=0;
@@ -243,7 +248,10 @@ class Screens_test_d extends Component{
                 console.log("now saving screens");             
               })
             }
-            this.props.FSubmit(this.state.itr);      
+            if(this.props.Fields.dsb=="")
+            this.props.FSubmit(this.state.itr);
+            else
+            this.props.FSubmit();      
         })
     }}
     
@@ -345,7 +353,10 @@ class Screens_test_d extends Component{
             ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
             ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
           };
-
+        const filterOptions1 = createFilterOptions({
+          matchFrom: 'start',
+          stringify: (option) => option.Module,
+        });
         const filterOptions2 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Screens,
@@ -382,15 +393,7 @@ class Screens_test_d extends Component{
           <Fragment>
            <Button  onClick={this.handleclick} style={{margin:5}} id="draft" >Save as Draft</Button>
           </Fragment>
-      );
-        const filterOptions1 = createFilterOptions({
-            matchFrom: 'start',
-            stringify: (option) => option.Module,
-          });
-        // const filterOptions3 = createFilterOptions({   //for combo box till the next @
-        //   matchFrom: 'start',
-        //   stringify: (option) => option.Emp_ID,
-        // });
+        );
         const list5=(          
           <Autocomplete
             id="Module"
@@ -402,7 +405,23 @@ class Screens_test_d extends Component{
             disabled={this.state.boola}
             renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
             />
-        )
+        );
+        const list6=(
+        <Fragment>
+        <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
+        </Fragment>
+        );
+        const list7=(
+          <Fragment>
+          <Button onClick={this.handleclick} id="submit">Submit</Button>
+          </Fragment>
+        );
+        
+        // const filterOptions3 = createFilterOptions({   //for combo box till the next @
+        //   matchFrom: 'start',
+        //   stringify: (option) => option.Emp_ID,
+        // });
+        
 
 
         return(
@@ -454,9 +473,10 @@ class Screens_test_d extends Component{
             }}
             />
             <br/>
-            {/* {(this.state.data.length)?list4:''}             */}
-            {list4}            
-            <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
+            {(this.props.Fields.dsb==="")?list4:''} 
+            {(this.props.Fields.dsb==="")?list6:''}
+            {(this.props.Fields.dsb==="no")?list7:''}             
+            
            </div>
 
         )

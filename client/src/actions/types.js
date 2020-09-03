@@ -1,6 +1,7 @@
 export const GET_empid='GET_empid';
 export const GET_oldkey='GET_oldkey'
 export const GET_headerkey='GET_headerkey';
+export const GET_reason='GET_reason';
 export const GET_ITEMS='GET_ITEMS';
 export const ADD_ITEM='ADD_ITEM';
 export const DELETE_ITEM='DELETE_ITEM';
