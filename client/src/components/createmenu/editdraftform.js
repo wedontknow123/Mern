@@ -27,7 +27,7 @@ var c=0 ;
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
 
-class editdraftform extends Component{
+class Editdraftform extends Component{
   uploadObj = new UploaderComponent();
     state={
         branch:'',
@@ -494,5 +494,4 @@ const mapStateToProps=state=>({
   // uemail:state.auth.user
 });
 
-  export default connect(mapStateToProps,{getEmpid,getHeaderkey,getdepartment})(editdraftform);  
-//export default (editdraftform);
+  export default connect(mapStateToProps,{getEmpid,getHeaderkey,getdepartment})(Editdraftform);  

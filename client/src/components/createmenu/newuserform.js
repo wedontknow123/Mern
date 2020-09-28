@@ -26,7 +26,7 @@ var now = new Date();
 var c=0 
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
-class newuserform extends Component{
+class Newuserform extends Component{
 
     uploadObj = new UploaderComponent();     
     state={
@@ -389,4 +389,4 @@ const mapStateToProps=state=>({
     eid:state.item.eid,
     department:state.item.department
   });
-export default connect(mapStateToProps,{getdepartment})(newuserform);//addItem,
+export default connect(mapStateToProps,{getdepartment})(Newuserform);//addItem,

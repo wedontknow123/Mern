@@ -67,8 +67,7 @@ class Rejected_req extends Component{
                     <TransitionGroup className="shopping-list">
                         {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons})=>(
                             <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
-                                <ListGroupItem tag="button" onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey,Reasons)}>
-                                   
+                                <ListGroupItem tag="button" style={{backgroundColor:'#998242', color:'#fff'}}  onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey,Reasons)}>                                   
                                     {Emp_ID}
                                 </ListGroupItem>
                             </CSSTransition>

@@ -1,4 +1,7 @@
 import React,{Component} from 'react';
+import './menu.css'
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import {
     Button,
     Label,
@@ -9,25 +12,33 @@ import {
     NavItem
 } from 'reactstrap';
 class home extends Component{
+
+    static propTypes={
+        auth:PropTypes.object.isRequired
+      }
+      //this.props.auth.user === null
+    
+    
     render(){
         return(
-            <div className="container">
-                <Button href='/options'>New User Creation</Button>
-                <br></br>
-                <br></br>
-                <Button href='/changes_required'>Changes Required</Button>
-                <br></br>
-                <br></br>
-                <Button href='/deactivate'>Deactivation</Button>
-                <br></br>
-                <br></br>
-                <Button href="/requests">Pending Requests</Button>
-                <br></br>
-                <br></br>
-                <Button href="/rejected">Rejected Requests</Button>
+            <div className="vuttons_1" >
+                <div  >
+                    <div className="row1"><Button className="bt-0" href='/options' title="Create New User">New User Creation</Button></div>
+                    <div className="row1"><Button className="bt-1" href='/changes_required'title="Change User Data">Changes Required</Button></div>
+                    <div className="row1"><Button className="bt-2" href='/deactivate' title="Deactivate User">Deactivation</Button></div>
+                </div>
+                <br/>
+                <div className="row2" >
+                    <div className="row1"><Button className="bt-3" href="/requests" title="Check Pending Requests">Pending Requests</Button></div>
+                    <div className="row1"><Button className="bt-4" href="/rejected" title="Check Rejected Requests">Rejected Requests</Button></div>
+                </div>                
             </div>
         )
     }
 }
 
-export default home;
+const mapStateToProps=state=>({
+    auth:state.auth,
+  });
+
+export default connect(mapStateToProps)(home);

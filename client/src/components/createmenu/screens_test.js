@@ -246,6 +246,11 @@ class Screens_test extends Component{
 
     render(){
 
+    //   if(this.props.Hkey===null|| this.props.Eid===null){            
+    //     console.log("goin back!")
+    //     return <Redirect to='/options'/>     //the final return should be inside an else ....         
+    // }
+
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
             Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -295,12 +300,12 @@ class Screens_test extends Component{
          );
         const list3=(
             <Fragment>
-             <Button onClick={this.handleclick1} >Add the screens from {this.state.module} module</Button>
+             <Button onClick={this.handleclick1} style={{backgroundColor:'#393939'}}>Add the screens from {this.state.module} module</Button>
             </Fragment>
         );
         const list4=(
             <Fragment>
-             <Button onClick={this.handleclick} style={{margin:5}} id="draft" >Save as Draft</Button>
+             <Button onClick={this.handleclick} style={{margin:5, backgroundColor:'#393939'}} id="draft" >Save as Draft</Button>
             </Fragment>
         );
         const filterOptions1 = createFilterOptions({
@@ -366,7 +371,7 @@ class Screens_test extends Component{
             <br/>
             {/* {(this.state.data.length)?list4:''}             */}
             {list4}
-            <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
+            <Button onClick={this.handleclick2} id="approval" style={{backgroundColor:'#393939'}}>Send for approval</Button>
            </div>
 
         )

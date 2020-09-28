@@ -14,7 +14,7 @@ var now = new Date();
 var c=0 ;
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
-class displaying_rejected extends Component{
+class Displaying_rejected extends Component{
     uploadObj = new UploaderComponent();
     state={
         info:[],
@@ -270,11 +270,19 @@ class displaying_rejected extends Component{
               <Redirect to='/'/>
                )
             }
+        if(this.props.hkey==""){
+            console.log("ALL DONEE!!!")
+                return (
+                <Redirect to='/rejected'/>
+                )
+            }
         const {errors} = this.state;
         return(
-            <div>
-                    <h3>{this.props.eid} :</h3>               
-                    <Form >
+            <div className="container">
+                                   
+                    <Form  >
+                            <h3 >{this.props.eid} :</h3>
+                            <br/>
                             <FormGroup row>
                                <Label for="exampleText"sm={3}>Reason :</Label>
                                <Col sm={5}>
@@ -402,4 +410,4 @@ const mapStateToProps=state=>({
     reason:state.item.reason
   });
 
-export default connect(mapStateToProps)(displaying_rejected);
+export default connect(mapStateToProps)(Displaying_rejected);

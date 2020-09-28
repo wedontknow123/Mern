@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 var dateFormat = require('dateformat');
 var n =1
 
-class deactivate extends Component{
+class Deactivate extends Component{
     state={
         empid:[],
         selectedid:'',
@@ -185,4 +185,4 @@ class deactivate extends Component{
 const mapStateToProps=state=>({
     auth:state.auth
 });
-export default connect(mapStateToProps)(deactivate);
+export default connect(mapStateToProps)(Deactivate);
