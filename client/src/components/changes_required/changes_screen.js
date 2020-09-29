@@ -387,7 +387,7 @@ class Changes_screen extends Component{
             title="Modules and Screens"
             style={{ width : "50%" }}
             columns={[
-                { title: 'S.No', field:'tableData.id'  ,filtering: false},  //  'tableData.id'
+                { title: 'S.No', field:'tableData.id' , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
                 { title: 'Module', field: 'mo' },
                 { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
                ]}

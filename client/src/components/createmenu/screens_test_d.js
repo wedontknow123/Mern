@@ -386,12 +386,12 @@ class Screens_test_d extends Component{
          );
         const list3=(
             <Fragment>
-             <Button onClick={this.handleclick1} >Add the screens from {this.state.module} module</Button>
+             <Button onClick={this.handleclick1} style={{backgroundColor:'#393939'}} >Add the screens from {this.state.module} module</Button>
             </Fragment>
         );
         const list4=(
           <Fragment>
-           <Button  onClick={this.handleclick} style={{margin:5}} id="draft" >Save as Draft</Button>
+           <Button  onClick={this.handleclick} style={{margin:5, backgroundColor:'#393939'}} id="draft" >Save as Draft</Button>
           </Fragment>
         );
         const list5=(          
@@ -408,12 +408,12 @@ class Screens_test_d extends Component{
         );
         const list6=(
         <Fragment>
-        <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
+        <Button onClick={this.handleclick2} id="approval" style={{backgroundColor:'#393939'}}>Send for approval</Button>
         </Fragment>
         );
         const list7=(
           <Fragment>
-          <Button onClick={this.handleclick} id="submit">Submit</Button>
+          <Button onClick={this.handleclick} id="submit" style={{backgroundColor:'#393939'}}>Submit</Button>
           </Fragment>
         );
         
@@ -438,7 +438,7 @@ class Screens_test_d extends Component{
             title="Modules and Screens"
             style={{ width : "50%" }}
             columns={[
-                { title: 'S.No', field:'tableData.id'  ,filtering: false},  //  'tableData.id'
+                { title: 'S.No', field:'tableData.id'  , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
                 { title: 'Module', field: 'mo' },
                 { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
                ]}

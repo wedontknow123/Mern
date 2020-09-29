@@ -27,7 +27,7 @@ var c=0 ;
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 var nodelink=require('../../nodelink.json');
 
-class editdraftform extends Component{
+class Editdraftform extends Component{
   uploadObj = new UploaderComponent();
     state={
         branch:'',
@@ -377,14 +377,14 @@ class editdraftform extends Component{
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="name" maxLength='100' id="name" value={this.state.name} onChange={this.handlechange1} />
-                             {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>}
+                             <Input type="text" name="name" maxLength='60' id="name" value={this.state.name} onChange={this.handlechange1} />
+                             {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="desig" sm={3}>Designation:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="desig" maxLength='100' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
+                             <Input type="text" name="desig" maxLength='60' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>
                          {/* <FormGroup row>
@@ -411,7 +411,7 @@ class editdraftform extends Component{
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
                              <Input type="email" name="email" maxLength='150' id="email" value={this.state.email} onChange={this.handlechange1}/>
-                             {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>} 
+                             {/* {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>}  */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
@@ -424,7 +424,7 @@ class editdraftform extends Component{
                                       value={this.state.doj}
                                       onChange={this.handlechange1}
                                     />
-                                    {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>}
+                                    {/* {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>} */}
                                     </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -494,5 +494,4 @@ const mapStateToProps=state=>({
   // uemail:state.auth.user
 });
 
-  export default connect(mapStateToProps,{getEmpid,getHeaderkey,getdepartment})(editdraftform);  
-//export default (editdraftform);
+  export default connect(mapStateToProps,{getEmpid,getHeaderkey,getdepartment})(Editdraftform);  

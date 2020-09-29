@@ -1,4 +1,5 @@
 import React  from 'react';
+import { Button } from 'reactstrap';
 import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
 const DownloadLinks = ({filenames,onClic,deleteFile}) => {
@@ -6,10 +7,11 @@ const DownloadLinks = ({filenames,onClic,deleteFile}) => {
   const linkList = filenames.length ? (
     filenames.map(fn =>{        
         return(
-        <span key={filenames.indexOf(fn)}>          
-          <a href="#" onClick={() => {onClic(filenames.indexOf(fn))}}  title="Click to Download and Preview">{fn.Document_Name} </a>
+        <span key={filenames.indexOf(fn)}>
+          <Button color="link" onClick={() => {onClic(filenames.indexOf(fn))}}  title="Click to Download and Preview">{fn.Document_Name}</Button>          
+          {/* <a href="#" onClick={() => {onClic(filenames.indexOf(fn))}}  title="Click to Download and Preview">{fn.Document_Name} </a> */}
           <label id={filenames.indexOf(fn)}> </label>
-          <IconButton onClick={() => {deleteFile(filenames.indexOf(fn),fn.Document_Name)}} id={fn.Document_Name} title="File will get deleted from the server">
+          <IconButton  onClick={() => {deleteFile(filenames.indexOf(fn),fn.Document_Name)}} id={fn.Document_Name} title="File will get deleted from the server">
             <Delete/>
           </IconButton>          
           <br></br>

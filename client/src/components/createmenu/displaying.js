@@ -29,7 +29,8 @@ var dateFormat = require('dateformat');
 var now = new Date();
 var n=1;
 var nodelink=require('../../nodelink.json')
-class displaying1 extends Component{
+
+class Displaying1 extends Component{
     state={
         info:[],
         last:0,
@@ -338,6 +339,12 @@ class displaying1 extends Component{
               <Redirect to='/'/>
                )
             }
+            if(this.props.hkey==""){
+                console.log("ALL DONEE!!!")
+                    return (
+                    <Redirect to='/requests'/>
+                    )
+                }
 
             const tableIcons = {
                 Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -435,7 +442,7 @@ class displaying1 extends Component{
                     title="Modules and Screens"
                     style={{ width : "50%" }}
                     columns={[
-                        { title: 'S.No', field:'tableData.id'  ,filtering: false},  //  'tableData.id'
+                        { title: 'S.No', field:'tableData.id' ,render:rowData =>{return(<p>{rowData.tableData.id+1}</p>)},filtering: false},  //  'tableData.id'
                         { title: 'Module', field: 'mo' },
                         { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
                     ]}
@@ -466,8 +473,8 @@ class displaying1 extends Component{
                 </FormGroup>
                     <br/>                             
                 <Fragment>                
-                    <Button onClick={this.handleclick1} style={{margin:5}} id="approve">Approve</Button>
-                    <Button onClick={this.handle_rejection} id="reject">Reject</Button>
+                    <Button onClick={this.handleclick1} style={{margin:5, backgroundColor:'#393939'}} id="approve">Approve</Button>
+                    <Button onClick={this.handle_rejection} style={{backgroundColor:'#393939'}} id="reject">Reject</Button>
                 </Fragment>
                 </Form>
                   
@@ -501,7 +508,7 @@ class displaying1 extends Component{
                 </FormGroup>
                 <FormGroup>
                 <Col sm={{ size: 10, offset: 3 }}>
-                     <Button id="itsave" >Save</Button>
+                     <Button id="itsave" style={{backgroundColor:'#393939'}}>Save</Button>
                 </Col>
                 </FormGroup>
              </Form>
@@ -509,7 +516,7 @@ class displaying1 extends Component{
             
         );
         return(
-            <div>
+            <div className="container">
                 <h3>{this.props.eid} :</h3>
                 <br/>
                 {list4}
@@ -527,4 +534,4 @@ const mapStateToProps=state=>({
     eid:state.item.eid
   });
 
-export default connect(mapStateToProps,{approval2})(displaying1);
+export default connect(mapStateToProps,{approval2})(Displaying1);

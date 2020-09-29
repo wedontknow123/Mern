@@ -8,7 +8,7 @@ import {getEmpid,getHeaderkey} from '../../actions/itemActions';
 import { Redirect,NavLink } from 'react-router-dom';
 var nodelink=require('../../nodelink.json');
 var n=1
-class pending_requests extends Component{
+class Pending_requests extends Component{
     state={
         r:"",
         empid:[],
@@ -63,8 +63,7 @@ class pending_requests extends Component{
                     <TransitionGroup className="shopping-list">
                         {empid.map(({Emp_ID,UserAccess_Headerkey})=>(
                             <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
-                                <ListGroupItem tag="button" onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey)}>
-                                   
+                                <ListGroupItem tag="button" style={{backgroundColor:'#998242',color:'#fff'}} onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey)}>                                   
                                     {Emp_ID}
                                 </ListGroupItem>
                             </CSSTransition>
@@ -83,4 +82,4 @@ const mapStateToProps=state=>({
     eid:state.item.eid,
     hkey:state.item.hkey
   });
-export default connect(mapStateToProps,{getEmpid,getHeaderkey})(pending_requests);
+export default connect(mapStateToProps,{getEmpid,getHeaderkey})(Pending_requests);

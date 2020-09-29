@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 var n = 1
 var nodelink=require('../../nodelink.json');
-class deleteform extends Component{
+class Deleteform extends Component{
     state={
         empid:[],
         selectid:'',
@@ -89,7 +89,7 @@ class deleteform extends Component{
             onChange={this.handlechange}
             renderInput={(params)=><TextField {...params} label="Delete" variant="outlined"/>}
             /><br></br>
-            <Button type="button" onClick={this.handlesubmit} disabled={this.state.boola} id="delete">Delete</Button>
+            <Button style={{backgroundColor:'#393939'}} type="button" onClick={this.handlesubmit} disabled={this.state.boola} id="delete">Delete</Button>
 
             </div>
         )
@@ -104,4 +104,4 @@ const mapStateToProps=state=>({
     // uemail:state.auth.user
   });
   
-    export default connect(mapStateToProps)( deleteform) ;
+    export default connect(mapStateToProps)( Deleteform) ;

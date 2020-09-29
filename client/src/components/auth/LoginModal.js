@@ -80,12 +80,12 @@ class LoginModal extends Component{
    render(){
        return(
            <div>
-              <NavLink onClick={this.toggle} href="#">Login</NavLink>
+              <NavLink onClick={this.toggle} style={{fontSize:'20px'}} href="#">Login</NavLink>
         
            <Modal
            isOpen={this.state.modal} 
            toggle={this.toggle}>
-           <ModalHeader toggle={this.toggle}>Login</ModalHeader>
+           <ModalHeader toggle={this.toggle} >Login</ModalHeader>
            <ModalBody>
              {this.state.msg?(<Alert color="danger">{this.state.msg}</Alert>):null}
                <Form onSubmit={this.onSubmit}>
@@ -109,9 +109,8 @@ class LoginModal extends Component{
                        placeholder="Password"
                        onChange={this.onChange}
                        />
-                       <Button
-                       color="dark"
-                       style={{marginTop:'2rem'}}
+                       <Button                       
+                       style={{marginTop:'2rem',backgroundColor:'#393939'}}
                        block
                        >Login</Button>
                    </FormGroup>
