@@ -228,7 +228,7 @@ exports.getapmaster=function(req,resp,reqbody){
     console.log(reqbody);
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Email not in (SELECT B.Approver_Email from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and A.Email not in (Select D.Email from Approval_Master D where D.Approval_ID <= (Select E.Approval_ID from Approval_Master E where E.Email=(Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and E.Department='IT')) ",function(data,err){
+            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Email not in (SELECT B.Approver_Email from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and A.Email not in (Select D.Email from Approval_Master D where D.Approval_ID <= (Select E.Approval_ID from Approval_Master E where E.Email=(Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and E.Department='"+data.Department+"')) ",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -320,7 +320,31 @@ exports.getrejected_emp_id=function(req,resp,reqbody){
       
       var data = JSON.parse(reqbody);
       if(data){
-        var sql=util.format("update Email_Workflow set Status ='RA' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='R'",data.UserAccess_Headerkey,data.Approver_Email);
+        var sql=util.format("update Email_Workflow set Status ='RA' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='RIP'",data.UserAccess_Headerkey,data.Approver_Email);
+        db.executeSql(sql,function(data,err){
+              if(err){ 
+               httpMsgs.show500(req,resp,err);
+              }
+              else{
+               httpMsgs.send200(req,resp);
+              }
+              });
+      }
+      else{
+           throw new Error("Input not valid");
+      }
+    }
+    catch(ex){
+      httpMsgs.show500(req,resp,ex);
+    }
+  };
+  exports.changeRejectedStatus=function(req,resp,reqbody){
+    try{
+      if(!reqbody) throw new Error("Input not valid");
+      
+      var data = JSON.parse(reqbody);
+      if(data){
+        var sql=util.format("update Email_Workflow set Status ='RIP' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Status='R'",data.UserAccess_Headerkey,data.Approver_Email);
         db.executeSql(sql,function(data,err){
               if(err){ 
                httpMsgs.show500(req,resp,err);
