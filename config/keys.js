@@ -1,12 +1,7 @@
-exports.dbConfig={
-    server:"LAPTOP-P4D7V446\\SQLEXPRESS",
-    //server:"LAPTOP-DVJ39MSC",
-    database:"INTERNSHIP",
-    user:"tejasp",
-    //user:"sourish",
-    password:"tejasp@2000",
-    //password:"sourish@123",
-    port:1433
-};
+const fs = require('fs')
+const path=require('path');
+let dbConfig1 = JSON.parse(fs.readFileSync(path.resolve(__dirname, "D:\SQL.json")));
+
+exports.dbConfig=dbConfig1;
 exports.httpMsgsFormat="HTML";
 exports.webPort=5000;

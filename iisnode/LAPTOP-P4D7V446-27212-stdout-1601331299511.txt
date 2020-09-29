@@ -1,0 +1,21 @@
+
+Server started on port \\.\pipe\a65bf5fc-0e05-4a20-bdbf-b26c5e575b30
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+{"UserAccess_Headerkey":1,"Department":"IT"}
+{"Emp_ID":"5567888888","Module":"Purchase","Screens":"POMT","Trans_Datetime":"2020-09-29 3:50:18 ","UserAccess_Headerkey":1}
+{
+  Emp_ID: '5567888888',
+  Module: 'Purchase',
+  Screens: 'POMT',
+  Trans_Datetime: '2020-09-29 3:50:18 ',
+  UserAccess_Headerkey: 1
+}
+E:\sql
+[ '1601331619138-PRACTICE 1.pdf' ]
