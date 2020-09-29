@@ -423,14 +423,14 @@ class Changes_required extends Component{
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="name" id="name" maxLength='100' value={this.state.name} onChange={this.handlechange1} />
-                             {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>}
+                             <Input type="text" name="name" id="name" maxLength='70' value={this.state.name} onChange={this.handlechange1} />
+                             {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="desig" sm={3}>Designation:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="desig" maxLength='100' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
+                             <Input type="text" name="desig" maxLength='70' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>
                          {/* <FormGroup row>
@@ -457,7 +457,7 @@ class Changes_required extends Component{
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
                              <Input type="email" name="email" maxLength='150' id="email" value={this.state.email} onChange={this.handlechange1}/>
-                             {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>}
+                             {/* {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>} */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
@@ -470,7 +470,7 @@ class Changes_required extends Component{
                                       value={this.state.doj}
                                       onChange={this.handlechange1}
                                     />
-                                    {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>}
+                                    {/* {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>} */}
                                     </Col>
                             </FormGroup>
                             <FormGroup row>

@@ -65,30 +65,30 @@ class Newuserform extends Component{
         let errors = this.state.errors; 
         let reasonl = this.state.reasonl;   
         switch (name) {
-            case 'name': 
-                errors.name = 
-                (value.length < 5 && value.length >0)
-                    ? 'Character limit >5 and <10 '
-                    : '';
-                break;
-            case 'email': 
-                errors.email = 
-                (validEmailRegex.test(value))
-                    ? ''
-                    : 'Email is not valid';
-                break;            
+            // case 'name': 
+            //     errors.name = 
+            //     (value.length < 5 && value.length >0)
+            //         ? 'Character limit >5 and <10 '
+            //         : '';
+            //     break;
+            // case 'email': 
+            //     errors.email = 
+            //     (validEmailRegex.test(value))
+            //         ? ''
+            //         : 'Email is not valid';
+            //     break;            
             case 'empid': 
                 errors.empid = 
                 (value.length < 10 && value.length >0) 
                 ? 'Employee ID must be less than or equal to 10 characters'
                 : '';
                 break;
-            case 'doj': 
-                errors.doj = 
-                value < now
-                ? 'Enter a valid date'
-                : '';
-                break;
+            // case 'doj': 
+            //     errors.doj = 
+            //     value < now
+            //     ? 'Enter a valid date'
+            //     : '';
+            //     break;
             case 'reason': 
                 reasonl = `${value.length}/150`                
                 break;                
@@ -263,14 +263,14 @@ class Newuserform extends Component{
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="name" id="name" maxLength='100' onChange={this.handlechange1} />
-                             {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>}
+                             <Input type="text" name="name" id="name" maxLength='60' onChange={this.handlechange1} />
+                             {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="desig" sm={3}>Designation:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="desig" id="desig" maxLength='100' onChange={this.handlechange1}/>
+                             <Input type="text" name="desig" id="desig" maxLength='60' onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>  
                          {/* <FormGroup row>
@@ -297,14 +297,13 @@ class Newuserform extends Component{
                           <Label for="emp_id" sm={3}>Employee Id <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
                            <Col sm={5}>
                              <Input type="text" name="empid" id="empid" maxLength='10' onChange={this.handlechange1}/>
-                             {errors.empid.length > 0 && <span className='error' style={{color:"red"}}>{errors.empid}</span>}
+                             {/* {errors.empid.length > 0 && <span className='error' style={{color:"red"}}>{errors.empid}</span>} */}
                               </Col>
                          </FormGroup> 
                          <FormGroup row>
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
                              <Input type="email" name="email" id="email" maxLength='150' onChange={this.handlechange1}/>
-                             {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>}   
                            </Col>
                          </FormGroup> 
                          <FormGroup row>
@@ -316,7 +315,6 @@ class Newuserform extends Component{
                                       id="doj"
                                       onChange={this.handlechange1}
                                     />
-                                    {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>}
                                     </Col>
                             </FormGroup>
                             <FormGroup row>
