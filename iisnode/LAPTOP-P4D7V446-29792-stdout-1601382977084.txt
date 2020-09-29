@@ -1,0 +1,54 @@
+
+Server started on port \\.\pipe\b351279c-a884-470f-9b7c-dff6f9a0f61e
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+{"Emp_ID":"7897988978","Module":"Purchase","Screens":"POMT","Trans_Datetime":"2020-09-29 18:44:42 ","UserAccess_Headerkey":4}
+{
+  Emp_ID: '7897988978',
+  Module: 'Purchase',
+  Screens: 'POMT',
+  Trans_Datetime: '2020-09-29 18:44:42 ',
+  UserAccess_Headerkey: 4
+}
+E:\sql
+[ '1601385282551-PRACTICE 1.pdf' ]
+{"Emp_ID":"TEMP003012","Module":"Purchase","Screens":"POMT","Trans_Datetime":"2020-09-29 18:46:07 ","UserAccess_Headerkey":4}
+{
+  Emp_ID: 'TEMP003012',
+  Module: 'Purchase',
+  Screens: 'POMT',
+  Trans_Datetime: '2020-09-29 18:46:07 ',
+  UserAccess_Headerkey: 4
+}
+{"Emp_ID":"TEMP003012","Module":"Purchase","Screens":"VEID","Trans_Datetime":"2020-09-29 18:46:07 ","UserAccess_Headerkey":4}
+{
+  Emp_ID: 'TEMP003012',
+  Module: 'Purchase',
+  Screens: 'VEID',
+  Trans_Datetime: '2020-09-29 18:46:07 ',
+  UserAccess_Headerkey: 4
+}
+E:\sql
+[ '1601385367217-PRACTICE 1.pdf' ]
