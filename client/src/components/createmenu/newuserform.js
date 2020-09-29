@@ -24,6 +24,7 @@ var now = new Date();
 // var lol =0;
 // var rd =0;
 var c=0 
+var nodelink=require('../../nodelink.json');
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
 class newuserform extends Component{
@@ -108,7 +109,7 @@ class newuserform extends Component{
     
     getheader=()=>{
         var v='';
-        axios.get('/api/items/key')
+        axios.get(nodelink.site+'/api/items/key')
         .then(res=>{
             v=res.data[0][''];
             console.log(v);
@@ -128,7 +129,7 @@ class newuserform extends Component{
     }
    
     componentDidMount(){
-        axios.get('/api/items/department')
+        axios.get(nodelink.site+'/api/items/department')
         .then(res=>{
             this.setState({
                department_options:res.data
@@ -147,7 +148,7 @@ class newuserform extends Component{
             for(var y=0;y<v.length;y++){//v
                 data.append('file',v[y].rawFile);
             }            
-            axios.post('/api/doc',data,{}).
+            axios.post(nodelink.site+'/api/doc',data,{}).
             then(res=>{                
                 console.log("now gettin new files")                
                 this.setState({
@@ -160,7 +161,7 @@ class newuserform extends Component{
                             Document_Name:this.state.filepath[x],
                             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
                         }
-                        axios.post('/api/doc/rec',new5)
+                        axios.post(nodelink.site+'/api/doc/rec',new5)
                         .then(res=>{                            
                             console.log("now saving new files"); 
                              c=c+1;
@@ -198,13 +199,13 @@ class newuserform extends Component{
             Status:this.state.status,
             User_Email:this.props.auth.user.Email
         }        
-        axios.post('/api/items',newItem)
+        axios.post(nodelink.site+'/api/items',newItem)
        .then(res=>{
             console.log("now saving newuserform")
             if(itr=="yes"){
                 console.log("changing state")
             var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
-            axios.post('/api/screens_test/upstat',s)
+            axios.post(nodelink.site+'/api/screens_test/upstat',s)
             }
             setTimeout(() => {
                 this.setState({

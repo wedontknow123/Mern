@@ -25,7 +25,7 @@ var n = 1;
 var now = new Date();
 var c=0 ;
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-
+var nodelink=require('../../nodelink.json');
 
 class editdraftform extends Component{
   uploadObj = new UploaderComponent();
@@ -71,7 +71,7 @@ class editdraftform extends Component{
             for(var y=0;y<v.length;y++){//v
                 data.append('file',v[y].rawFile);
             }
-            axios.post('/api/doc',data,{}).
+            axios.post(nodelink+'/api/doc',data,{}).
             then(res=>{                
               console.log("now gettin new files")
                 this.setState({
@@ -84,7 +84,7 @@ class editdraftform extends Component{
                             Document_Name:this.state.files[x],
                             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
                         }
-                        axios.post('/api/doc/rec',new5)
+                        axios.post(nodelink+'/api/doc/rec',new5)
                         .then(res=>{                          
                           console.log("now saving new files"); 
                            c=c+1;                                                      
@@ -105,7 +105,7 @@ class editdraftform extends Component{
       console.log(fileName) 
       console.log(this.state.key)      
       var a = {fname : fileName, fpath:this.state.filepath, hkey:this.state.key}
-      axios.post('/api/download/del', a ).then(res=>{console.log(res)})       
+      axios.post(nodelink+'/api/download/del', a ).then(res=>{console.log(res)})       
       console.log(ikey)
         document.getElementById(ikey).innerHTML = "DELETED!";
         document.getElementById(name).remove() 
@@ -117,7 +117,7 @@ class editdraftform extends Component{
       var fileName = this.state.filenames[key].Document_Name
       console.log(fileName)      
       var a = {fname : fileName, fpath:this.state.filepath}
-       axios.post('/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
+       axios.post(nodelink+'/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
             .then(function(res){             
               var data = new Blob([res.data]);              
               var blob = data;
@@ -141,7 +141,7 @@ class editdraftform extends Component{
       this.setState({
         empid: a
       }, () => {
-        axios.post('/api/draft/emp',this.state)
+        axios.post(nodelink+'/api/draft/emp',this.state)
         .then(res=>{            
             console.log(res.data)
               var r = res.data;
@@ -162,14 +162,14 @@ class editdraftform extends Component{
                 status:x.Status,
                 useremail:x.User_Email
             })  
-            axios.post('/api/download/fn',this.state)
+            axios.post(nodelink+'/api/download/fn',this.state)
             .then(res => {              
               this.setState({
                 filenames : res.data
               })
               console.log(this.state.filenames)
             }) 
-            axios.get('/api/download/fp')
+            axios.get(nodelink+'/api/download/fp')
             .then(res => {
               var x = res.data
               var y = x[0].Document_Path
@@ -203,7 +203,7 @@ class editdraftform extends Component{
       }
   }
   componentDidMount(){
-    axios.get('/api/items/department')
+    axios.get(nodelink+'/api/items/department')
     .then(res=>{
         this.setState({
            department_options:res.data
@@ -226,7 +226,7 @@ class editdraftform extends Component{
           console.log(this.state.useremail)} 
          else if(n==1){ 
           console.log(this.props)
-          axios.post('/api/draft',this.state)
+          axios.post(nodelink+'/api/draft',this.state)
             .then(res=>{
             this.setState({
                 items:res.data,
@@ -303,13 +303,13 @@ class editdraftform extends Component{
             Emp_ID:this.state.empid,
             User_Email:this.props.auth.user.Email
         }       
-        axios.post('/api/draft/save',newItem)
+        axios.post(nodelink+'/api/draft/save',newItem)
           .then(res=>{            
             console.log("now saving form")
             if(itr=="yes"){
               console.log("changing state")
               var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
-              axios.post('/api/screens_test/upstat',s)
+              axios.post(nodelink+'/api/screens_test/upstat',s)
             }          
             setTimeout(() => {
               this.setState({

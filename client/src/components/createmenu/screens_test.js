@@ -28,6 +28,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {getapprovalinfo,approval1} from '../../actions/itemActions';
+var nodelink=require('../../nodelink.json');
 var a='';
 var dateFormat = require('dateformat');
 // const validateForm = (errors) => {
@@ -114,7 +115,7 @@ class Screens_test extends Component{
         this.setState({
           module: a
         }, () => {
-          axios.post('/api/screens_test',this.state)
+          axios.post(nodelink.site+'/api/screens_test',this.state)
           .then(res=>{
             var x=res.data
             if(this.state.data.length!==0)
@@ -196,7 +197,7 @@ class Screens_test extends Component{
               Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
               UserAccess_Headerkey:this.props.Hkey
               }
-              axios.post('/api/screens_test/save',new2)
+              axios.post(nodelink.site+'/api/screens_test/save',new2)
               .then(res=>{
                 console.log("now saving screens");
               })
@@ -234,7 +235,7 @@ class Screens_test extends Component{
 
     componentDidMount(){
       console.log(this.props)
-        axios.get('/api/screens_test')
+        axios.get(nodelink.site+'/api/screens_test')
     .then(res=>{
        this.setState({
            items:res.data

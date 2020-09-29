@@ -1,9 +1,9 @@
 import {GET_Department,GET_reason,send_for_approval,GET_empid,GET_headerkey,GET_oldkey,GET_ITEMS,ADD_ITEM,DELETE_ITEM,ITEMS_LOADING} from '../actions/types';
 import axios from 'axios';
-
+var nodelink=require('../nodelink.json');
 export const getItems=()=>dispatch=>{
     dispatch(setItemsLoading());
-    axios.get('/api/screens')
+    axios.get(nodelink.site+'/api/screens')
     .then(res=>dispatch({
         type:GET_ITEMS,
         payload: res.data
@@ -46,14 +46,14 @@ export const getOldkey=(okey)=>dispatch=>{
 };
 
 export const approval1=(info)=>dispatch=>{
-     axios.post('/api/apmaster/submit',info)
+     axios.post(nodelink.site+'/api/apmaster/submit',info)
      .then(res=>{
          console.log("now submitted approval data to master");
      })
 };
 
 export const getapprovalinfo=(info)=>dispatch=>{
-    axios.post('/api/apmaster',info)
+    axios.post(nodelink.site+'/api/apmaster',info)
     .then(res=>{console.log("now getting approval info")//res.data[0].Approver_Name
         dispatch({
         type:send_for_approval,
@@ -63,14 +63,14 @@ export const getapprovalinfo=(info)=>dispatch=>{
 
 
 export const approval2=(info)=>dispatch=>{
-    axios.post('/api/apmaster/approval',info)
+    axios.post(nodelink.site+'/api/apmaster/approval',info)
     .then(res=>{
         console.log(res);
     })
 };
 
 export const addItem2=(item)=>dispatch=>{
-    axios.post('/api/screens',item)
+    axios.post(nodelink.site+'/api/screens',item)
     .then(res=>{
         return(res.data);
     })
@@ -79,7 +79,7 @@ export const addItem2=(item)=>dispatch=>{
 
 
 export const deleteItem=(id)=>dispatch=>{
-    axios.delete('/api/items/').then(res=> 
+    axios.delete(nodelink.site+'/api/items/').then(res=> 
         dispatch({
             type:DELETE_ITEM,
             payload:id

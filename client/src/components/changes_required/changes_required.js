@@ -25,7 +25,7 @@ var dateFormat = require('dateformat');
 var n = 1
 var now = new Date();
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-
+var nodelink=require('../../nodelink.json');
 
 class changes_required extends Component{
 
@@ -75,7 +75,7 @@ class changes_required extends Component{
               data.append('file',v[x].rawFile);
           }
           //console.log(data)
-          axios.post('/api/doc',data,{}).
+          axios.post(nodelink.site+'/api/doc',data,{}).
           then(res=>{              
               console.log("now gettin new files")
               this.setState({
@@ -90,7 +90,7 @@ class changes_required extends Component{
                               Document_Name:this.state.files[x],
                               Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
                           }
-                          axios.post('/api/doc/rec',new5).then(res=>{console.log("now saving new files")})                      
+                          axios.post(nodelink.site+'/api/doc/rec',new5).then(res=>{console.log("now saving new files")})                      
                         }                         
                   })
           })
@@ -103,7 +103,7 @@ class changes_required extends Component{
         Document_Name:this.state.oldFiles[x],
         Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
     }
-    axios.post('/api/doc/rec/ch',new6).then(res=>{console.log("now saving old files");})                      
+    axios.post(nodelink.site+'/api/doc/rec/ch',new6).then(res=>{console.log("now saving old files");})                      
   }}
   if(this.state.filepath.length>=0 && this.state.oldFiles.length>=0){                                 
     this.onSubmit()  
@@ -127,7 +127,7 @@ class changes_required extends Component{
       var fileName = this.state.filenames[key].Document_Name
       console.log(fileName)      
       var a = {fname : fileName, fpath:this.state.filepath}
-       axios.post('/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
+       axios.post(nodelink.site+'/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
             .then(function(res){             
               var data = new Blob([res.data]);              
               var blob = data;
@@ -150,7 +150,7 @@ class changes_required extends Component{
       this.setState({
         empid: a
       }, () => {
-        axios.post('/api/changes_required/emp',this.state)
+        axios.post(nodelink.site+'/api/changes_required/emp',this.state)
         .then(res=>{
             console.log(res.data)
               var r = res.data;
@@ -170,7 +170,7 @@ class changes_required extends Component{
                 okey:x.UserAccess_Headerkey,
                 status:x.Status
             })
-            axios.get('/api/download/fp')
+            axios.get(nodelink.site+'/api/download/fp')
             .then(res => {
               var x = res.data
               var y = x[0].Document_Path
@@ -179,7 +179,7 @@ class changes_required extends Component{
               })
               //console.log(this.state.filepath)
             })
-            axios.post('/api/changes_screen/fn',this.state)
+            axios.post(nodelink.site+'/api/changes_screen/fn',this.state)
             .then(res => {              
               this.setState({
                 filenames : res.data,                
@@ -224,7 +224,7 @@ class changes_required extends Component{
   }
 
     componentDidMount(){      
-        axios.get('/api/items/department')
+        axios.get(nodelink.site+'/api/items/department')
         .then(res=>{
             this.setState({
                department_options:res.data
@@ -248,7 +248,7 @@ class changes_required extends Component{
             console.log(this.state.useremail)} 
            else if(n==1){ 
             console.log(this.props)
-            axios.post('/api/changes_required',this.state)
+            axios.post(nodelink.site+'/api/changes_required',this.state)
               .then(res=>{
               this.setState({
                   items:res.data,
@@ -310,7 +310,7 @@ class changes_required extends Component{
   // }
     getheader=()=>{
         var v='';
-        axios.get('/api/items/key')
+        axios.get(nodelink.site+'/api/items/key')
         .then(res=>{
             v=res.data[0][''];
             //console.log(v);
@@ -349,7 +349,7 @@ class changes_required extends Component{
             UserAccess_Headerkey:this.state.key,
             User_Email:this.props.auth.user.Email
         }
-        axios.post('/api/changes_required/save',newItem)
+        axios.post(nodelink.site+'/api/changes_required/save',newItem)
           .then(res=>{
             console.log(res);
             console.log("now saving form")

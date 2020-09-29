@@ -38,7 +38,7 @@ var dateFormat = require('dateformat');
 //   );
 //   return valid;
 // }
-
+var nodelink=require('../../nodelink.json');
 class Changes_screen extends Component{
         // validate=()=>{
         //   if(validateForm(this.props.Errors)=="Valid") {
@@ -113,7 +113,7 @@ class Changes_screen extends Component{
             else if(n==1){
               //console.log(this.state)
               //do smthng abt data: [] here, to fill the table
-              axios.post('/api/changes_screen/data',this.state)
+              axios.post(nodelink.site+'/api/changes_screen/data',this.state)
                 .then(res=>{
                   //console.log(res)                  
                   //console.log(res.data)
@@ -163,7 +163,7 @@ class Changes_screen extends Component{
         this.setState({
           module: a
         }, () => {
-          axios.post('/api/changes_screen',this.state)
+          axios.post(nodelink.site+'/api/changes_screen',this.state)
           .then(res=>{
             var x=res.data             
             if(this.state.data.length!==0)
@@ -243,7 +243,7 @@ class Changes_screen extends Component{
            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
            UserAccess_Headerkey:this.props.Hkey
           }         
-          axios.post('/api/changes_screen/save',new2)
+          axios.post(nodelink.site+'/api/changes_screen/save',new2)
           .then(res=>{
             console.log("now saving screens");            
           })
@@ -278,7 +278,7 @@ class Changes_screen extends Component{
    }
 
     componentDidMount(){
-      axios.get('/api/changes_screen')
+      axios.get(nodelink.site+'/api/changes_screen')
         .then(res=>{
           this.setState({
               items:res.data
