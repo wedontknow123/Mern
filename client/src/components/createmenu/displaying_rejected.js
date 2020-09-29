@@ -88,12 +88,12 @@ class Displaying_rejected extends Component{
             Emp_ID:this.props.eid,
             UserAccess_Headerkey:String(this.props.hkey)
         }        
-        axios.post(nodelink+'/api/apmaster/display',info)
+        axios.post(nodelink.site+'/api/apmaster/display',info)
           .then(res=>{
           this.setState({
               info:res.data
           })
-          axios.post(nodelink+'/api/apmaster/emp',this.props)
+          axios.post(nodelink.site+'/api/apmaster/emp',this.props)
                 .then(res=>{            
                     console.log(res.data)
                     console.log(this.state.info)
@@ -110,14 +110,14 @@ class Displaying_rejected extends Component{
                         emptype:x.Employee_Type,
                         software:x.Software,
                     })  
-                    axios.post(nodelink+'/api/download/fn',this.state)
+                    axios.post(nodelink.site+'/api/download/fn',this.state)
                     .then(res => {              
                     this.setState({
                         filenames : res.data
                     })
                     console.log(this.state.filenames)
                     }) 
-                    axios.get(nodelink+'/api/download/fp')
+                    axios.get(nodelink.site+'/api/download/fp')
                     .then(res => {
                     var x = res.data
                     var y = x[0].Document_Path
@@ -157,7 +157,7 @@ class Displaying_rejected extends Component{
             for(var y=0;y<v.length;y++){//v
                 data.append('file',v[y].rawFile);
             }
-            axios.post(nodelink+'/api/doc',data,{}).
+            axios.post(nodelink.site+'/api/doc',data,{}).
             then(res=>{                
               console.log("now gettin new files")
                 this.setState({
@@ -170,7 +170,7 @@ class Displaying_rejected extends Component{
                             Document_Name:this.state.files[x],
                             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
                         }
-                        axios.post(nodelink+'/api/doc/rec',new5)
+                        axios.post(nodelink.site+'/api/doc/rec',new5)
                         .then(res=>{                          
                           console.log("now saving new files"); 
                            c=c+1;                                                      
@@ -191,7 +191,7 @@ class Displaying_rejected extends Component{
         console.log(fileName) 
         console.log(this.state.key)      
         var a = {fname : fileName, fpath:this.state.filepath, hkey:this.state.key}
-        axios.post(nodelink+'/api/download/del', a ).then(res=>{console.log(res)})       
+        axios.post(nodelink.site+'/api/download/del', a ).then(res=>{console.log(res)})       
         console.log(ikey)
           document.getElementById(ikey).innerHTML = "DELETED!";
           document.getElementById(name).remove() 
@@ -203,7 +203,7 @@ class Displaying_rejected extends Component{
         var fileName = this.state.filenames[key].Document_Name
         console.log(fileName)      
         var a = {fname : fileName, fpath:this.state.filepath}
-         axios.post(nodelink+'/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
+         axios.post(nodelink.site+'/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
               .then(function(res){             
                 var data = new Blob([res.data]);              
                 var blob = data;
@@ -239,10 +239,10 @@ class Displaying_rejected extends Component{
             Emp_ID:this.state.empid,
             User_Email:this.props.auth.user.Email
         }       
-        axios.post(nodelink+'/api/draft/save',newItem)
+        axios.post(nodelink.site+'/api/draft/save',newItem)
           .then(res=>{            
             console.log("now saving form")
-            axios.post(nodelink+'/api/apmaster',info)
+            axios.post(nodelink.site+'/api/apmaster',info)
             .then(res=>{
                 console.log(res)
                 const info1={
@@ -252,10 +252,10 @@ class Displaying_rejected extends Component{
                     Approver_Email:res.data[0].Email
                 }
                 console.log(info1);
-                axios.post(nodelink+'/api/apmaster/submit',info1)
+                axios.post(nodelink.site+'/api/apmaster/submit',info1)
                 .then(res=>{
                     console.log(res); 
-                    axios.post(nodelink+'/api/apmaster/rejectedstatus',info1)
+                    axios.post(nodelink.site+'/api/apmaster/rejectedstatus',info1)
                     .then(res=>{
                         console.log(res);
                         setTimeout(() => {

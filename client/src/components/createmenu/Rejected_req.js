@@ -34,7 +34,7 @@ class Rejected_req extends Component{
             const info1={
                 "User_Email":this.state.Approver_Email
             }
-            axios.post(nodelink+'/api/apmaster/rejected',info1)
+            axios.post(nodelink.site+'/api/apmaster/rejected',info1)
               .then(res=>{
               this.setState({
                   empid:res.data,

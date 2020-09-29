@@ -9,7 +9,7 @@ const call= require('./calling');
 //     call.get7(req,res);//,useremail
 // })
 router.post('/',(req,res)=>{ //post
-    
+    console.log(req.body);
     const useremail= req.body.useremail;
     call.get7(req,res,useremail);//,useremail
 })

@@ -31,7 +31,7 @@ class Pending_requests extends Component{
             console.log(this.state.Approver_Email)} 
            else if(n==1){ 
             console.log(this.props)
-            axios.post(nodelink+'/api/apmaster/pending',this.state)
+            axios.post(nodelink.site+'/api/apmaster/pending',this.state)
               .then(res=>{
               this.setState({
                   empid:res.data,

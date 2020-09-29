@@ -1,0 +1,10 @@
+
+Server started on port \\.\pipe\84c53294-4728-4fec-8ed1-85fbc48746a6
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]

@@ -71,13 +71,13 @@ class Displaying1 extends Component{
                 UserAccess_Headerkey:String(this.props.hkey)
             }
             
-            axios.post(nodelink+'/api/apmaster/display',info)
+            axios.post(nodelink.site+'/api/apmaster/display',info)
               .then(res=>{
                 this.setState({
                     info:res.data
                 })
                 
-                axios.post(nodelink+'/api/apmaster/emp',this.props)
+                axios.post(nodelink.site+'/api/apmaster/emp',this.props)
                 .then(res=>{            
                     console.log(res.data)
                     console.log(this.state.info)
@@ -94,14 +94,14 @@ class Displaying1 extends Component{
                         emptype:x.Employee_Type,
                         software:x.Software,
                     })  
-                    axios.post(nodelink+'/api/download/fn',this.state)
+                    axios.post(nodelink.site+'/api/download/fn',this.state)
                     .then(res => {              
                     this.setState({
                         filenames : res.data
                     })
                     console.log(this.state.filenames)
                     }) 
-                    axios.get(nodelink+'/api/download/fp')
+                    axios.get(nodelink.site+'/api/download/fp')
                     .then(res => {
                     var x = res.data
                     var y = x[0].Document_Path
@@ -110,7 +110,7 @@ class Displaying1 extends Component{
                     })
                     console.log(this.state.filepath)
                     })
-                    axios.post(nodelink+'/api/screens_test_d/data',this.state)
+                    axios.post(nodelink.site+'/api/screens_test_d/data',this.state)
                     .then(res=>{
                       var datas =[];
                       var i;
@@ -147,7 +147,7 @@ class Displaying1 extends Component{
             const info5={
                 Approver_Email:this.state.useremail
             }
-            axios.post(nodelink+'/api/apmaster/checkingIT',info5)
+            axios.post(nodelink.site+'/api/apmaster/checkingIT',info5)
               .then(res=>{
               this.setState({
                   r : "yes"
@@ -190,7 +190,7 @@ class Displaying1 extends Component{
         var fileName = this.state.filenames[key].Document_Name
         console.log(fileName)      
         var a = {fname : fileName, fpath:this.state.filepath}
-         axios.post(nodelink+'/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
+         axios.post(nodelink.site+'/api/download',a,{responseType: 'arraybuffer'})//{responseType: 'blob'}
               .then(function(res){             
                 var data = new Blob([res.data]);              
                 var blob = data;
@@ -217,16 +217,16 @@ class Displaying1 extends Component{
           Emp_ID:this.props.eid
         }
         console.log(info);
-        axios.post(nodelink+'/api/apmaster/previous',info)
+        axios.post(nodelink.site+'/api/apmaster/previous',info)
         .then(res=>{
         console.log(res);
-        axios.post(nodelink+'/api/apmaster/approval',info)
+        axios.post(nodelink.site+'/api/apmaster/approval',info)
         .then(res=>{
              const info1={
                  UserAccess_Headerkey:String(this.props.hkey),
                  Department:this.state.info[0].Emp_Department
              }
-             axios.post(nodelink+'/api/apmaster',info1)
+             axios.post(nodelink.site+'/api/apmaster',info1)
              .then(res=>{
                  console.log(res.data.length)
                  if(res.data.length===1){
@@ -237,7 +237,7 @@ class Displaying1 extends Component{
                      Approver_Email:res.data[0].Email
                    }
                    console.log(info2);
-                 axios.post(nodelink+'/api/apmaster/submit',info2)
+                 axios.post(nodelink.site+'/api/apmaster/submit',info2)
                  .then(res=>{
                     console.log(res);
                   })
@@ -247,7 +247,7 @@ class Displaying1 extends Component{
                          UserAccess_Headerkey:String(this.props.hkey),
                          Approver_Email: this.props.auth.user.Email
                      }
-                     axios.post(nodelink+'/api/apmaster/finalApprover',info3)
+                     axios.post(nodelink.site+'/api/apmaster/finalApprover',info3)
                      .then(res=>{
                         this.setState({
                             last:1
@@ -279,7 +279,7 @@ class Displaying1 extends Component{
                 Approver_Email: this.props.auth.user.Email,
                 Emp_ID:this.props.eid
             }
-            axios.post(nodelink+'/api/apmaster/approval',info)
+            axios.post(nodelink.site+'/api/apmaster/approval',info)
             .then(res=>{
                 console.log(res);
                 setTimeout(() => {
@@ -321,7 +321,7 @@ class Displaying1 extends Component{
                 Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
             }
             console.log(info);
-            axios.post(nodelink+'/api/apmaster/itcred',info)
+            axios.post(nodelink.site+'/api/apmaster/itcred',info)
             .then(res=>{
                 console.log(res);
                 setTimeout(() => {
