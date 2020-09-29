@@ -10,11 +10,11 @@ import {
     REGISTER_FAIL
 } from '../actions/types';
 import {returnErrors} from './errorActions';
-
+var nodelink=require('../nodelink.json');
 export const loadUser=()=>(dispatch, getState)=>{
     dispatch({type:USER_LOADING});
 
-    axios.get('/api/auth/user',tokenConfig(getState))
+    axios.get(nodelink.site+'/api/auth/user',tokenConfig(getState))
     .then(res=>dispatch({
         type:USER_LOADED,
         payload:res.data
@@ -37,7 +37,7 @@ export const register=({name,email,password})=>dispatch=>{
 
     const body=({name,email,password});
 
-    axios.post('/api/users',body,config)
+    axios.post(nodelink.site+'/api/users',body,config)
     .then(res=>{console.log(res);
         dispatch({
         type:REGISTER_SUCCESS,
@@ -61,7 +61,7 @@ export const login=({email,password})=>dispatch=>{
 
     const body=({email,password});
 
-    axios.post('/api/auth',body,config)
+    axios.post(nodelink.site +'/api/auth',body,config)
     .then(res=>dispatch({
         type:LOGIN_SUCCESS,
         payload:res.data

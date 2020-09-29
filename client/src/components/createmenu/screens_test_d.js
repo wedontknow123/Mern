@@ -28,7 +28,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {getapprovalinfo,approval1} from '../../actions/itemActions';
-
+var nodelink=require('../../nodelink.json');
 var a='';
 var dateFormat = require('dateformat');
 var n=1;
@@ -105,7 +105,7 @@ class Screens_test_d extends Component{
                   })} 
                 else if(n==1){
                   //do smthng abt data: [] here, to fill the table
-                  axios.post('/api/screens_test_d/data',this.state)
+                  axios.post(nodelink+'/api/screens_test_d/data',this.state)
                     .then(res=>{
                       var datas =[];
                       var i;
@@ -149,7 +149,7 @@ class Screens_test_d extends Component{
         this.setState({
           module: a
         }, () => {
-          axios.post('/api/screens_test_d',this.state)
+          axios.post(nodelink+'/api/screens_test_d',this.state)
           .then(res=>{
               //here
               var x=res.data             
@@ -232,7 +232,7 @@ class Screens_test_d extends Component{
         var w=0;
         console.log(this.props.Hkey);
         var x ={ UserAccess_Headerkey:this.props.Hkey }
-        axios.post('/api/screens_test_d/del',x)    
+        axios.post(nodelink+'/api/screens_test_d/del',x)    
         .then(res=>{
           console.log("deleted previos entries of screens");
           for (i=0;i<this.state.data.length;i++){
@@ -243,7 +243,7 @@ class Screens_test_d extends Component{
                 Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
                 UserAccess_Headerkey:this.props.Hkey
               }         
-              axios.post('/api/screens_test_d/save',new2)
+              axios.post(nodelink+'/api/screens_test_d/save',new2)
               .then(res=>{
                 console.log("now saving screens");             
               })
@@ -285,7 +285,7 @@ class Screens_test_d extends Component{
 
     componentDidMount(){
       console.log(this.props)
-      axios.get('/api/screens_test_d')
+      axios.get(nodelink+'/api/screens_test_d')
         .then(res=>{
           this.setState({
               items:res.data

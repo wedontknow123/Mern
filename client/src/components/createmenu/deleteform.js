@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 var n = 1
-
+var nodelink=require('../../nodelink.json');
 class Deleteform extends Component{
     state={
         empid:[],
@@ -31,7 +31,7 @@ class Deleteform extends Component{
         const new1={
             Emp_ID:this.state.selectid
         };
-        axios.post('/api/items/delete',new1)
+        axios.post(nodelink.site+'/api/items/delete',new1)
         .then(res=>{
             console.log(res);
         })
@@ -58,7 +58,7 @@ class Deleteform extends Component{
               console.log(this.state.useremail)} 
             else if(n==1){ 
               console.log(this.props)
-              axios.post('/api/items/del',this.state)
+              axios.post(nodelink.site+'/api/items/del',this.state)
                 .then(res=>{
                 this.setState({
                     empid:res.data,

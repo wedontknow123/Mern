@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 
 var dateFormat = require('dateformat');
 var n =1
+var nodelink=require('../../nodelink.json');
 
 class Deactivate extends Component{
     state={
@@ -60,7 +61,7 @@ class Deactivate extends Component{
             alert("Fill all the * (Required) fields !")
            }
         else{var v='';
-        axios.get('/api/items/key')
+        axios.get(nodelink.site+'/api/items/key')
         .then(res=>{
             v=res.data[0][''];
             console.log(v);
@@ -96,7 +97,7 @@ class Deactivate extends Component{
 
       }
       console.log(this.state);
-      axios.post('/api/deactivate/cont',newitem)
+      axios.post(nodelink.site+'/api/deactivate/cont',newitem)
       .then(res=>{
           this.setState({
               done:"yes"
@@ -126,7 +127,7 @@ class Deactivate extends Component{
             console.log(this.state.useremail)} 
            else if(n==1){ 
             console.log(this.props)
-            axios.post('/api/deactivate',this.state)
+            axios.post(nodelink.site+'/api/deactivate',this.state)
               .then(res=>{
               this.setState({
                   empid:res.data,

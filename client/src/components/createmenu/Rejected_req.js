@@ -6,7 +6,7 @@ import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {getEmpid,getHeaderkey,getReason} from '../../actions/itemActions';
 import { Redirect,NavLink } from 'react-router-dom';
-
+var nodelink=require('../../nodelink.json');
 var n=1
 class Rejected_req extends Component{
     state={
@@ -34,7 +34,7 @@ class Rejected_req extends Component{
             const info1={
                 "User_Email":this.state.Approver_Email
             }
-            axios.post('/api/apmaster/rejected',info1)
+            axios.post(nodelink+'/api/apmaster/rejected',info1)
               .then(res=>{
               this.setState({
                   empid:res.data,

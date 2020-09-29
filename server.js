@@ -2,14 +2,20 @@ const express = require('express');
 const db= require('./db');
 const bodyParser= require('body-parser');
 const path=require('path');
+var cors=require('cors');
 const items =require('./routes/api/items');
 const app=express();
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use('/api/items',require('./routes/api/items'));
 app.use('/api/users',require('./routes/api/Users'));
 app.use('/api/auth',require('./routes/api/auth'));
-
+app.get('/',function(req,res){
+    res.send('hello');
+})
+app.get('/api',function(req,res){
+    res.send('hello123');
+})
 //app.use('/api/screens',require('./routes/api/screens'));
 app.use('/api/screens_test',require('./routes/api/screens_test'));
 app.use('/api/apmaster',require('./routes/api/Approval_master'));

@@ -6,7 +6,7 @@ import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {getEmpid,getHeaderkey} from '../../actions/itemActions';
 import { Redirect,NavLink } from 'react-router-dom';
-
+var nodelink=require('../../nodelink.json');
 var n=1
 class Pending_requests extends Component{
     state={
@@ -31,7 +31,7 @@ class Pending_requests extends Component{
             console.log(this.state.Approver_Email)} 
            else if(n==1){ 
             console.log(this.props)
-            axios.post('/api/apmaster/pending',this.state)
+            axios.post(nodelink+'/api/apmaster/pending',this.state)
               .then(res=>{
               this.setState({
                   empid:res.data,
