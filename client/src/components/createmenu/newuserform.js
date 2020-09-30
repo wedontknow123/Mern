@@ -21,7 +21,7 @@ import Screens_test from './screens_test';
 
 var dateFormat = require('dateformat');
 var now = new Date();
-// var lol =0;
+ var lol = "no";
 // var rd =0;
 var c=0 
 var nodelink=require('../../nodelink.json');
@@ -78,12 +78,12 @@ class Newuserform extends Component{
             //         ? ''
             //         : 'Email is not valid';
             //     break;            
-            case 'empid': 
-                errors.empid = 
-                (value.length < 10 && value.length >0) 
-                ? 'Employee ID must be less than or equal to 10 characters'
-                : '';
-                break;
+            // case 'empid': 
+            //     errors.empid = 
+            //     (value.length < 10 && value.length >0) 
+            //     ? 'Employee ID must be less than or equal to 10 characters'
+            //     : '';
+            //     break;
             // case 'doj': 
             //     errors.doj = 
             //     value < now
@@ -140,8 +140,8 @@ class Newuserform extends Component{
         })
     }
        
-    handlechange4=(itr)=>{         
-        let v = this.uploadObj.getFilesData()
+    handlechange4=(itr,v,rea)=>{         
+        // let v = this.uploadObj.getFilesData()
         var x;
         if(v!==null){
             const data=new FormData();
@@ -172,14 +172,14 @@ class Newuserform extends Component{
                            })                                                
                         }
                         if(this.state.filepath.length>=0){                                 
-                            this.handlechange3(itr) 
+                            this.handlechange3(itr,rea) 
                         }                                                                   
                     })
             })
      }     
     }
    
-    handlechange3=(itr)=>{          
+    handlechange3=(itr,rea)=>{          
         this.props.getdepartment(this.state.depart);
         if(this.state.empid){
         const newItem={
@@ -193,7 +193,7 @@ class Newuserform extends Component{
             DOJ:this.state.doj,
             Employee_Type:this.state.emptype,
             Software:this.state.software,
-            Reason:this.state.reason,
+            Reason:rea,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             UserAccess_Headerkey:this.state.key,
             Status:this.state.status,
@@ -203,14 +203,16 @@ class Newuserform extends Component{
        .then(res=>{
             console.log("now saving newuserform")
             if(itr=="yes"){
+                lol="yes"
                 console.log("changing state")
-            var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
-            axios.post(nodelink.site+'/api/screens_test/upstat',s)
+                var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
+                axios.post(nodelink.site+'/api/screens_test/upstat',s)
             }
             setTimeout(() => {
                 this.setState({
                     done:'yes'
                 })
+                
             }, 3000)
             
        })        
@@ -222,6 +224,8 @@ class Newuserform extends Component{
         const {errors} = this.state;
         if(this.state.done=='yes'){            
             console.log("ALL DONE !!")
+            if(lol=="yes")
+            alert("Successfully sent for approval")
             return <Redirect to='/options'/>     //the final return should be inside an else ....         
         }
         const filterOptions1 = createFilterOptions({
@@ -340,42 +344,15 @@ class Newuserform extends Component{
                                 <option value="others">Others</option>
                              </Input>
                              </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
-                               <Col sm={5}>
-                               <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
-                               </Col>
-                             </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleText"sm={3}>Reason</Label>
-                               <Col sm={5}>
-                               <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange1}/>
-                               {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
-                               </Col>
-                            </FormGroup>                            
+                            </FormGroup>                                            
                              <br/>
                              <hr width="90%" size="15" ></hr>
                              <br/>
                              <FormGroup >
                              <Screens_test Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.handlechange4} Errors={this.state.errors} Fields={this.state}/>
-                             {/* <Screens_test/>  */}
                              </FormGroup>
-                             <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
-                             {/* <Button >Save as Draft</Button> */}
-
-                            {/* <FormGroup check row>
-                                <Col sm={{ size: 10, offset: 3 }}>
-                                 <Button >Save and Next</Button>
-                                </Col>
-                                {/* type="submit" onClick={this.handlechange4}
-                                <Col sm={{ size: 10, offset: 3 }}>
-                                 <Button >Save as Draft</Button>
-                                </Col> */}
-                            {/* </FormGroup> */}
-
-
-                </Form>            
+                             <Label style={{color:'red',fontSize:'20px' }} >* Required</Label> 
+                    </Form>            
             </div>
         );
     }

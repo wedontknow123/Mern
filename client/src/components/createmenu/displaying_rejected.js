@@ -55,28 +55,28 @@ class Displaying_rejected extends Component{
         const { name, value } = e.target;        
         //console.log(value);        
         let errors = this.state.errors;    
-        switch (name) {
-            case 'name': 
-                errors.name = 
-                (value.length < 5 && value.length >0)
-                      ? 'Character limit >5 and <10 '
-                    : '';
-                break;
-            case 'email': 
-                errors.email = 
-                validEmailRegex.test(value)
-                    ? ''
-                    : 'Email is not valid';
-                break;
-            case 'doj': 
-                errors.doj = 
-                value < now
-                ? 'Enter a valid date'
-                : '';
-                break;                
-            default:
-                break;
-        }    
+        // switch (name) {
+        //     case 'name': 
+        //         errors.name = 
+        //         (value.length < 5 && value.length >0)
+        //               ? 'Character limit >5 and <10 '
+        //             : '';
+        //         break;
+        //     case 'email': 
+        //         errors.email = 
+        //         validEmailRegex.test(value)
+        //             ? ''
+        //             : 'Email is not valid';
+        //         break;
+        //     case 'doj': 
+        //         errors.doj = 
+        //         value < now
+        //         ? 'Enter a valid date'
+        //         : '';
+        //         break;                
+        //     default:
+        //         break;
+        // }    
         this.setState({errors,[name]: value})
           
       }
@@ -277,7 +277,7 @@ class Displaying_rejected extends Component{
                )
             }
         if(this.props.hkey==""){
-            console.log("ALL DONEE!!!")
+            console.log("no key")
                 return (
                 <Redirect to='/rejected'/>
                 )
@@ -329,7 +329,7 @@ class Displaying_rejected extends Component{
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
                              <Input type="text" name="name" maxLength='70' id="name" value={this.state.name} onChange={this.handlechange1} />
-                             {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>}
+                             {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
@@ -388,13 +388,7 @@ class Displaying_rejected extends Component{
                                 <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic} deleteFile={this.deleteFile} />
                                 
                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
-                               <Col sm={5}>
-                                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />
-                               </Col>
-                             </FormGroup>                            
+                            </FormGroup>                                                       
                              <br/>
                              <hr width="90%" size="15" ></hr>
                              <br/>

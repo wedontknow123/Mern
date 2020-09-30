@@ -65,10 +65,10 @@ class Changes_required extends Component{
         auth:PropTypes.object.isRequired
     }
 
-    fileSave=()=>{     
+    fileSave=(v,rea)=>{     
                  
      //console.log(this.uploadObj.getFilesData())
-      let v = this.uploadObj.getFilesData()
+      // let v = this.uploadObj.getFilesData()
       if(v!==null){//this.state.file          
           const data=new FormData();
           for(var x=0;x<v.length;x++){//v
@@ -106,7 +106,7 @@ class Changes_required extends Component{
     axios.post(nodelink.site+'/api/doc/rec/ch',new6).then(res=>{console.log("now saving old files");})                      
   }}
   if(this.state.filepath.length>=0 && this.state.oldFiles.length>=0){                                 
-    this.onSubmit()  
+    this.onSubmit(rea)  
   }
 }
 
@@ -269,24 +269,24 @@ class Changes_required extends Component{
       let errors = this.state.errors;
       let reasonl = this.state.reasonl;    
       switch (name) {
-          case 'name': 
-              errors.name = 
-              (value.length < 5 && value.length >0)
-                    ? 'Character limit >5 and <10 '
-                  : '';
-              break;
-          case 'email': 
-              errors.email = 
-              validEmailRegex.test(value)
-                  ? ''
-                  : 'Email is not valid';
-              break;
-          case 'doj': 
-              errors.doj = 
-              value < now
-              ? 'Enter a valid date'
-              : '';
-              break;
+          // case 'name': 
+          //     errors.name = 
+          //     (value.length < 5 && value.length >0)
+          //           ? 'Character limit >5 and <10 '
+          //         : '';
+          //     break;
+          // case 'email': 
+          //     errors.email = 
+          //     validEmailRegex.test(value)
+          //         ? ''
+          //         : 'Email is not valid';
+          //     break;
+          // case 'doj': 
+          //     errors.doj = 
+          //     value < now
+          //     ? 'Enter a valid date'
+          //     : '';
+          //     break;
           case 'reason': 
               reasonl = `${value.length}/150`                
               break;                
@@ -330,7 +330,7 @@ class Changes_required extends Component{
     }
 
 
-    onSubmit=()=>{ 
+    onSubmit=(rea)=>{ 
         var now = new Date();        
         const newItem={
             Trans_Type:this.state.type,
@@ -342,7 +342,7 @@ class Changes_required extends Component{
             DOJ:this.state.doj,
             Employee_Type:this.state.emptype,
             Software:this.state.software,
-            Reason:this.state.reason,
+            Reason:rea,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Status:'sent for approval',            
             Emp_ID:this.state.empid,
@@ -365,10 +365,11 @@ class Changes_required extends Component{
       const {errors} = this.state;     
         if(this.state.done=='yes'){
           console.log("ALL DONEE!!!")
-            return (
-            <Redirect to='/'/>
-             )
-          }
+          alert("Successfully sent for approval")
+          return (
+          <Redirect to='/'/>
+            )
+        }
         const filterOptions1 = createFilterOptions({   //for combo box till the next @
             matchFrom: 'start',
             stringify: (option) => option.Emp_ID,
@@ -433,26 +434,6 @@ class Changes_required extends Component{
                              <Input type="text" name="desig" maxLength='70' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>
-                         {/* <FormGroup row>
-                          <Label for="depart" sm={3}>Department:</Label>
-                           <Col sm={5}>
-                             <Input type="text" name="depart" id="depart" value={this.state.depart} onChange={this.handlechange1}/>
-                              </Col>
-                         </FormGroup> */}
-                         {/* <FormGroup row>
-                         <Label for="depart" sm={3}>Department:</Label>
-                         <Col sm={5}>
-                         <Autocomplete
-                            id="Module"                                                     
-                            options={this.state.department_options}
-                            getOptionLabel={(option)=>option.Department}
-                                filterOptions={filterOptions2}
-                            style={{width:300}}
-                            onChange={this.handlechange2}
-                            renderInput={(params)=><TextField {...params}  label="Department" variant="outlined"/>}
-                          />
-                         </Col>
-                         </FormGroup> */}
                          <FormGroup row>
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
@@ -501,20 +482,7 @@ class Changes_required extends Component{
                                <Col sm={5}>                                
                                 <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic} deleteFile={this.deleteFile} />                                
                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser:</Label>
-                               <Col sm={5}>
-                                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />
-                               </Col>
-                             </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleText"sm={3}>Reason <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
-                               <Col sm={5}>
-                               <Input type="textarea" name="reason" id="reason" maxLength='150' value={this.state.reason} onChange={this.handlechange1}/>
-                               {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
-                               </Col>
-                            </FormGroup>
+                            </FormGroup>                            
                             <br/>
                              <hr width="90%" size="15" ></hr>
                              <br/>
@@ -522,11 +490,7 @@ class Changes_required extends Component{
                              <Changes_screen Hkey={this.state.key} Okey={this.state.okey} Department={this.state.depart} Reason={this.state.reason} Eid={this.state.empid} FSubmit={this.fileSave} Errors={this.state.errors} Fields={this.state}/>                             
                              </FormGroup>
                              <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
-                            {/* <FormGroup check row>
-                               <Col sm={{ size: 10, offset: 3 }}>
-                                 <Button >Save and Next</Button>
-                                   </Col>
-                                 </FormGroup> */}
+                           
                           </Form>
             </div>
         );

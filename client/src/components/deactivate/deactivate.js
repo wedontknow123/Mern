@@ -60,26 +60,33 @@ class Deactivate extends Component{
         if(this.state.reason.length==0){//
             alert("Fill all the * (Required) fields !")
            }
-        else{var v='';
-        axios.get(nodelink.site+'/api/items/key')
-        .then(res=>{
-            v=res.data[0][''];
-            console.log(v);
-            if(v==null){
-               this.setState({
-                   key:1
-               })
-            }
-            else {
-                v=v+1
-                this.setState({
-                    UserAccess_Headerkey:v
-                },()=>{
-                    document.getElementById("submit").disabled=true;
-                    this.handlesubmit();
+        else{
+            if(window.confirm('Are you sure you want to DEACTIVATE this user ?')){
+                var v='';
+                axios.get(nodelink.site+'/api/items/key')
+                .then(res=>{
+                    v=res.data[0][''];
+                    console.log(v);
+                    if(v==null){
+                    this.setState({
+                        key:1
+                    })
+                    }
+                    else {
+                        v=v+1
+                        this.setState({
+                            UserAccess_Headerkey:v
+                        },()=>{
+                            document.getElementById("submit").disabled=true;
+                            this.handlesubmit();
+                        })
+                    }
                 })
             }
-        })}
+            else{
+                document.getElementById("submit").disabled=false;
+            }            
+        }
     }
     
     handlesubmit=(e)=>{
@@ -149,10 +156,11 @@ class Deactivate extends Component{
           });
           if(this.state.done=='yes'){
             console.log("ALL DONEE!!!")
-              return (
-              <Redirect to='/'/>
-               )
-            }
+            alert("Successfully deactivated")
+            return (
+            <Redirect to='/'/>
+            )
+          }
         return(
             <div className='container'>
             <Form>
