@@ -21,7 +21,7 @@ import Screens_test from './screens_test';
 
 var dateFormat = require('dateformat');
 var now = new Date();
-// var lol =0;
+ var lol = "no";
 // var rd =0;
 var c=0 
 var nodelink=require('../../nodelink.json');
@@ -78,12 +78,12 @@ class Newuserform extends Component{
             //         ? ''
             //         : 'Email is not valid';
             //     break;            
-            case 'empid': 
-                errors.empid = 
-                (value.length < 10 && value.length >0) 
-                ? 'Employee ID must be less than or equal to 10 characters'
-                : '';
-                break;
+            // case 'empid': 
+            //     errors.empid = 
+            //     (value.length < 10 && value.length >0) 
+            //     ? 'Employee ID must be less than or equal to 10 characters'
+            //     : '';
+            //     break;
             // case 'doj': 
             //     errors.doj = 
             //     value < now
@@ -203,14 +203,16 @@ class Newuserform extends Component{
        .then(res=>{
             console.log("now saving newuserform")
             if(itr=="yes"){
+                lol="yes"
                 console.log("changing state")
-            var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
-            axios.post(nodelink.site+'/api/screens_test/upstat',s)
+                var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
+                axios.post(nodelink.site+'/api/screens_test/upstat',s)
             }
             setTimeout(() => {
                 this.setState({
                     done:'yes'
                 })
+                
             }, 3000)
             
        })        
@@ -222,6 +224,8 @@ class Newuserform extends Component{
         const {errors} = this.state;
         if(this.state.done=='yes'){            
             console.log("ALL DONE !!")
+            if(lol=="yes")
+            alert("Successfully sent for approval")
             return <Redirect to='/options'/>     //the final return should be inside an else ....         
         }
         const filterOptions1 = createFilterOptions({

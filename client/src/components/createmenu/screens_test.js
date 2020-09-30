@@ -75,17 +75,23 @@ class Screens_test extends Component{
            if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 || fields.branch==="" || fields.name==="" || fields.desig==="" || fields.email===null || fields.filepath===null || fields.dog===""){//
             alert("Fill all the fields !")
            }
-           else
-           {let errors=this.props.Errors
-            if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0|| errors.doj.length>0){
-              alert("Correct the errors (in red) and try again !")}
-           else{console.log(this.props);
-           const info={
-            UserAccess_Headerkey:this.props.Hkey,
-            Department:this.props.Department
-           }
-           document.getElementById("approval").disabled=true;
-           this.props.getapprovalinfo(info); }}
+           else{
+            let errors=this.props.Errors
+          //   if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0|| errors.doj.length>0){
+          //     alert("Correct the errors (in red) and try again !")}
+            if(window.confirm('Are you sure you want to SEND FOR APPROVAL ?')){
+              console.log(this.props);
+              const info={
+                UserAccess_Headerkey:this.props.Hkey,
+                Department:this.props.Department
+              }
+              document.getElementById("approval").disabled=true;
+              this.props.getapprovalinfo(info); 
+            }
+            else{
+              document.getElementById("approval").disabled=false;
+            }
+          }
          }
 
          componentDidUpdate(){
@@ -181,10 +187,7 @@ class Screens_test extends Component{
     }    
    else{
      let errors=this.props.Errors
-     if(errors.empid.length>0 || errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
-       alert("Correct the errors(in red) and try again !")
-      }
-      else{
+     
         document.getElementById("approval").disabled=true;
         document.getElementById("draft").disabled=true;        
         var now = new Date();
@@ -203,7 +206,7 @@ class Screens_test extends Component{
               })
             }
             this.props.FSubmit(this.state.itr); 
-        }
+        
         }
    }
 

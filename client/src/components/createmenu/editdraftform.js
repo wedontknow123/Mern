@@ -24,6 +24,7 @@ var dateFormat = require('dateformat');
 var n = 1;
 var now = new Date();
 var c=0 ;
+var lol="no";
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 var nodelink=require('../../nodelink.json');
 
@@ -247,24 +248,24 @@ class Editdraftform extends Component{
       let errors = this.state.errors;
       let reasonl=this.state.reasonl;    
       switch (name) {
-          case 'name': 
-              errors.name = 
-              (value.length < 5 && value.length >0)
-                    ? 'Character limit >5 and <10 '
-                  : '';
-              break;
-          case 'email': 
-              errors.email = 
-              validEmailRegex.test(value)
-                  ? ''
-                  : 'Email is not valid';
-              break;
-          case 'doj': 
-              errors.doj = 
-              value < now
-              ? 'Enter a valid date'
-              : '';
-              break;
+          // case 'name': 
+          //     errors.name = 
+          //     (value.length < 5 && value.length >0)
+          //           ? 'Character limit >5 and <10 '
+          //         : '';
+          //     break;
+          // case 'email': 
+          //     errors.email = 
+          //     validEmailRegex.test(value)
+          //         ? ''
+          //         : 'Email is not valid';
+          //     break;
+          // case 'doj': 
+          //     errors.doj = 
+          //     value < now
+          //     ? 'Enter a valid date'
+          //     : '';
+          //     break;
           case 'reason': 
               reasonl = `${value.length}/150`;                
               break;                
@@ -307,6 +308,7 @@ class Editdraftform extends Component{
           .then(res=>{            
             console.log("now saving form")
             if(itr=="yes"){
+              lol="yes"
               console.log("changing state")
               var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
               axios.post(nodelink.site+'/api/screens_test/upstat',s)
@@ -323,6 +325,8 @@ class Editdraftform extends Component{
         const {errors} = this.state;       
         if(this.state.done=='yes'){
           console.log("ALL DONE!!!")
+          if(lol=="yes")
+            alert("Successfully sent for approval")
           return  <Redirect to='/options'/>            
         }
         const filterOptions1 = createFilterOptions({   //for combo box till the next @

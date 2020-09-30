@@ -73,23 +73,24 @@ class Screens_test_d extends Component{
         
         handleclick2=()=>{
           console.log("Approval button clicked");
-          // this.validate()
           let fields = this.props.Fields
           if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 || fields.branch==="" || fields.name==="" || fields.desig==="" || fields.email===null || fields.filepath===null || fields.dog===""){//
-            //
             alert("Fill all the fields !")
            }
-           else
-           {let errors=this.props.Errors
-            if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
-              alert("Correct the errors (in red) and try again !")}
            else{
-          const info={
-           UserAccess_Headerkey:this.props.Hkey,
-           Department:this.props.Department
-          }
-          document.getElementById("approval").disabled=true;          
-          this.props.getapprovalinfo(info);}}          
+             if(window.confirm('Are you sure you want to SEND FOR APPROVAL ?')){
+                let errors=this.props.Errors            
+                const info={
+                UserAccess_Headerkey:this.props.Hkey,
+                Department:this.props.Department
+                }
+                document.getElementById("approval").disabled=true;          
+                this.props.getapprovalinfo(info);
+            }
+            else{
+              document.getElementById("approval").disabled=false;
+            }
+          }          
         }
 
         componentDidUpdate(){          
@@ -218,15 +219,12 @@ class Screens_test_d extends Component{
        }
        else
        {let errors=this.props.Errors
-        if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
-          alert("Correct the errors (in red) and try again !")}
-       else{ 
+         
         if(this.props.Fields.dsb==""){
           document.getElementById("approval").disabled=true;
           document.getElementById("draft").disabled=true;
         }
-        else{document.getElementById("submit").disabled=true;}
-        document.getElementById("submit").disabled=true;  
+        else{document.getElementById("submit").disabled=true;}          
         var now = new Date();
         var i;
         var w=0;
@@ -253,9 +251,7 @@ class Screens_test_d extends Component{
             else
             this.props.FSubmit();      
         })
-    }}
-    
-        
+    }        
    }
 
    //this will save the data into the table

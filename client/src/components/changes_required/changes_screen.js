@@ -75,20 +75,22 @@ class Changes_screen extends Component{
           // this.validate()
           let fields = this.props.Fields
           if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 || fields.branch==="" || fields.name==="" || fields.desig==="" || fields.email===null || fields.doj==="" ){//
-            alert("Fill all the * (Required) fields !")
+            alert("Fill all the fields !")
            }
-           else
-           {let errors=this.props.Errors
-            if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
-              alert("Correct the errors (in red) and try again !")}
            else{
-          const info={
-           UserAccess_Headerkey:this.props.Hkey,
-           Department:this.props.Department
-          }
-          document.getElementById("approval").disabled=true;          
-          this.props.getapprovalinfo(info);}}
-           
+            if(window.confirm('Are you sure you want to SEND FOR APPROVAL ?')){
+              let errors=this.props.Errors            
+              const info={
+              UserAccess_Headerkey:this.props.Hkey,
+              Department:this.props.Department
+              }
+              document.getElementById("approval").disabled=true;          
+              this.props.getapprovalinfo(info);
+            }
+            else{
+              document.getElementById("approval").disabled=false;
+            }
+          }           
         }
 
         componentDidUpdate(){
@@ -228,29 +230,26 @@ class Changes_screen extends Component{
      }
      else
      {let errors=this.props.Errors
-      if(errors.email.length>0 || errors.name.length>0 || errors.doj.length>0){
-        alert("Correct the errors (in red) and try again !")}
-     else{
-    var now = new Date();
-    var i;
-    document.getElementById("approval").disabled=true;
-    document.getElementById("draft").disabled=true;        
-    for (i=0;i<this.state.data.length;i++){
-       const new2={
-           Emp_ID:this.props.Eid,
-           Module:this.state.data[i].mo,
-           Screens:this.state.data[i].sc,
-           Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-           UserAccess_Headerkey:this.props.Hkey
-          }         
-          axios.post(nodelink.site+'/api/changes_screen/save',new2)
-          .then(res=>{
-            console.log("now saving screens");            
-          })
-        }
-        if(i==this.state.data.length){
-        this.props.FSubmit(); 
-        }}}
+      var now = new Date();
+      var i;
+      document.getElementById("approval").disabled=true;
+      // document.getElementById("draft").disabled=true;        
+      for (i=0;i<this.state.data.length;i++){
+        const new2={
+            Emp_ID:this.props.Eid,
+            Module:this.state.data[i].mo,
+            Screens:this.state.data[i].sc,
+            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
+            UserAccess_Headerkey:this.props.Hkey
+            }         
+            axios.post(nodelink.site+'/api/changes_screen/save',new2)
+            .then(res=>{
+              console.log("now saving screens");            
+            })
+          }
+          if(i==this.state.data.length){
+          this.props.FSubmit(); 
+          }}
    }
 
    //this will save the data into the table

@@ -365,10 +365,11 @@ class Changes_required extends Component{
       const {errors} = this.state;     
         if(this.state.done=='yes'){
           console.log("ALL DONEE!!!")
-            return (
-            <Redirect to='/'/>
-             )
-          }
+          alert("Successfully sent for approval")
+          return (
+          <Redirect to='/'/>
+            )
+        }
         const filterOptions1 = createFilterOptions({   //for combo box till the next @
             matchFrom: 'start',
             stringify: (option) => option.Emp_ID,
