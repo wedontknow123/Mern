@@ -150,7 +150,6 @@ exports.get12=function(req,res,empid){
     }
   });
 };
-
 exports.getdepartment=function(req,res){
   db.executeSql("Select distinct Department from Approval_Master",function(data,err){
    if(err){
@@ -252,6 +251,29 @@ exports.getpending_requests=function(req,resp,reqbody){
     var data = JSON.parse(reqbody);
     if(data){
             db.executeSql("SELECT Emp_ID,UserAccess_Headerkey from Email_Workflow where Approver_Email='"+data.Approver_Email+"' and (Status is null or Status ='')",function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.getapprovedby=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+            db.executeSql("SELECT Approver_Name,Trans_Datetime FROM Email_Workflow where UserAccess_Headerkey = '"+data.UserAccess_Headerkey+"' and (Status='A' or Status='AF')",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }

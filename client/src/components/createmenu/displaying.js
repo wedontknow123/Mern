@@ -7,7 +7,8 @@ import PropTypes from 'prop-types';
 import {approval2} from '../../actions/itemActions';
 import { Alert,Label,Form,FormGroup,Input,Col } from 'reactstrap';
 import MaterialTable from "material-table";
-
+import {Container,ListGroup,ListGroupItem} from 'reactstrap';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -57,7 +58,8 @@ class Displaying1 extends Component{
         data:[],
         filenames : [],        
         filepath : "",
-        done:""
+        done:"",
+        approvedby:[]
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -122,6 +124,12 @@ class Displaying1 extends Component{
                         data : datas           
                        })                  
                         console.log("now getting data for table")
+                        axios.post(nodelink.site+'/api/apmaster/approvedby',info)
+                        .then(res=>{
+                            this.setState({
+                                approvedby:res.data
+                            })
+                        })
                     })                 
                     console.log(this.props)
                     console.log(this.state)            
@@ -515,11 +523,26 @@ class Displaying1 extends Component{
             </Fragment>
             
         );
+        const {approvedby}=this.state;
         return(
             <div className="container">
                 <h3>{this.props.eid} :</h3>
                 <br/>
                 {list4}
+                <br/>
+                <ListGroup>
+                    <TransitionGroup className="shopping-list">
+                        {approvedby.map(({Approver_Name,Trans_Datetime})=>(
+                            <CSSTransition key={Trans_Datetime} timeout={500} classNames="fade">
+                                <ListGroupItem >                                   
+                                  <p>This form has already been approved by {Approver_Name} on {Trans_Datetime}</p>
+                                </ListGroupItem>
+                            </CSSTransition>
+                        ))}
+
+                    </TransitionGroup>
+                </ListGroup>
+                <br/>
                {(this.state.dep===1)?list3:list2}
                {(this.state.last===1)?list1:''}
             </div>

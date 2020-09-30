@@ -46,7 +46,14 @@ router.post('/previous',(req,res)=>{
 router.post('/rejectedstatus',(req,res)=>{
     call.changeRejectedStatus(req,res,JSON.stringify(req.body))
 })
+
 router.post('/itcred',(req,res)=>{
     call.itcredentials(req,res,JSON.stringify(req.body))
 })
+
+router.post('/approvedby',(req,res)=>{
+    console.log(req.body);
+    call.getapprovedby(req,res,JSON.stringify(req.body))
+})
+
 module.exports=router;
