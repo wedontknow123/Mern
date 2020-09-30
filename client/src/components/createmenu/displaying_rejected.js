@@ -388,13 +388,7 @@ class Displaying_rejected extends Component{
                                 <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic} deleteFile={this.deleteFile} />
                                 
                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
-                               <Col sm={5}>
-                                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />
-                               </Col>
-                             </FormGroup>                            
+                            </FormGroup>                                                       
                              <br/>
                              <hr width="90%" size="15" ></hr>
                              <br/>

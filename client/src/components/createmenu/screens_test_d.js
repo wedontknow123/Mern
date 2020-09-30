@@ -1,6 +1,7 @@
 import React, { Component,Fragment} from 'react';
 import { Redirect,NavLink } from 'react-router-dom';
-import {Container,ListGroup,ListGroupItem,Button,Label} from 'reactstrap';
+import {Container,ListGroup,ListGroupItem,Button,Label,FormGroup,Col,Input} from 'reactstrap';
+import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {connect} from 'react-redux';
 import {getItems,addItem2} from '../../actions/itemActions';
@@ -41,22 +42,9 @@ var n=1;
 // }
 
 class Screens_test_d extends Component{
+    uploadObj = new UploaderComponent();
 
-        // validate=()=>{
-        //   if(validateForm(this.props.Errors)=="Valid") {
-        //     console.log("bruh")
-        //     this.setState({
-        //         valid:'Valid'
-        //     })
-        //   }else{
-        //     console.log("bruh wtf")
-        //     this.setState({
-        //         valid:'InValid'
-        //     })
-        //   }
-        // }
-
-        state = {          
+     state = {          
           items: [],
           empid: '',
           module: '',
@@ -68,7 +56,9 @@ class Screens_test_d extends Component{
           done : '',
           itr : '',
           r : '',
-          valid:''
+          valid:'',
+          reasonl:'',
+          reason:''
         };
         
         handleclick2=()=>{
@@ -142,6 +132,19 @@ class Screens_test_d extends Component{
             }
           }
         }
+
+        handlechange2=(e)=>{
+          const { name, value } = e.target; 
+          let reasonl = this.state.reasonl;  
+          switch (name) {          
+              case 'reason': 
+                  reasonl = `${value.length}/150`                
+                  break;                
+              default:
+                  break;
+          }    
+          this.setState({reasonl, [name]: value})
+      }
 
       //controls the box that shows the screens in a selected module
       handlechange = (values,event) => {
@@ -219,7 +222,7 @@ class Screens_test_d extends Component{
        }
        else
        {let errors=this.props.Errors
-         
+        let v = this.uploadObj.getFilesData()
         if(this.props.Fields.dsb==""){
           document.getElementById("approval").disabled=true;
           document.getElementById("draft").disabled=true;
@@ -247,7 +250,7 @@ class Screens_test_d extends Component{
               })
             }
             if(this.props.Fields.dsb=="")
-            this.props.FSubmit(this.state.itr);
+            this.props.FSubmit(this.state.itr,v,this.state.reason);
             else
             this.props.FSubmit();      
         })
@@ -412,63 +415,75 @@ class Screens_test_d extends Component{
           <Button onClick={this.handleclick} id="submit" style={{backgroundColor:'#393939'}}>Submit</Button>
           </Fragment>
         );
-        
-        // const filterOptions3 = createFilterOptions({   //for combo box till the next @
-        //   matchFrom: 'start',
-        //   stringify: (option) => option.Emp_ID,
-        // });
-        
-
+        const list8=(
+          <FormGroup row>
+                <Label for="exampleText"sm={3}>Reason</Label>
+                <Col sm={5}>
+                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.props.Fields.reason}/>
+                {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
+                </Col>
+          </FormGroup>  
+        );
 
         return(
           <div>
             <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
-            {list5}
-            <br></br>
-            {(this.state.screens.length&&this.state.module)?list2:''}
-            {(this.state.selectedscreen.length)?list3:''}
+            <div>
+              {list5}
+              <br></br>
+              {(this.state.screens.length&&this.state.module)?list2:''}
+              {(this.state.selectedscreen.length)?list3:''}
+              <br/>
+            </div>           
+            <div>
+              <MaterialTable
+              title="Modules and Screens"
+              style={{ width : "50%" }}
+              columns={[
+                  { title: 'S.No', field:'tableData.id'  , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
+                  { title: 'Module', field: 'mo' },
+                  { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
+                ]}
+              icons={tableIcons}
+              data={this.state.data}
+              localization={{
+                  header: {
+                      actions: ''
+                  }}}
+              editable={{
 
-            <br/>
-
-            <MaterialTable
-            title="Modules and Screens"
-            style={{ width : "50%" }}
-            columns={[
-                { title: 'S.No', field:'tableData.id'  , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
-                { title: 'Module', field: 'mo' },
-                { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
-               ]}
-            icons={tableIcons}
-            data={this.state.data}
-            localization={{
-                header: {
-                    actions: ''
-                }}}
-            editable={{
-
-                onRowDelete: oldData =>
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                    const dataDelete = [...this.state.data];
-                    console.log(oldData)
-                    console.log(dataDelete)
-                    const index = oldData.tableData.id;
-                    console.log(index)
-                    dataDelete.splice(index, 1);
-                    this.setState({ data : [...dataDelete]});
-                    console.log(this.state.data)
-
-                    resolve()
-                    }, 1000)
-                }),
-            }}
-            options={{
-                filtering: true,
-                actionsColumnIndex: -1,
-                search : false,
-            }}
-            />
-            <br/>
+                  onRowDelete: oldData =>
+                  new Promise((resolve, reject) => {
+                      setTimeout(() => {
+                      const dataDelete = [...this.state.data];
+                      console.log(oldData)
+                      console.log(dataDelete)
+                      const index = oldData.tableData.id;
+                      console.log(index)
+                      dataDelete.splice(index, 1);
+                      this.setState({ data : [...dataDelete]});
+                      console.log(this.state.data)
+                      resolve()
+                      }, 1000)
+                  }),
+              }}
+              options={{
+                  filtering: true,
+                  actionsColumnIndex: -1,
+                  search : false,
+              }}
+              />
+              <br/>
+              <hr width="90%" size="15" ></hr>
+              <br/>
+            </div>
+            <FormGroup row>
+                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                <Col sm={5}>
+                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
+                </Col>
+              </FormGroup>
+            {(this.props.Fields.dsb==="")?list8:''}  
             {(this.props.Fields.dsb==="")?list4:''} 
             {(this.props.Fields.dsb==="")?list6:''}
             {(this.props.Fields.dsb==="no")?list7:''}             

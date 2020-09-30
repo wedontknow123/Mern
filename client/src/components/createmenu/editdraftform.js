@@ -64,8 +64,8 @@ class Editdraftform extends Component{
       auth:PropTypes.object.isRequired
     }
 
-    fileSave = (itr) =>{ 
-        let v = this.uploadObj.getFilesData()
+    fileSave = (itr,v,rea) =>{ 
+        // let v = this.uploadObj.getFilesData()
         var x;
         if(v!==null){           
             const data=new FormData();
@@ -94,7 +94,7 @@ class Editdraftform extends Component{
                         } 
                         console.log("lol")
                         if(this.state.filepath.length>=0){                                 
-                          this.onSubmit(itr) 
+                          this.onSubmit(itr,rea) 
                         }                             
                     })
             })
@@ -286,7 +286,7 @@ class Editdraftform extends Component{
   //  }
   // }
 
-    onSubmit=(itr)=>{
+    onSubmit=(itr,rea)=>{
       this.props.getdepartment(this.state.depart);
         var now = new Date();
         const newItem={
@@ -298,7 +298,7 @@ class Editdraftform extends Component{
             DOJ:this.state.doj,
             Employee_Type:this.state.emptype,
             Software:this.state.software,
-            Reason:this.state.reason,
+            Reason:rea,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Status:this.state.status,            
             Emp_ID:this.state.empid,
@@ -391,26 +391,7 @@ class Editdraftform extends Component{
                              <Input type="text" name="desig" maxLength='60' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>
-                         {/* <FormGroup row>
-                          <Label for="depart" sm={3}>Department:</Label>
-                           <Col sm={5}>
-                             <Input type="text" name="depart" id="depart" value={this.state.depart} onChange={this.handlechange1}/>
-                              </Col>
-                         </FormGroup> */}
-                         {/* <FormGroup row>
-                         <Label for="depart" sm={3}>Department:</Label>
-                         <Col sm={5}>
-                         <Autocomplete
-                            id="Module"                                                     
-                            options={this.state.department_options}
-                            getOptionLabel={(option)=>option.Department}
-                                filterOptions={filterOptions2}
-                            style={{width:300}}
-                            onChange={this.handlechange2}
-                            renderInput={(params)=><TextField {...params}  label="Department" variant="outlined"/>}
-                          />
-                         </Col>
-                         </FormGroup> */}
+                         
                          <FormGroup row>
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
@@ -456,25 +437,10 @@ class Editdraftform extends Component{
                             </FormGroup>
                             <FormGroup row>
                                <Label for="uploaded_files"sm={3}>Uploaded Files:</Label>
-                               <Col sm={5}>
-                                
-                                <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic} deleteFile={this.deleteFile} />
-                                
+                               <Col sm={5}>                                
+                                <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic} deleteFile={this.deleteFile} />                                
                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
-                               <Col sm={5}>
-                                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />
-                               </Col>
-                             </FormGroup>
-                            <FormGroup row>
-                               <Label for="exampleText"sm={3}>Reason</Label>
-                               <Col sm={5}>
-                               <Input type="textarea" name="reason" id="reason"  maxLength='150' value={this.state.reason} onChange={this.handlechange1}/>
-                               {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
-                               </Col>
-                            </FormGroup>
+                            </FormGroup>                            
                              <br/>
                              <hr width="90%" size="15" ></hr>
                              <br/>

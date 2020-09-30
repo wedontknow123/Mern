@@ -1,6 +1,7 @@
 import React, { Component,Fragment} from 'react';
 import { Redirect,NavLink } from 'react-router-dom';
-import {Container,ListGroup,ListGroupItem,Button,Label} from 'reactstrap';
+import {Container,ListGroup,ListGroupItem,Button,Label,FormGroup,Col,Input} from 'reactstrap';
+import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {connect} from 'react-redux';
 import {getItems,addItem2} from '../../actions/itemActions';
@@ -40,21 +41,8 @@ var dateFormat = require('dateformat');
 // }
 var nodelink=require('../../nodelink.json');
 class Changes_screen extends Component{
-        // validate=()=>{
-        //   if(validateForm(this.props.Errors)=="Valid") {
-        //     console.log("bruh")
-        //     this.setState({
-        //         valid:'Valid'
-        //     })
-        //   }else{
-        //     console.log("bruh wtf")
-        //     this.setState({
-        //         valid:'InValid'
-        //     })
-        //   }
-        // }
 
-
+       uploadObj = new UploaderComponent();
         state = {          
           items: [],
           empid: '',
@@ -67,7 +55,9 @@ class Changes_screen extends Component{
           done : '',
           itr : '',
           r : '',
-          valid:''
+          valid:'',
+          reasonl:'',
+          reason:''
         };
         
         handleclick2=()=>{
@@ -158,6 +148,20 @@ class Changes_screen extends Component{
           }
         }
 
+        handlechange2=(e)=>{
+          const { name, value } = e.target; 
+          let reasonl = this.state.reasonl;  
+          switch (name) {          
+              case 'reason': 
+                  reasonl = `${value.length}/150`                
+                  break;                
+              default:
+                  break;
+          }    
+          this.setState({reasonl, [name]: value})
+      }
+
+
       //controls the box that shows the screens in a selected module
       handlechange = (values,event) => {
           if(event!==null){
@@ -230,6 +234,7 @@ class Changes_screen extends Component{
      }
      else
      {let errors=this.props.Errors
+      let v = this.uploadObj.getFilesData()
       var now = new Date();
       var i;
       document.getElementById("approval").disabled=true;
@@ -248,7 +253,7 @@ class Changes_screen extends Component{
             })
           }
           if(i==this.state.data.length){
-          this.props.FSubmit(); 
+          this.props.FSubmit(v,this.state.reason); 
           }}
    }
 
@@ -375,56 +380,69 @@ class Changes_screen extends Component{
         return(
           <div>
             <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
-            {list5}
-            <br></br>
-            {(this.state.screens.length&&this.state.module)?list2:''}
-            {(this.state.selectedscreen.length)?list3:''}
+            <div>
+              {list5}
+              <br></br>
+              {(this.state.screens.length&&this.state.module)?list2:''}
+              {(this.state.selectedscreen.length)?list3:''}
+              <br/>
+            </div>
+            <div>
+              <MaterialTable
+              title="Modules and Screens"
+              style={{ width : "50%" }}
+              columns={[
+                  { title: 'S.No', field:'tableData.id' , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
+                  { title: 'Module', field: 'mo' },
+                  { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
+                ]}
+              icons={tableIcons}
+              data={this.state.data}
+              localization={{
+                  header: {
+                      actions: ''
+                  }}}
+              editable={{
 
-            <br/>
-
-            <MaterialTable
-            title="Modules and Screens"
-            style={{ width : "50%" }}
-            columns={[
-                { title: 'S.No', field:'tableData.id' , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
-                { title: 'Module', field: 'mo' },
-                { title: 'Screen', field: 'sc', initialEditValue: 'initial edit value' }
-               ]}
-            icons={tableIcons}
-            data={this.state.data}
-            localization={{
-                header: {
-                    actions: ''
-                }}}
-            editable={{
-
-                onRowDelete: oldData =>
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                    const dataDelete = [...this.state.data];
-                    console.log(oldData)
-                    console.log(dataDelete)
-                    const index = oldData.tableData.id;
-                    console.log(index)
-                    dataDelete.splice(index, 1);
-                    this.setState({ data : [...dataDelete]});
-                    console.log(this.state.data)
-
-                    resolve()
-                    }, 1000)
-                }),
-            }}
-            options={{
-                filtering: true,
-                actionsColumnIndex: -1,
-                search : false,
-            }}
-            />
-            <br/>
-            {/* {(this.state.data.length)?list4:''}             */}
-            {/* {list4}             */}
+                  onRowDelete: oldData =>
+                  new Promise((resolve, reject) => {
+                      setTimeout(() => {
+                      const dataDelete = [...this.state.data];
+                      console.log(oldData)
+                      console.log(dataDelete)
+                      const index = oldData.tableData.id;
+                      console.log(index)
+                      dataDelete.splice(index, 1);
+                      this.setState({ data : [...dataDelete]});
+                      console.log(this.state.data)
+                      resolve()
+                      }, 1000)
+                  }),
+              }}
+              options={{
+                  filtering: true,
+                  actionsColumnIndex: -1,
+                  search : false,
+              }}
+              />
+              <br/>
+              <hr width="90%" size="15" ></hr>
+              <br/>
+            </div> 
+            <FormGroup row>
+                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                <Col sm={5}>
+                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
+                </Col>
+              </FormGroup>
+             <FormGroup row>
+                <Label for="exampleText"sm={3}>Reason</Label>
+                <Col sm={5}>
+                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.props.Fields.reason}/>
+                {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
+                </Col>
+             </FormGroup>  
             <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
-
            </div>
 
         )
