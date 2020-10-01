@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
+import {Container,ListGroup,ListGroupItem,Button,Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {getEmpid,getHeaderkey,getReason} from '../../actions/itemActions';
 import { Redirect,NavLink } from 'react-router-dom';
@@ -61,7 +61,13 @@ class Rejected_req extends Component{
         }
         const {empid}=this.state;
         return(
-            <Container>                
+            <div className="container">
+                <Breadcrumb>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Rejected Requests</BreadcrumbItem>
+                 </Breadcrumb>
+            <Container> 
+                               
                 <ListGroup>
                     <TransitionGroup className="shopping-list">
                         {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons})=>(
@@ -75,6 +81,7 @@ class Rejected_req extends Component{
                 </ListGroup>
                 <br></br>
             </Container>
+            </div>
         )
        
     }

@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import { Redirect,NavLink } from 'react-router-dom';
 import axios from 'axios';
-import {Button,Alert,Label,Form,FormGroup,Input,Col } from 'reactstrap';
+import {Button,Alert,Label,Form,FormGroup,Input,Col,Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import DownloadLinks from './DownloadLinks'
 import Screens_test_d from './screens_test_d';
@@ -285,7 +285,11 @@ class Displaying_rejected extends Component{
         const {errors} = this.state;
         return(
             <div className="container">
-                                   
+                       <Breadcrumb>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                <BreadcrumbItem><a href="/rejected">Rejected Requests</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Display</BreadcrumbItem>
+                 </Breadcrumb>            
                     <Form  >
                             <h3 >{this.props.eid} :</h3>
                             <br/>

@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import {Container,ListGroup,ListGroupItem,Button} from 'reactstrap';
+import {Container,ListGroup,ListGroupItem,Button,    Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {getEmpid,getHeaderkey} from '../../actions/itemActions';
 import { Redirect,NavLink } from 'react-router-dom';
@@ -57,6 +57,11 @@ class Pending_requests extends Component{
         }
         const {empid}=this.state;
         return(
+            <div className="container">
+                <Breadcrumb>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Pending Requests</BreadcrumbItem>
+                 </Breadcrumb>
             <Container>
                 
                 <ListGroup>
@@ -72,6 +77,7 @@ class Pending_requests extends Component{
                     </TransitionGroup>
                 </ListGroup>
             </Container>
+            </div>
         )
        
     }

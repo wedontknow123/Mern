@@ -9,7 +9,8 @@ import {
     FormGroup,
     Input,
     Col,
-    NavItem
+    NavItem,
+    Breadcrumb, BreadcrumbItem
 } from 'reactstrap';
 class home extends Component{
 
@@ -22,6 +23,9 @@ class home extends Component{
     render(){
         return(
             <div className="vuttons_1" >
+                <Breadcrumb>
+                <BreadcrumbItem active>Home</BreadcrumbItem>                
+                </Breadcrumb>
                 <div  >
                     <div className="row1"><Button className="bt-0" href='/options' title="Create New User">New User Creation</Button></div>
                     <div className="row1"><Button className="bt-1" href='/changes_required'title="Change User Data">Changes Required</Button></div>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import {Button} from 'reactstrap';
 import PropTypes from 'prop-types';
 import {approval2} from '../../actions/itemActions';
-import { Alert,Label,Form,FormGroup,Input,Col } from 'reactstrap';
+import { Alert,Label,Form,FormGroup,Input,Col,    Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import MaterialTable from "material-table";
 import {Container,ListGroup,ListGroupItem} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
@@ -473,7 +473,7 @@ class Displaying1 extends Component{
         const list2=(            
                 <Form> 
                 <FormGroup row>
-                    <Label for="exampleText"sm={3}>Reason :</Label>
+                    <Label for="exampleText"sm={3}>Remarks :</Label>
                     <Col sm={5}>
                         <Input type="textarea" name="reason" id="reason"  maxLength='150' value={this.state.reason} onChange={this.handlechange1}/>
                         {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
@@ -526,6 +526,11 @@ class Displaying1 extends Component{
         const {approvedby}=this.state;
         return(
             <div className="container">
+                <Breadcrumb>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                <BreadcrumbItem><a href="/requests">Pending Requests</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Display</BreadcrumbItem>
+                 </Breadcrumb>
                 <h3>{this.props.eid} :</h3>
                 <br/>
                 {list4}

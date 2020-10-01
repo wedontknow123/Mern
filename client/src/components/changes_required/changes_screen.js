@@ -430,13 +430,13 @@ class Changes_screen extends Component{
               <br/>
             </div> 
             <FormGroup row>
-                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                <Label for="exampleCustomFileBrowser"sm={3}>Attach files:</Label>
                 <Col sm={5}>
                 <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
               </FormGroup>
              <FormGroup row>
-                <Label for="exampleText"sm={3}>Reason</Label>
+                <Label for="exampleText"sm={3}>Remarks:</Label>
                 <Col sm={5}>
                 <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.props.Fields.reason}/>
                 {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}

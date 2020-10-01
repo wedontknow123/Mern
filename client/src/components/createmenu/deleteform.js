@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
-import {Button} from 'reactstrap';
+import {Button,    Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -80,6 +80,11 @@ class Deleteform extends Component{
           });
         return(
             <div className="container">
+              <Breadcrumb>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                <BreadcrumbItem><a href="/options">New User Creation Menu</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Delete</BreadcrumbItem>
+                 </Breadcrumb>
             <Autocomplete
             id="delete"
             options={this.state.empid}

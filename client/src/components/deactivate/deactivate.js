@@ -8,7 +8,9 @@ import {
     FormGroup,
     Input,
     Col,
-    NavItem
+    NavItem,
+    Breadcrumb, BreadcrumbItem
+
 } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
@@ -163,6 +165,10 @@ class Deactivate extends Component{
           }
         return(
             <div className='container'>
+                <Breadcrumb>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Deactivate</BreadcrumbItem>
+                 </Breadcrumb>
             <Form>
             <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
               <Autocomplete

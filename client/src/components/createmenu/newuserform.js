@@ -7,7 +7,9 @@ import {
     Input,
     Col,
     CustomInput,
-    NavItem
+    NavItem,
+    Breadcrumb, BreadcrumbItem
+
 } from 'reactstrap';
 import {connect} from 'react-redux';
 import {getEmpid,getHeaderkey,getdepartment} from '../../actions/itemActions';//addItem,
@@ -234,6 +236,11 @@ class Newuserform extends Component{
           });
         return( //
             <div className="container">
+                <Breadcrumb>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                <BreadcrumbItem><a href="/options">New User Creation Menu</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Create New User Form</BreadcrumbItem>
+                 </Breadcrumb>
                 <Form  > {/*onSubmit={this.handlechange4} // should have a onsubmit attribute to disable bothe buttons */} 
                         
                         <FormGroup tag="fieldset" row>
