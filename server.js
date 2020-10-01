@@ -28,7 +28,7 @@ app.use('/api/screens_test_d',require('./routes/api/screens_test_d'));
 app.use('/api/changes_required',require('./routes/api/changes_required'));
 app.use('/api/changes_screen',require('./routes/api/changes_screen'));
 app.use('/api/deactivate',require('./routes/api/deactivate'));
-
+app.use('/api/status',require('./routes/api/status'));
 require("./routes/api/items");
 
 const port = process.env.PORT || 5000;

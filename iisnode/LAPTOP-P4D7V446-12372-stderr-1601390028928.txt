@@ -1,0 +1,12 @@
+(node:12372) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+SyntaxError: Unexpected token ' in JSON at position 25
+    at JSON.parse (<anonymous>)
+    at parse (E:\temperory\Mern-master\node_modules\body-parser\lib\types\json.js:89:19)
+    at E:\temperory\Mern-master\node_modules\body-parser\lib\read.js:121:18
+    at invokeCallback (E:\temperory\Mern-master\node_modules\raw-body\index.js:224:16)
+    at done (E:\temperory\Mern-master\node_modules\raw-body\index.js:213:7)
+    at IncomingMessage.onEnd (E:\temperory\Mern-master\node_modules\raw-body\index.js:273:7)
+    at IncomingMessage.emit (events.js:323:22)
+    at endReadableNT (_stream_readable.js:1204:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)
+Tue, 29 Sep 2020 14:37:54 GMT tedious deprecated The default value for `config.options.enableArithAbort` will change from `false` to `true` in the next major version of `tedious`. Set the value to `true` or `false` explicitly to silence this message. at node_modules\mssql\lib\tedious\connection-pool.js:61:23
