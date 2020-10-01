@@ -810,7 +810,7 @@ exports.del2=function(req,res,reqbody){
     
     var data = JSON.parse(reqbody);
     if(data){
-      var sql="delete from UserAccess_Header where Status = 'draft' and Emp_ID="+data.Emp_ID;
+      var sql="delete from UserAccess_Header where Status = 'draft' and Emp_ID='"+data.Emp_ID+"'";
       db.executeSql(sql,function(data,err){
         if(err){
           httpMsgs.show500(req,res,err);
