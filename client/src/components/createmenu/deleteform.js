@@ -14,7 +14,8 @@ class Deleteform extends Component{
         selectid:'',
         useremail:"",
         r : "",
-        boola: true
+        boola: true,
+        lol:''
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -27,6 +28,7 @@ class Deleteform extends Component{
          })
      }
     handlesubmit=(value,event)=>{
+      if(window.confirm("Are you sure you want to DELETE the draft ?")){
       document.getElementById("delete").disabled=true;
         const new1={
             Emp_ID:this.state.selectid
@@ -34,16 +36,14 @@ class Deleteform extends Component{
         axios.post(nodelink.site+'/api/items/delete',new1)
         .then(res=>{
             console.log(res);
+            this.setState({
+              lol:"yes"
+            })
         })
+      }
+      else{document.getElementById("delete").disabled=false;}
     }
-    componentDidMount(){
-        // axios.get('/api/items/del')
-        // .then(res=>{
-        //     this.setState({
-        //         empid:res.data
-        //     })
-        // })
-    }
+    
 
     componentDidUpdate(prevProps){
         if(this.state.r === ""){
@@ -74,6 +74,7 @@ class Deleteform extends Component{
     }
 
     render(){
+        if(this.state.lol==="yes"){alert("Draft deleted successfully !")}
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Emp_ID,

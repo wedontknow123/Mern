@@ -57,7 +57,8 @@ class Displaying1 extends Component{
         data:[],
         filenames : [],        
         filepath : "",
-        done:""
+        done:"",
+        lol:""
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -93,6 +94,7 @@ class Displaying1 extends Component{
                         doj:dateFormat(x.DOJ, "yyyy-mm-dd"),
                         emptype:x.Employee_Type,
                         software:x.Software,
+                        reason:x.Reason
                     })  
                     axios.post(nodelink.site+'/api/download/fn',this.state)
                     .then(res => {              
@@ -206,62 +208,68 @@ class Displaying1 extends Component{
       }
 
     handleclick1=()=>{
-        document.getElementById("reject").disabled=true;
-        document.getElementById("approve").disabled=true;
-        const info={
-          Status:'A',
-          Reason:this.state.reason,
-          UserAccess_Headerkey:String(this.props.hkey),
-          Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-          Approver_Email:this.props.auth.user.Email,
-          Emp_ID:this.props.eid
-        }
-        console.log(info);
-        axios.post(nodelink.site+'/api/apmaster/previous',info)
-        .then(res=>{
-        console.log(res);
-        axios.post(nodelink.site+'/api/apmaster/approval',info)
-        .then(res=>{
-             const info1={
-                 UserAccess_Headerkey:String(this.props.hkey),
-                 Department:this.state.info[0].Emp_Department
-             }
-             axios.post(nodelink.site+'/api/apmaster',info1)
-             .then(res=>{
-                 console.log(res.data.length)
-                 if(res.data.length===1){
-                 const info2={
-                     UserAccess_Headerkey:this.props.hkey,
-                     Emp_ID:this.props.eid,
-                     Approver_Name:res.data[0].Approver_Name,
-                     Approver_Email:res.data[0].Email
-                   }
-                   console.log(info2);
-                 axios.post(nodelink.site+'/api/apmaster/submit',info2)
-                 .then(res=>{
-                    console.log(res);
-                  })
-                 }
-                 else{
-                     const info3={
-                         UserAccess_Headerkey:String(this.props.hkey),
-                         Approver_Email: this.props.auth.user.Email
-                     }
-                     axios.post(nodelink.site+'/api/apmaster/finalApprover',info3)
-                     .then(res=>{
-                        this.setState({
-                            last:1
-                        })
-                     })
-                 }
-                })
-                setTimeout(() => {
-                    this.setState({
-                        done:'yes'
+        if(window.confirm('Are you sure you want to APPROVE ?')){
+            document.getElementById("reject").disabled=true;
+            document.getElementById("approve").disabled=true;
+            const info={
+            Status:'A',
+            Reason:this.state.reason,
+            UserAccess_Headerkey:String(this.props.hkey),
+            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
+            Approver_Email:this.props.auth.user.Email,
+            Emp_ID:this.props.eid
+            }
+            console.log(info);
+            axios.post(nodelink.site+'/api/apmaster/previous',info)
+            .then(res=>{
+            console.log(res);
+            axios.post(nodelink.site+'/api/apmaster/approval',info)
+            .then(res=>{
+                const info1={
+                    UserAccess_Headerkey:String(this.props.hkey),
+                    Department:this.state.info[0].Emp_Department
+                }
+                axios.post(nodelink.site+'/api/apmaster',info1)
+                .then(res=>{
+                    console.log(res.data.length)
+                    if(res.data.length===1){
+                    const info2={
+                        UserAccess_Headerkey:this.props.hkey,
+                        Emp_ID:this.props.eid,
+                        Approver_Name:res.data[0].Approver_Name,
+                        Approver_Email:res.data[0].Email
+                    }
+                    console.log(info2);
+                    axios.post(nodelink.site+'/api/apmaster/submit',info2)
+                    .then(res=>{
+                        console.log(res);
                     })
-                },3000)
-         })
-        })
+                    }
+                    else{
+                        const info3={
+                            UserAccess_Headerkey:String(this.props.hkey),
+                            Approver_Email: this.props.auth.user.Email
+                        }
+                        axios.post(nodelink.site+'/api/apmaster/finalApprover',info3)
+                        .then(res=>{
+                            this.setState({
+                                last:1
+                            })
+                        })
+                    }
+                    })
+                    setTimeout(() => {
+                        this.setState({
+                            done:'yes',
+                            lol:"1"
+                        })
+                    },3000)
+            })
+            })
+        }
+        else{
+            document.getElementById("approve").disabled=false;
+        }
     }
 
     handle_rejection=()=>{
@@ -269,6 +277,7 @@ class Displaying1 extends Component{
             alert("Fill the Reason Field!")
            }
         else{
+            if(window.confirm('Are you sure you want to REJECT ?')){
             document.getElementById("reject").disabled=true;
             document.getElementById("approve").disabled=true;
             const info={
@@ -284,10 +293,15 @@ class Displaying1 extends Component{
                 console.log(res);
                 setTimeout(() => {
                     this.setState({
-                        done:'yes'
+                        done:'yes',
+                        lol:"2"
                     })
                 },3000)
             })
+            }
+            else{
+               document.getElementById("reject").disabled=false; 
+            }
         }          
     }
 
@@ -310,6 +324,7 @@ class Displaying1 extends Component{
             alert("Fill the the User ID field!")
            }
         else{
+            if(window.confirm('Are you sure you want to SAVE ?')){
             document.getElementById("itsave").disabled=true;
             const info={
                 FS_SS_UserID:this.state.userid,
@@ -326,15 +341,23 @@ class Displaying1 extends Component{
                 console.log(res);
                 setTimeout(() => {
                     this.setState({
-                        done:'yes'
+                        done:'yes',
+                        lol:"3"
                     })
                 },3000)
             })
+            }
+            else{
+                document.getElementById("itsave").disabled=false;
+            }
         }
     }
     render(){
         if(this.state.done=='yes'){
             console.log("ALL DONEE!!!")
+             if(this.state.lol==="1")alert("Approved Successfully !")
+             else if(this.state.lol==="2")alert("Rejected Successfully !")
+             else alert("Saved Successfully !")
               return (
               <Redirect to='/'/>
                )
@@ -437,6 +460,12 @@ class Displaying1 extends Component{
                         {this.DownloadLinks()}                               
                     </Col>
                 </FormGroup>
+                <FormGroup row>
+                    <Label for="exampleText"sm={3}>reason :</Label>
+                    <Col sm={5}>
+                        <Input type="textarea" name="reason" id="reason"  maxLength='150' value={this.state.reason} disabled/>                        
+                    </Col>
+                </FormGroup>
                     <br/>
                 <MaterialTable
                     title="Modules and Screens"
@@ -467,7 +496,7 @@ class Displaying1 extends Component{
                 <FormGroup row>
                     <Label for="exampleText"sm={3}>Reason :</Label>
                     <Col sm={5}>
-                        <Input type="textarea" name="reason" id="reason"  maxLength='150' value={this.state.reason} onChange={this.handlechange1}/>
+                        <Input type="textarea" name="reason" id="reason"  maxLength='150'  onChange={this.handlechange1}/>
                         {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                     </Col>
                 </FormGroup>
