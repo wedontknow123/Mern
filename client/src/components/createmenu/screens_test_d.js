@@ -491,17 +491,12 @@ class Screens_test_d extends Component{
               }}
               />
             </div>
-<<<<<<< HEAD
-            <FormGroup row>
-                <Label for="exampleCustomFileBrowser"sm={3}>Attach files:</Label>
-=======
             <br/>
              <FormGroup row>
                   <br/>
                   <hr width="90%" size="15" ></hr>
                   <br/><br/>
                 <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
->>>>>>> 342f3e09cc2475cbdedc8c8ef850dc2ca94d799f
                 <Col sm={5}>
                 <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
