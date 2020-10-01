@@ -228,6 +228,8 @@ class Newuserform extends Component{
             console.log("ALL DONE !!")
             if(lol=="yes")
             alert("Successfully sent for approval")
+            else
+            alert("Successfully saved as draft")
             return <Redirect to='/options'/>     //the final return should be inside an else ....         
         }
         const filterOptions1 = createFilterOptions({

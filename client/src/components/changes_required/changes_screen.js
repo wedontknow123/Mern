@@ -119,7 +119,8 @@ class Changes_screen extends Component{
                   } n=n+1                       
                   this.setState({
                       data : datas,
-                      r : '0'                 
+                      r : '0' ,
+                      reason:this.props.Fields.reason                
                       })                  
                   console.log("now getting data for table")
                 })
@@ -226,9 +227,6 @@ class Changes_screen extends Component{
     
   //this will save the data to the database 
    handleclick=(e)=>{
-    // document.getElementById("draft").disabled=true;
-    //this.props.FSubmit();
-    // this.validate()
     if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 ){//
       alert("Fill all the * (Required) fields !")
      }
@@ -379,10 +377,11 @@ class Changes_screen extends Component{
 
         return(
           <div>
+            <div style={{position:'absolute'}}>
             <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
-            <div>
+              <br/>
               {list5}
-              <br></br>
+              <br/>
               {(this.state.screens.length&&this.state.module)?list2:''}
               {(this.state.selectedscreen.length)?list3:''}
               <br/>
@@ -390,7 +389,7 @@ class Changes_screen extends Component{
             <div>
               <MaterialTable
               title="Modules and Screens"
-              style={{ width : "50%" }}
+              style={{ width : "50%" , marginRight:'70px',  marginLeft:'auto',position:'static'}}
               columns={[
                   { title: 'S.No', field:'tableData.id' , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
                   { title: 'Module', field: 'mo' },
@@ -403,7 +402,6 @@ class Changes_screen extends Component{
                       actions: ''
                   }}}
               editable={{
-
                   onRowDelete: oldData =>
                   new Promise((resolve, reject) => {
                       setTimeout(() => {
@@ -425,12 +423,13 @@ class Changes_screen extends Component{
                   search : false,
               }}
               />
-              <br/>
-              <hr width="90%" size="15" ></hr>
-              <br/>
-            </div> 
-            <FormGroup row>
-                <Label for="exampleCustomFileBrowser"sm={3}>Attach files:</Label>
+            </div>
+            <br/>
+             <FormGroup row>
+                  <br/>
+                  <hr width="90%" size="15" ></hr>
+                  <br/><br/>
+                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
                 <Col sm={5}>
                 <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
@@ -438,10 +437,11 @@ class Changes_screen extends Component{
              <FormGroup row>
                 <Label for="exampleText"sm={3}>Remarks:</Label>
                 <Col sm={5}>
-                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.props.Fields.reason}/>
+                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.state.reason}/>
                 {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                 </Col>
              </FormGroup>  
+             <br/>
             <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
            </div>
 

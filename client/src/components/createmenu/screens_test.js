@@ -183,35 +183,47 @@ class Screens_test extends Component{
 
     }
 
+    final_s=()=>{
+      let v = this.uploadObj.getFilesData()
+      document.getElementById("approval").disabled=true;
+      document.getElementById("draft").disabled=true;        
+      var now = new Date();
+      var i;
+      for (i=0;i<this.state.data.length;i++){
+        const new2={
+            Emp_ID:this.props.Eid,
+            Module:this.state.data[i].mo,
+            Screens:this.state.data[i].sc,
+            Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
+            UserAccess_Headerkey:this.props.Hkey
+            }
+            axios.post(nodelink.site+'/api/screens_test/save',new2)
+            .then(res=>{
+              console.log("now saving screens");
+            })
+          }
+          this.props.FSubmit(this.state.itr,v,this.state.reason);
+    }
+
   //this will save the data to the database
-   handleclick=()=>{
+   handleclick=(e)=>{
      
-    if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 ){//
+    if(this.props.Eid===null || this.props.Department==="" ){//
       alert("Fill all the * (Required) fields !")
     }    
    else{
-     let errors=this.props.Errors
-        let v = this.uploadObj.getFilesData()
-        document.getElementById("approval").disabled=true;
-        document.getElementById("draft").disabled=true;        
-        var now = new Date();
-        var i;
-        for (i=0;i<this.state.data.length;i++){
-          const new2={
-              Emp_ID:this.props.Eid,
-              Module:this.state.data[i].mo,
-              Screens:this.state.data[i].sc,
-              Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-              UserAccess_Headerkey:this.props.Hkey
-              }
-              axios.post(nodelink.site+'/api/screens_test/save',new2)
-              .then(res=>{
-                console.log("now saving screens");
-              })
-            }
-            this.props.FSubmit(this.state.itr,v,this.state.reason); 
-        
-        }
+     if(e.target.id==="draft"){
+      if(window.confirm('Are you sure you want to SAVE AS DRAFT ?')){
+        this.final_s()       
+      }
+      else{
+        document.getElementById("draft").disabled=false;
+      }
+     }
+     else{
+      this.final_s()
+     }
+    }
    }
 
    //this will save the data into the table
@@ -321,11 +333,12 @@ class Screens_test extends Component{
             stringify: (option) => option.Module,
           });
 
-
+          // <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>
         return(
            <div>
-             <div>
-                <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
+             <div style={{position:'absolute'}} >
+                <Label name="screens">Choose Screens :</Label>
+                <br/>
                 <Autocomplete
                 id="Module"
                 options={this.state.items}
@@ -335,15 +348,16 @@ class Screens_test extends Component{
                 onChange={this.handlechange}
                 disabled={this.state.boola}
                 renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
-                /><br></br>
+                />
+                <br/>
                 {(this.state.screens.length&&this.state.module)?list2:''}
                 {(this.state.selectedscreen.length)?list3:''}
-                <br/>
              </div>
+             <br/>
              <div>
                 <MaterialTable
                 title="Modules and Screens"
-                style={{ width : "50%" }}
+                style={{ width : "50%" , marginRight:'70px',  marginLeft:'auto',position:'static'}}
                 columns={[
                     { title: 'S.No', field:'tableData.id' , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) }, filtering: false},  //  'tableData.id'
                     { title: 'Module', field: 'mo' },
@@ -378,24 +392,34 @@ class Screens_test extends Component{
                     actionsColumnIndex: -1,
                     search : false,
                 }}
-                />
-                <br/>
-                <hr width="90%" size="15" ></hr>
-                <br/>
-             </div> 
+                />                               
+             </div>              
+             <br/>
              <FormGroup row>
+<<<<<<< HEAD
                 <Label for="exampleCustomFileBrowser"sm={3}>Attach files:</Label>
+=======
+                  <br/>
+                  <hr width="90%" size="15" ></hr>
+                  <br/><br/>
+                <Label for="exampleCustomFileBrowser"sm={3}>File Browser:</Label>
+>>>>>>> 342f3e09cc2475cbdedc8c8ef850dc2ca94d799f
                 <Col sm={5}>
                 <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
               </FormGroup>
              <FormGroup row>
+<<<<<<< HEAD
                 <Label for="exampleText"sm={3}>Remarks:</Label>
+=======
+                <Label for="exampleText"sm={3}>Reason:</Label>
+>>>>>>> 342f3e09cc2475cbdedc8c8ef850dc2ca94d799f
                 <Col sm={5}>
                 <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2}/>
                 {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                 </Col>
-             </FormGroup>            
+             </FormGroup>
+             <br/>            
              {list4}
              <Button onClick={this.handleclick2} id="approval" style={{backgroundColor:'#393939'}}>Send for approval</Button>
            </div>

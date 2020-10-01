@@ -37,7 +37,8 @@ class Displaying_rejected extends Component{
         emptype:'Permanent',
         software:'FS',
         reason:this.props.reason,
-        status:'draft',
+        reason_o:'',
+        status:'sent for approval',
         items: [],
         data:[],
         filenames : [],        
@@ -109,6 +110,7 @@ class Displaying_rejected extends Component{
                         doj:dateFormat(x.DOJ, "yyyy-mm-dd"),
                         emptype:x.Employee_Type,
                         software:x.Software,
+                        reason_o:x.Reason,
                     })  
                     axios.post(nodelink.site+'/api/download/fn',this.state)
                     .then(res => {              
@@ -126,19 +128,7 @@ class Displaying_rejected extends Component{
                     })
                     console.log(this.state.filepath)
                      })
-                    // axios.post('/api/screens_test_d/data',this.state)
-                    // .then(res=>{
-                    //   var datas =[];
-                    //   var i;
-                    //   for (i=1;i<res.data.length+1;i++){
-                    //       var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
-                    //       datas[i-1] = x
-                    //   }                       
-                    //   this.setState({
-                    //     data : datas           
-                    //    })                  
-                    //     console.log("now getting data for table")
-                    // })                 
+                                  
                     console.log(this.props)
                     console.log(this.state)            
         })                     
@@ -149,8 +139,7 @@ class Displaying_rejected extends Component{
         auth:PropTypes.object.isRequired
     }
 
-    fileSave = () =>{ 
-        let v = this.uploadObj.getFilesData()
+    fileSave = (v,rea) =>{         
         var x;
         if(v!==null){           
             const data=new FormData();
@@ -179,7 +168,7 @@ class Displaying_rejected extends Component{
                         } 
                         console.log("lol")
                         if(this.state.filepath.length>=0){                                 
-                          this.handleclick1() 
+                          this.handleclick1(rea) 
                         }                             
                     })
             })
@@ -218,7 +207,7 @@ class Displaying_rejected extends Component{
             });
       }
 
-    handleclick1=()=>{
+    handleclick1=(rea)=>{
         const info={
             UserAccess_Headerkey:String(this.props.hkey),
             Department:this.state.info[0].Emp_Department
@@ -233,7 +222,7 @@ class Displaying_rejected extends Component{
             DOJ:this.state.doj,
             Employee_Type:this.state.emptype,
             Software:this.state.software,
-            Reason:this.state.reason,
+            Reason:rea,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Status:this.state.status,            
             Emp_ID:this.state.empid,
@@ -272,6 +261,7 @@ class Displaying_rejected extends Component{
     render(){
         if(this.state.done=='yes'){
             console.log("ALL DONEE!!!")
+            alert("Submitted successfully !")
               return (
               <Redirect to='/'/>
                )

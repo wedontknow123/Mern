@@ -104,11 +104,22 @@ class Screens_test_d extends Component{
                           var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
                           datas[i-1] = x
                       } 
-                      n=n+1                       
-                      this.setState({
-                        data : datas,
-                        r : '0'                 
-                       })                  
+                      n=n+1 
+                      if(this.props.Fields.dsb==="no"){
+                        this.setState({
+                          data : datas,
+                          r : '0' ,
+                          reason:this.props.Fields.reason_o                
+                         })
+                      } 
+                      else{
+                        this.setState({
+                          data : datas,
+                          r : '0' ,
+                          reason:this.props.Fields.reason                
+                         })
+                      }                     
+                                        
                         console.log("now getting data for table")
                     })                
                  }         
@@ -210,19 +221,10 @@ class Screens_test_d extends Component{
            })
        }
 
-    }  
-  //this will save the data to the database 
-   handleclick=(e)=>{
-
-    //document.getElementById("draft").disabled=true;
-    //this.props.FSubmit();
-      // this.validate()
-      if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0){//
-        alert("Fill all the * (Required) fields !")
-       }
-       else
-       {let errors=this.props.Errors
-        let v = this.uploadObj.getFilesData()
+    } 
+    
+    final_s=()=>{
+      let v = this.uploadObj.getFilesData()
         if(this.props.Fields.dsb==""){
           document.getElementById("approval").disabled=true;
           document.getElementById("draft").disabled=true;
@@ -252,8 +254,34 @@ class Screens_test_d extends Component{
             if(this.props.Fields.dsb=="")
             this.props.FSubmit(this.state.itr,v,this.state.reason);
             else
-            this.props.FSubmit();      
+            this.props.FSubmit(v,this.state.reason);      
         })
+    }
+  //this will save the data to the database 
+   handleclick=(e)=>{
+      if(this.props.Eid===null || this.props.Department==="" ){//
+        alert("Fill all the * (Required) fields !")
+       }
+       else{
+        if(e.target.id==="draft"){
+          if(window.confirm('Are you sure you want to SAVE AS DRAFT ?')){
+            this.final_s()       
+          }
+          else{
+            document.getElementById("draft").disabled=false;
+          }
+         }
+         else if(e.target.id==="submit"){
+          if(window.confirm('Are you sure you want to SUBMIT ?')){
+            this.final_s()       
+          }
+          else{
+            document.getElementById("submit").disabled=false;
+          }
+         }
+         else{
+          this.final_s()
+         } 
     }        
    }
 
@@ -328,10 +356,6 @@ class Screens_test_d extends Component{
 
 
     render(){
-        // if(this.state.done=='yes'){
-        //     //return <Redirect to='/options/newuser/screens'/>
-        //     return <Redirect to='/options'/>
-        // }
 
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -415,30 +439,23 @@ class Screens_test_d extends Component{
           <Button onClick={this.handleclick} id="submit" style={{backgroundColor:'#393939'}}>Submit</Button>
           </Fragment>
         );
-        const list8=(
-          <FormGroup row>
-                <Label for="exampleText"sm={3}>Remarks:</Label>
-                <Col sm={5}>
-                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.props.Fields.reason}/>
-                {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
-                </Col>
-          </FormGroup>  
-        );
-
+        
         return(
-          <div>
-            <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
-            <div>
+          <div>            
+            <div style={{position:'absolute'}}>
+               <Label name="screens">Choose Screens :</Label>
+               <br/>
               {list5}
-              <br></br>
+              <br/>
               {(this.state.screens.length&&this.state.module)?list2:''}
               {(this.state.selectedscreen.length)?list3:''}
               <br/>
-            </div>           
+            </div>
+            <br/>           
             <div>
               <MaterialTable
               title="Modules and Screens"
-              style={{ width : "50%" }}
+              style={{ width : "50%" , marginRight:'70px',  marginLeft:'auto',position:'static'}}
               columns={[
                   { title: 'S.No', field:'tableData.id'  , render:rowData => { return( <p>{rowData.tableData.id+1}</p> ) },filtering: false},  //  'tableData.id'
                   { title: 'Module', field: 'mo' },
@@ -473,17 +490,30 @@ class Screens_test_d extends Component{
                   search : false,
               }}
               />
-              <br/>
-              <hr width="90%" size="15" ></hr>
-              <br/>
             </div>
+<<<<<<< HEAD
             <FormGroup row>
                 <Label for="exampleCustomFileBrowser"sm={3}>Attach files:</Label>
+=======
+            <br/>
+             <FormGroup row>
+                  <br/>
+                  <hr width="90%" size="15" ></hr>
+                  <br/><br/>
+                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+>>>>>>> 342f3e09cc2475cbdedc8c8ef850dc2ca94d799f
                 <Col sm={5}>
                 <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
               </FormGroup>
-            {(this.props.Fields.dsb==="")?list8:''}  
+              <FormGroup row>
+                <Label for="exampleText"sm={3}>Reason</Label>
+                <Col sm={5}>
+                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.state.reason}/>
+                {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
+                </Col>
+          </FormGroup> 
+          <br/> 
             {(this.props.Fields.dsb==="")?list4:''} 
             {(this.props.Fields.dsb==="")?list6:''}
             {(this.props.Fields.dsb==="no")?list7:''}             
