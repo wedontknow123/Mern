@@ -445,19 +445,19 @@ class Displaying1 extends Component{
                     </Col>
                 </FormGroup>
                 <FormGroup row>
-                    <Label for="doj"sm={3}>Date of Joining</Label>
+                    <Label for="doj"sm={3}>Date of Joining:</Label>
                     <Col sm={5}>
                         <Input type="date" name="doj" id="doj" value={this.state.doj} disabled/>                                    
                     </Col>
                 </FormGroup>
                 <FormGroup row>
-                    <Label for="emptype" sm={3} >Employee Type :</Label>
+                    <Label for="emptype" sm={3} >Employee Type:</Label>
                     <Col sm={5}>
                         <Input type ="text" name="emptype" id="emptype" value={this.state.emptype} disabled/>
                     </Col>
                 </FormGroup>
                 <FormGroup row>
-                    <Label for="software"sm={3}>Software</Label>
+                    <Label for="software"sm={3}>Software:</Label>
                     <Col sm={5}>
                         <Input type="text" name="software" id="Software"  value={this.state.software} disabled/>
                     </Col>
@@ -469,7 +469,7 @@ class Displaying1 extends Component{
                     </Col>
                 </FormGroup>
                 <FormGroup row>
-                    <Label for="exampleText"sm={3}>reason :</Label>
+                    <Label for="exampleText"sm={3}>reason:</Label>
                     <Col sm={5}>
                         <Input type="textarea" name="reason" id="reason"  maxLength='150' value={this.state.reason} disabled/>                        
                     </Col>
@@ -502,7 +502,7 @@ class Displaying1 extends Component{
         const list2=(            
                 <Form> 
                 <FormGroup row>
-                    <Label for="exampleText"sm={3}>Remarks :</Label>
+                    <Label for="exampleText"sm={3}>Remarks:</Label>
                     <Col sm={5}>
                         <Input type="textarea" name="reason" id="reason"  maxLength='150'  onChange={this.handlechange1}/>
                         {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
@@ -521,13 +521,13 @@ class Displaying1 extends Component{
             <Fragment>
              <Form onSubmit={this.handlesubmit } >
              <FormGroup row>
-                          <Label for="FS_SS User ID" sm={3}>FS_SS User ID</Label>
+                          <Label for="FS_SS User ID" sm={3}>FS_SS User ID:</Label>
                            <Col sm={5}>
                              <Input type="text" name="userid" id="uerid" onChange={this.handlechange1}/>
                            </Col>
               </FormGroup> 
               <FormGroup row>
-                             <Label for="Created on"sm={3}>Created On</Label>
+                             <Label for="Created on"sm={3}>Created On:</Label>
                              <Col sm={5}>
                                    <Input
                                      type="date"
@@ -555,7 +555,7 @@ class Displaying1 extends Component{
         const {approvedby}=this.state;
         return(
             <div className="container">
-                <Breadcrumb>
+                <Breadcrumb style={{marginTop:'-25px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                 <BreadcrumbItem><a href="/requests">Pending Requests</a></BreadcrumbItem>
                  <BreadcrumbItem active>Display</BreadcrumbItem>
@@ -568,12 +568,11 @@ class Displaying1 extends Component{
                     <TransitionGroup className="shopping-list">
                         {approvedby.map(({Approver_Name,Trans_Datetime})=>(
                             <CSSTransition key={Trans_Datetime} timeout={500} classNames="fade">
-                                <ListGroupItem >                                   
+                                <ListGroupItem>                                   
                                   <p>This form has already been approved by {Approver_Name} on {Trans_Datetime}</p>
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
-
                     </TransitionGroup>
                 </ListGroup>
                 <br/>

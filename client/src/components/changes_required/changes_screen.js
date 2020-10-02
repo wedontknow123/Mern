@@ -368,7 +368,7 @@ class Changes_screen extends Component{
             filterOptions={filterOptions1}
             style={{width:300}}
             onChange={this.handlechange}
-            disabled={this.state.boola}
+            disabled={this.props.Fields.boola}
             renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
             />
         )
@@ -401,6 +401,7 @@ class Changes_screen extends Component{
                   header: {
                       actions: ''
                   }}}
+                  disabled={this.props.Fields.boola}
               editable={{
                   onRowDelete: oldData =>
                   new Promise((resolve, reject) => {
@@ -429,20 +430,20 @@ class Changes_screen extends Component{
                   <br/>
                   <hr width="90%" size="15" ></hr>
                   <br/><br/>
-                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                <Label for="exampleCustomFileBrowser"sm={3}>Attach file:</Label>
                 <Col sm={5}>
-                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
+                <UploaderComponent type="file" autoUpload={false} enabled={!this.props.Fields.boola} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
               </FormGroup>
              <FormGroup row>
                 <Label for="exampleText"sm={3}>Remarks:</Label>
                 <Col sm={5}>
-                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.state.reason}/>
+                <Input type="textarea" name="reason" id="reason" maxLength='150' disabled={this.props.Fields.boola} onChange={this.handlechange2} value={this.state.reason}/>
                 {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                 </Col>
              </FormGroup>  
              <br/>
-            <Button onClick={this.handleclick2} id="approval">Send for approval</Button>
+            <Button disabled={this.props.Fields.boola} onClick={this.handleclick2} id="approval">Send for approval</Button>
            </div>
 
         )

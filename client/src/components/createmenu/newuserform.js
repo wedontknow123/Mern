@@ -238,7 +238,7 @@ class Newuserform extends Component{
           });
         return( //
             <div className="container">
-                <Breadcrumb>
+                <Breadcrumb style={{marginTop:'-25px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                 <BreadcrumbItem><a href="/options">New User Creation Menu</a></BreadcrumbItem>
                  <BreadcrumbItem active>Create New User Form</BreadcrumbItem>
@@ -246,7 +246,7 @@ class Newuserform extends Component{
                 <Form  > {/*onSubmit={this.handlechange4} // should have a onsubmit attribute to disable bothe buttons */} 
                         
                         <FormGroup tag="fieldset" row>
-                            <legend className="col-form-label col-sm-3">Branch</legend>
+                            <legend className="col-form-label col-sm-3">Branch:</legend>
                             <Col sm={10}>
                                 <FormGroup check inline>
                                     <Label check>
@@ -294,21 +294,21 @@ class Newuserform extends Component{
                               </Col>
                          </FormGroup>   */}
                          <FormGroup row>
-                         <Label for="depart" sm={3}>Department <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
+                         <Label for="depart" sm={3}>Department:<span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
                          <Col sm={5}>
                          <Autocomplete
                            id="Module"
                             options={this.state.department_options}
                               getOptionLabel={(option)=>option.Department}
                                  filterOptions={filterOptions1}
-                              style={{width:300}}
+                              style={{width:270}}
                               onChange={this.handlechange6}
                               renderInput={(params)=><TextField {...params} label="Department" variant="outlined"/>}
                                />
                                </Col>
                          </FormGroup>
                          <FormGroup row>
-                          <Label for="emp_id" sm={3}>Employee Id <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
+                          <Label for="emp_id" sm={3}>Employee Id:<span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
                            <Col sm={5}>
                              <Input type="text" name="empid" id="empid" maxLength='10' onChange={this.handlechange1}/>
                              {/* {errors.empid.length > 0 && <span className='error' style={{color:"red"}}>{errors.empid}</span>} */}
@@ -321,7 +321,7 @@ class Newuserform extends Component{
                            </Col>
                          </FormGroup> 
                          <FormGroup row>
-                             <Label for="doj"sm={3}>Date of Joining</Label>
+                             <Label for="doj"sm={3}>Date of Joining:</Label>
                              <Col sm={5}>
                                    <Input
                                      type="date"
@@ -332,7 +332,7 @@ class Newuserform extends Component{
                                     </Col>
                             </FormGroup>
                             <FormGroup row>
-                              <Label for="emptype" sm={3} >Employee Type</Label>
+                              <Label for="emptype" sm={3} >Employee Type:</Label>
                               <Col sm={5}>
                                   <Input type ="select" name="emptype" id="emptype" onChange={this.handlechange1} value={this.state.emptype}>
                                       <option value="Permanent">Permanent</option>
@@ -343,7 +343,7 @@ class Newuserform extends Component{
                               </Col>
                             </FormGroup>
                             <FormGroup row>
-                            <Label for="software"sm={3}>Software</Label>
+                            <Label for="software"sm={3}>Software:</Label>
                             <Col sm={5}>
                             <Input type="select" name="software" id="Software" onChange={this.handlechange1} value={this.state.software}>                              
                                <option value='FS'>FS</option>

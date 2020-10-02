@@ -399,7 +399,7 @@ class Screens_test extends Component{
                   <br/>
                   <hr width="90%" size="15" ></hr>
                   <br/><br/>
-                <Label for="exampleCustomFileBrowser"sm={3}>File Browser:</Label>
+                <Label for="exampleCustomFileBrowser"sm={3}>Attach file:</Label>
                 <Col sm={5}>
                 <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
