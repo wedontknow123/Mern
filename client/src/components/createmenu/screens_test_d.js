@@ -392,6 +392,7 @@ class Screens_test_d extends Component{
                 options={this.state.screens}
                 getOptionLabel={(option) => option.Screens}
                 style={{width:300}}
+                disabled={this.props.Fields.boola}
                 filterOptions={filterOptions2}
                 filterSelectedOptions
                 onChange={this.handlechange1}
@@ -414,7 +415,7 @@ class Screens_test_d extends Component{
         );
         const list4=(
           <Fragment>
-           <Button  onClick={this.handleclick} style={{margin:5, backgroundColor:'#393939'}} id="draft" >Save as Draft</Button>
+           <Button  onClick={this.handleclick} style={{margin:5, backgroundColor:'#393939'}} disabled={this.props.Fields.boola} id="draft" >Save as Draft</Button>
           </Fragment>
         );
         const list5=(          
@@ -425,18 +426,18 @@ class Screens_test_d extends Component{
             filterOptions={filterOptions1}
             style={{width:300}}
             onChange={this.handlechange}
-            disabled={this.state.boola}
+            disabled={this.props.Fields.boola}
             renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
             />
         );
         const list6=(
         <Fragment>
-        <Button onClick={this.handleclick2} id="approval" style={{backgroundColor:'#393939'}}>Send for approval</Button>
+        <Button onClick={this.handleclick2} id="approval" disabled={this.props.Fields.boola} style={{backgroundColor:'#393939'}}>Send for approval</Button>
         </Fragment>
         );
         const list7=(
           <Fragment>
-          <Button onClick={this.handleclick} id="submit" style={{backgroundColor:'#393939'}}>Submit</Button>
+          <Button onClick={this.handleclick} id="submit" disabled={this.props.Fields.boola} style={{backgroundColor:'#393939'}}>Submit</Button>
           </Fragment>
         );
         
@@ -463,6 +464,7 @@ class Screens_test_d extends Component{
                 ]}
               icons={tableIcons}
               data={this.state.data}
+              disabled={this.props.Fields.boola}
               localization={{
                   header: {
                       actions: ''
@@ -496,15 +498,15 @@ class Screens_test_d extends Component{
                   <br/>
                   <hr width="90%" size="15" ></hr>
                   <br/><br/>
-                <Label for="exampleCustomFileBrowser"sm={3}>File Browser</Label>
+                <Label for="exampleCustomFileBrowser"sm={3}>Attach File:</Label>
                 <Col sm={5}>
-                <UploaderComponent type="file" autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
+                <UploaderComponent type="file" enabled={!this.props.Fields.boola} autoUpload={false} ref = { upload => {this.uploadObj = upload}} asyncSettings={this.path} />                               
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="exampleText"sm={3}>Reason</Label>
+                <Label for="exampleText"sm={3}>Reason:</Label>
                 <Col sm={5}>
-                <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2} value={this.state.reason}/>
+                <Input type="textarea" name="reason" id="reason" maxLength='150' disabled={this.props.Fields.boola} onChange={this.handlechange2} value={this.state.reason}/>
                 {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                 </Col>
           </FormGroup> 

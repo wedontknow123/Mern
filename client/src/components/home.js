@@ -22,20 +22,23 @@ class home extends Component{
     
     render(){
         return(
-            <div className="vuttons_1" >
-                <Breadcrumb>
+            <div>
+                <Breadcrumb style={{marginTop:'-25px'}}>
                 <BreadcrumbItem active>Home</BreadcrumbItem>                
                 </Breadcrumb>
-                <div  >
-                    <div className="row1"><Button className="bt-0" href='/options' title="Create New User">New User Creation</Button></div>
-                    <div className="row1"><Button className="bt-1" href='/changes_required'title="Change User Data">Changes Required</Button></div>
-                    <div className="row1"><Button className="bt-2" href='/deactivate' title="Deactivate User">Deactivation</Button></div>
+                <div className="vuttons_1" >
+                    
+                    <div  >
+                        <div className="row1"><Button className="bt-0" href='/options' title="Create New User">New User Creation</Button></div>
+                        <div className="row1"><Button className="bt-1" href='/changes_required'title="Change User Data">Changes Required</Button></div>
+                        <div className="row1"><Button className="bt-2" href='/deactivate' title="Deactivate User">Deactivation</Button></div>
+                    </div>
+                    <br/>
+                    <div className="row2" >
+                        <div className="row1"><Button className="bt-3" href="/requests" title="Check Pending Requests">Pending Requests</Button></div>
+                        <div className="row1"><Button className="bt-4" href="/rejected" title="Check Rejected Requests">Rejected Requests</Button></div>
+                    </div>                
                 </div>
-                <br/>
-                <div className="row2" >
-                    <div className="row1"><Button className="bt-3" href="/requests" title="Check Pending Requests">Pending Requests</Button></div>
-                    <div className="row1"><Button className="bt-4" href="/rejected" title="Check Rejected Requests">Rejected Requests</Button></div>
-                </div>                
             </div>
         )
     }

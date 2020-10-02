@@ -14,15 +14,18 @@ import {
 class Createmenu extends Component{
     render(){
         return(
-            <div className="vuttons_2">
-                <Breadcrumb>
+            <div>
+                <Breadcrumb style={{marginTop:'-25px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
-                 <BreadcrumbItem active>New User Creation Menu</BreadcrumbItem>
-                 </Breadcrumb>
-                <div className="row1"><Button className="bt-0" href='/options/newuser' title="Create New User">Create New User</Button></div>                
-                <div className="row1"><Button className="bt-0" href='/options/editdraftform' title="Edit Saved User Details">Edit</Button></div>               
-                <div className="row1"><Button className="bt-0" href="/options/deleteform" title="Delete Saved User">Delete</Button></div>                
+                <BreadcrumbItem active>New User Creation Menu</BreadcrumbItem>
+                </Breadcrumb>
+                <div className="vuttons_2">                
+                    <div className="row1"><Button className="bt-0" href='/options/newuser' title="Create New User">Create New User</Button></div>                
+                    <div className="row1"><Button className="bt-0" href='/options/editdraftform' title="Edit Saved User Details">Edit</Button></div>               
+                    <div className="row1"><Button className="bt-0" href="/options/deleteform" title="Delete Saved User">Delete</Button></div>                
+                </div>
             </div>
+            
         )
     }
 }

@@ -61,16 +61,15 @@ class Changes_required extends Component{
           name:'',          
           email:'',
           doj:'',                    
-        }        
+        } ,
+        boola:true       
     }
     static propTypes={
         auth:PropTypes.object.isRequired
     }
 
-    fileSave=(v,rea)=>{     
-                 
-     //console.log(this.uploadObj.getFilesData())
-      // let v = this.uploadObj.getFilesData()
+    fileSave=(v,rea)=>{ 
+
       if(v!==null){//this.state.file          
           const data=new FormData();
           for(var x=0;x<v.length;x++){//v
@@ -83,8 +82,6 @@ class Changes_required extends Component{
               this.setState({
                   files:res.data
               },()=>{
-                  //console.log(this.state.filepath)
-                  //console.log(this.state.key)
                       for(var x=0;x<this.state.files.length;x++){
                           const new5={
                               UserAccess_Headerkey:this.state.key,
@@ -150,7 +147,8 @@ class Changes_required extends Component{
          var a=event.Emp_ID;
          console.log(a)
       this.setState({
-        empid: a
+        empid: a,
+        boola:false
       }, () => {
         axios.post(nodelink.site+'/api/changes_required/emp',this.state)
         .then(res=>{
@@ -297,19 +295,7 @@ class Changes_required extends Component{
       }    
       this.setState({errors,reasonl, [name]: value})              
     }
-  //   see=()=>{
-  //       console.log("yesss");
-  //   }
-  //   depval=()=>{ return this.state.depart||{}}
-  //   handlechange2=(value,event)=>{
-  //     if(event!==null){           
-  //      this.setState({
-  //        depart:event.Department
-  //      }, () => {
-  //        console.log(this.state.depart)
-  //      });       
-  //  }
-  // }
+  
     getheader=()=>{
         var v='';
         axios.get(nodelink.site+'/api/items/key')
@@ -382,7 +368,7 @@ class Changes_required extends Component{
         // });
         return(
             <div className="container">
-            <Breadcrumb>
+            <Breadcrumb style={{marginTop:'-25px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                  <BreadcrumbItem active>Changes Required Form</BreadcrumbItem>
                  </Breadcrumb>
@@ -398,29 +384,29 @@ class Changes_required extends Component{
            
                 <Form >{/*onSubmit={this.fileSave} disabled={true}*/}
                         <FormGroup tag="fieldset" row>
-                            <legend className="col-form-label col-sm-3">Branch</legend>
+                            <legend className="col-form-label col-sm-3">Branch:</legend>
                             <Col sm={10}>
                                 <FormGroup check inline>
                                     <Label check>
-                                    <Input type="radio" name="branch" value="Marketing" checked={this.state.branch==='Marketing'} onChange={this.handlechange1}/>
+                                    <Input type="radio" name="branch" value="Marketing" checked={this.state.branch==='Marketing'} disabled={this.state.boola} onChange={this.handlechange1}/>
                                     Marketing
                                     </Label>
                                 </FormGroup>
                                 <FormGroup check inline>
                                     <Label check>
-                                    <Input type="radio" name="branch" value="SCM" checked={this.state.branch==='SCM'} onChange={this.handlechange1}/>
+                                    <Input type="radio" name="branch" value="SCM" checked={this.state.branch==='SCM'} disabled={this.state.boola} onChange={this.handlechange1}/>
                                     SCM
                                     </Label>
                                     </FormGroup>
                                 <FormGroup check inline>
                                     <Label check>
-                                    <Input type="radio" name="branch" value="MFG-Hosur Rd Plant" checked={this.state.branch==='MFG-Hosur Rd Plant'} onChange={this.handlechange1}/>
+                                    <Input type="radio" name="branch" value="MFG-Hosur Rd Plant" checked={this.state.branch==='MFG-Hosur Rd Plant'} disabled={this.state.boola} onChange={this.handlechange1}/>
                                      MFG-Hosur Rd Plant
                                     </Label>
                                 </FormGroup>
                                 <FormGroup check inline>
                                     <Label check>
-                                    <Input type="radio" name="branch" value="MFG-jigani Rd plant" checked={this.state.branch==='MFG-jigani Rd plant'} onChange={this.handlechange1}/>
+                                    <Input type="radio" name="branch" value="MFG-jigani Rd plant" checked={this.state.branch==='MFG-jigani Rd plant'} disabled={this.state.boola} onChange={this.handlechange1}/>
                                      MFG-Jigani Rd Plant
                                     </Label>
                                 </FormGroup>
@@ -429,25 +415,25 @@ class Changes_required extends Component{
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="name" id="name" maxLength='70' value={this.state.name} onChange={this.handlechange1} />
+                             <Input type="text" name="name" id="name" maxLength='70' value={this.state.name} disabled={this.state.boola} onChange={this.handlechange1} />
                              {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="desig" sm={3}>Designation:</Label>
                            <Col sm={5}>
-                             <Input type="text" name="desig" maxLength='70' id="desig" value={this.state.desig} onChange={this.handlechange1}/>
+                             <Input type="text" name="desig" maxLength='70' id="desig" value={this.state.desig} disabled={this.state.boola} onChange={this.handlechange1}/>
                               </Col>
                          </FormGroup>
                          <FormGroup row>
                           <Label for="email" sm={3}>Email:</Label>
                            <Col sm={5}>
-                             <Input type="email" name="email" maxLength='150' id="email" value={this.state.email} onChange={this.handlechange1}/>
+                             <Input type="email" name="email" maxLength='150' id="email" value={this.state.email} disabled={this.state.boola} onChange={this.handlechange1}/>
                              {/* {errors.email.length > 0 && <span className='error' style={{color:"red"}}>{errors.email}</span>} */}
                               </Col>
                          </FormGroup>
                          <FormGroup row>
-                             <Label for="doj"sm={3}>Date of Joining</Label>
+                             <Label for="doj"sm={3}>Date of Joining:</Label>
                              <Col sm={5}>
                                    <Input                                     
                                      type="date"
@@ -455,14 +441,15 @@ class Changes_required extends Component{
                                       id="doj"
                                       value={this.state.doj}
                                       onChange={this.handlechange1}
+                                      disabled={this.state.boola}
                                     />
                                     {/* {errors.doj.length > 0 && <span className='error' style={{color:"red"}}>{errors.doj}</span>} */}
                                     </Col>
                             </FormGroup>
                             <FormGroup row>
-                              <Label for="emptype" sm={3} >Employee Type</Label>
+                              <Label for="emptype" sm={3} >Employee Type:</Label>
                               <Col sm={5}>
-                                  <Input type ="select" name="emptype" id="emptype" onChange={this.handlechange1} value={this.state.emptype}>
+                                  <Input type ="select" name="emptype" id="emptype" onChange={this.handlechange1} disabled={this.state.boola} value={this.state.emptype}>
                                       <option value="Permanent">Permanent</option>
                                       <option value="Temperory">Temperory</option>
                                       <option value="Apprentice">Apprentice</option>
@@ -471,9 +458,9 @@ class Changes_required extends Component{
                               </Col>
                             </FormGroup>
                             <FormGroup row>
-                            <Label for="software"sm={3}>Software</Label>
+                            <Label for="software"sm={3}>Software:</Label>
                             <Col sm={5}>
-                            <Input type="select" name="software" id="Software" onChange={this.handlechange1} value={this.state.software}>
+                            <Input type="select" name="software" id="Software" onChange={this.handlechange1} disabled={this.state.boola} value={this.state.software}>
                                <option value='FS'>FS</option>
                                <option value='SS'>SS</option>
                                <option value='Focus'>Focus</option>
@@ -485,7 +472,7 @@ class Changes_required extends Component{
                             <FormGroup row>
                                <Label for="uploaded_files"sm={3}>Uploaded Files:</Label>
                                <Col sm={5}>                                
-                                <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic} deleteFile={this.deleteFile} />                                
+                                <DownloadLinks filenames={this.state.filenames}  onClic={this.onClic}  deleteFile={this.deleteFile} />                                
                                </Col>
                             </FormGroup>                            
                             <br/>

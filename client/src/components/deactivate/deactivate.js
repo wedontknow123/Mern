@@ -39,7 +39,8 @@ class Deactivate extends Component{
 
     handlechange=(value,event)=>{
         this.setState({
-            selectedid:event.Emp_ID
+            selectedid:event.Emp_ID,
+            boola:false
         })
     }
     handlechange1=(e)=>{
@@ -165,34 +166,34 @@ class Deactivate extends Component{
           }
         return(
             <div className='container'>
-                <Breadcrumb>
+                <Breadcrumb style={{marginTop:'-25px',marginBottom:'50px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                  <BreadcrumbItem active>Deactivate</BreadcrumbItem>
                  </Breadcrumb>
-            <Form>
-            <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
+            <Form>            
               <Autocomplete
               id="deactivate"
               options={this.state.empid}
               getOptionLabel={(option)=>option.Emp_ID}
               filterOptions={filterOptions1}
-              style={{width:300}}
+              style={{width:300}}              
               onChange={this.handlechange}
               renderInput={(params)=><TextField {...params} label="Deactivate" variant="outlined"/>}
               /><br></br>
               <FormGroup row>
-                <Label for="exampleText"sm={1}>Reason:<span className="required" style={{color:'red',fontSize:'20px'}}>*</span></Label>
-               <Col sm={5}>
-                  <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange1}/>
-                  {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
-                  </Col>
-                 </FormGroup>
+                    <Label for="exampleText"sm={3}>Reason<span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
+                    <Col sm={5}>
+                    <Input type="textarea" name="reason" id="reason" disabled={this.state.boola} maxLength='150' onChange={this.handlechange1}/>
+                    {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
+                    </Col>
+              </FormGroup>
               <FormGroup row>
                   <Col sm={{ size: 6, offset: 1 }}>
-                  <Button onClick={this.getheader} id="submit">Submit</Button>
-                  </Col>
+                  <Button onClick={this.getheader} disabled={this.state.boola} id="submit">Submit</Button>
+                  </Col>                  
               </FormGroup>
-            </Form>
+              <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
+            </Form>            
             </div>
         )
     }

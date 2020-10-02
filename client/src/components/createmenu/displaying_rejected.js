@@ -275,7 +275,7 @@ class Displaying_rejected extends Component{
         const {errors} = this.state;
         return(
             <div className="container">
-                       <Breadcrumb>
+                       <Breadcrumb style={{marginTop:'-25px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                 <BreadcrumbItem><a href="/rejected">Rejected Requests</a></BreadcrumbItem>
                  <BreadcrumbItem active>Display</BreadcrumbItem>
@@ -291,7 +291,7 @@ class Displaying_rejected extends Component{
                             </FormGroup>
                         
                         <FormGroup tag="fieldset" row>
-                            <legend className="col-form-label col-sm-3">Branch</legend>
+                            <legend className="col-form-label col-sm-3">Branch:</legend>
                             <Col sm={10}>
                                 <FormGroup check inline>
                                     <Label check>
@@ -340,7 +340,7 @@ class Displaying_rejected extends Component{
                               </Col>
                          </FormGroup>
                          <FormGroup row>
-                             <Label for="doj"sm={3}>Date of Joining</Label>
+                             <Label for="doj"sm={3}>Date of Joining:</Label>
                              <Col sm={5}>
                                    <Input                                     
                                      type="date"
@@ -353,7 +353,7 @@ class Displaying_rejected extends Component{
                                     </Col>
                             </FormGroup>
                             <FormGroup row>
-                              <Label for="emptype" sm={3} >Employee Type</Label>
+                              <Label for="emptype" sm={3} >Employee Type:</Label>
                               <Col sm={5}>
                                   <Input type ="select" name="emptype" id="emptype" onChange={this.handlechange1} value={this.state.emptype}>
                                       <option value="Permanent">Permanent</option>
@@ -364,7 +364,7 @@ class Displaying_rejected extends Component{
                               </Col>
                             </FormGroup>
                             <FormGroup row>
-                            <Label for="software"sm={3}>Software</Label>
+                            <Label for="software"sm={3}>Software:</Label>
                             <Col sm={5}>
                             <Input type="select" name="software" id="Software" onChange={this.handlechange1} value={this.state.software}>
                                <option value='FS'>FS</option>

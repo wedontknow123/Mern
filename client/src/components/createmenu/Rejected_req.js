@@ -61,27 +61,29 @@ class Rejected_req extends Component{
         }
         const {empid}=this.state;
         return(
-            <div className="container">
-                <Breadcrumb>
+            <div>
+                <Breadcrumb style={{marginTop:'-25px',marginBottom:'50px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
-                 <BreadcrumbItem active>Rejected Requests</BreadcrumbItem>
-                 </Breadcrumb>
-            <Container> 
-                               
-                <ListGroup>
-                    <TransitionGroup className="shopping-list">
-                        {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons})=>(
-                            <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
-                                <ListGroupItem tag="button" style={{backgroundColor:'#998242', color:'#fff'}}  onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey,Reasons)}>                                   
-                                    {Emp_ID}
-                                </ListGroupItem>                                
-                            </CSSTransition>                            
-                        ))}                        
-                    </TransitionGroup>                    
-                </ListGroup>
-                <br></br>
-            </Container>
+                <BreadcrumbItem active>Rejected Requests</BreadcrumbItem>
+                </Breadcrumb>
+                <div className="container">                
+                    <Container>                                 
+                        <ListGroup>
+                            <TransitionGroup >
+                                {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons})=>(
+                                    <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
+                                        <ListGroupItem tag="button" style={{backgroundColor:'#998242', color:'#fff',borderRadius:'5px',marginBottom:'10px'}}  onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey,Reasons)}>                                   
+                                            {Emp_ID}
+                                        </ListGroupItem>                                
+                                    </CSSTransition>                            
+                                ))}                        
+                            </TransitionGroup>                    
+                        </ListGroup>
+                        <br></br>
+                    </Container>
+                </div>
             </div>
+            
         )
        
     }

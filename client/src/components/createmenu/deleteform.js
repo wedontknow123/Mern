@@ -5,6 +5,7 @@ import {Button,    Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import { Redirect} from 'react-router-dom';
 
 var n = 1
 var nodelink=require('../../nodelink.json');
@@ -74,14 +75,17 @@ class Deleteform extends Component{
     }
 
     render(){
-        if(this.state.lol==="yes"){alert("Draft deleted successfully !")}
+        if(this.state.lol==="yes"){
+          alert("Draft deleted successfully !")
+          return  <Redirect to='/options'/>
+        }
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Emp_ID,
           });
         return(
             <div className="container">
-              <Breadcrumb>
+              <Breadcrumb style={{marginTop:'-25px',marginBottom:'50px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                 <BreadcrumbItem><a href="/options">New User Creation Menu</a></BreadcrumbItem>
                  <BreadcrumbItem active>Delete</BreadcrumbItem>
