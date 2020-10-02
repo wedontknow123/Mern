@@ -5,7 +5,7 @@ import axios from 'axios';
 import {Button} from 'reactstrap';
 import PropTypes from 'prop-types';
 import {approval2} from '../../actions/itemActions';
-import { Alert,Label,Form,FormGroup,Input,Col,    Breadcrumb, BreadcrumbItem} from 'reactstrap';
+import { Alert,Label,Form,FormGroup,Input,Col,Table,    Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import MaterialTable from "material-table";
 import {Container,ListGroup,ListGroupItem} from 'reactstrap';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
@@ -576,6 +576,24 @@ class Displaying1 extends Component{
 
                     </TransitionGroup>
                 </ListGroup>
+                <h2>This is already been approved by:</h2>
+                <Table striped>
+                <thead>
+                 <tr>
+                 <th>Approver Name</th>
+                 <th>On</th>
+                </tr>
+                  </thead>
+                  {approvedby.map(({Approver_Name,Trans_Datetime})=>(
+                      <tbody key={Trans_Datetime}timeout={500} >
+                          <tr>
+                              <th scope='row'>{Approver_Name}</th>
+                              <td>{Trans_Datetime }</td>
+                          </tr>
+                          </tbody>
+
+                  ))}
+                </Table>
                 <br/>
                {(this.state.dep===1)?list3:list2}
                {(this.state.last===1)?list1:''}
