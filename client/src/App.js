@@ -25,6 +25,7 @@ import Pending_requests from './components/createmenu/pending_requests';
 import Displaying1 from './components/createmenu/displaying';
 import Rejected_req from './components/createmenu/Rejected_req';
 import Displaying_rejected from './components/createmenu/displaying_rejected';
+import status1 from './components/createmenu/status';
 class App extends Component{
   static propTypes={
     auth:PropTypes.object.isRequired
@@ -62,6 +63,8 @@ class App extends Component{
             <Route exact path='/requests/display' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Displaying1/>))}/>
             <Route exact path='/rejected' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Rejected_req/>))}/>
             <Route exact path='/rejected/display' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Displaying_rejected/>))}/>
+            <Route exact path='/status' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<status1/>))}/>
+
         </div>
       </BrowserRouter>
     </Provider>
