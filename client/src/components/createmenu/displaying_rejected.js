@@ -275,7 +275,7 @@ class Displaying_rejected extends Component{
         const {errors} = this.state;
         return(
             <div className="container">
-                       <Breadcrumb style={{marginTop:'-25px'}}>
+                       <Breadcrumb style={{marginTop:'105px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                 <BreadcrumbItem><a href="/rejected">Rejected Requests</a></BreadcrumbItem>
                  <BreadcrumbItem active>Display</BreadcrumbItem>

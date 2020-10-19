@@ -555,7 +555,7 @@ class Displaying1 extends Component{
         const {approvedby}=this.state;
         return(
             <div className="container">
-                <Breadcrumb style={{marginTop:'-25px'}}>
+                <Breadcrumb style={{marginTop:'105px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                 <BreadcrumbItem><a href="/requests">Pending Requests</a></BreadcrumbItem>
                  <BreadcrumbItem active>Display</BreadcrumbItem>

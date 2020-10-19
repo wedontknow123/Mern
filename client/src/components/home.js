@@ -23,10 +23,10 @@ class home extends Component{
     render(){
         return(
             <div>
-                <Breadcrumb style={{marginTop:'-25px'}}>
+                <Breadcrumb style={{marginTop:'105px',padding:'0px 50px'}}>
                 <BreadcrumbItem active>Home</BreadcrumbItem>                
                 </Breadcrumb>
-                <div className="vuttons_1" >
+                {/* <div className="vuttons_1" >
                     
                     <div  >
                         <div className="row1"><Button className="bt-0" href='/options' title="Create New User">New User Creation</Button></div>
@@ -41,7 +41,7 @@ class home extends Component{
                         <div className="row1"><Button className="bt-4" href="/register" title="register">Register</Button></div>
 
                     </div>                
-                </div>
+                </div> */}
             </div>
         )
     }
