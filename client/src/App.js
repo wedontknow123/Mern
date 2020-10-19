@@ -31,10 +31,8 @@ import Pending_requests from './components/createmenu/pending_requests';
 import Displaying1 from './components/createmenu/displaying';
 import Rejected_req from './components/createmenu/Rejected_req';
 import Displaying_rejected from './components/createmenu/displaying_rejected';
-<<<<<<< HEAD
 import Status from './components/createmenu/status';
 import Register from './register/register';
-=======
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
@@ -51,7 +49,6 @@ import { Paper } from '@material-ui/core';
 //   },
 // }));
 
->>>>>>> f7e787ef9e2277e8c59e57473fe95af11cacd65e
 class App extends Component{
 
   state={
@@ -101,11 +98,8 @@ class App extends Component{
             <Route exact path='/requests/display' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Displaying1/>))}/>
             <Route exact path='/rejected' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Rejected_req/>))}/>
             <Route exact path='/rejected/display' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Displaying_rejected/>))}/>
-<<<<<<< HEAD
             <Route exact path='/status' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Status/>))}/>
             <Route exact path='/register' component={Register}/>
-=======
->>>>>>> f7e787ef9e2277e8c59e57473fe95af11cacd65e
         </div>
       </BrowserRouter>
     </Provider>
