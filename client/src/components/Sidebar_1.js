@@ -66,11 +66,11 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <ListItem divider style={{justifyContent: "center"}} classes={{gutters: classes.gutters}}>
+        <ListItem divider style={{justifyContent: "center"}} classes={{paper: classes.gutters}}>
           <img src={Trelleborglogo}  width="130" height="60"  />
         </ListItem>
         <br/>
-        <ListItem classes={{gutters: classes.gutters}}>
+        <ListItem classes={{paper: classes.gutters}}>
           <p style={{fontSize:"30px",textAlign:"center",fontWeight:"bold"}}>Menu</p>
         </ListItem>
         <ListItem button onClick={handleClick} classes={{gutters: classes.gutters}}>
