@@ -62,7 +62,7 @@ class Rejected_req extends Component{
         const {empid}=this.state;
         return(
             <div>
-                <Breadcrumb style={{marginTop:'-25px',marginBottom:'50px'}}>
+                <Breadcrumb style={{marginTop:'105px',marginBottom:'50px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                 <BreadcrumbItem active>Rejected Requests</BreadcrumbItem>
                 </Breadcrumb>

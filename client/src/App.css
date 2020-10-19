@@ -24,3 +24,15 @@
 }
 
 .exp{visibility: hidden;}
+
+.drawerpaper{
+  width:240px;
+  top:80px;
+  position:sticky;
+}
+
+.MuiDrawer-paper{
+  width:240px;
+  top:80px;
+  position:sticky;
+}

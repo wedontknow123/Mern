@@ -16,6 +16,9 @@ import RegisterModal from './auth/RegisterModal';
 import Logout from './auth/Logout';
 import LoginModal from './auth/LoginModal';
 import Trelleborglogo from '../Trellologo3.png';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import Sidebar_1 from './Sidebar_1'
 var a='';
 class AppNavbar extends Component{
     state={
@@ -33,6 +36,16 @@ toggle=()=>{
  
  render(){
     const{isAuthenticated,user}=this.props.auth;
+
+    // const vert_align = {
+    //     display: 'flex',
+    //     width: 0,
+    //     paddingRight: "0",
+    //     paddingLeft: "0px",
+    //     marginRight: "0px",
+    //     marginLeft: "0px"
+        
+    // }
 
     const authLinks=(
         <Fragment>
@@ -58,9 +71,10 @@ toggle=()=>{
         </Fragment>
     );
      return(
-     <div>
-         <Navbar style={{backgroundColor:'#393939'}} dark expand="sm" className="mb-5">
-             <Container>
+    //  <div style={{position:"fixed"}}>
+         <Navbar style={{backgroundColor:'#393939'}} dark  expand="sm" className="mb-5" fixed="top">
+             <Container style={{paddingLeft:"0px",maxWidth:"1320px",marginLeft:"0px"}}>
+                 <Sidebar_1/>
                  <NavbarBrand href="/" title="Home"><img src={Trelleborglogo} alt="logo" width="100" height="54" /></NavbarBrand>
                  <NavbarToggler onClick={this.toggle}/>
                  <Collapse isOpen={this.state.isOpen} navbar>
@@ -71,7 +85,7 @@ toggle=()=>{
              </Container>
            
          </Navbar>
-     </div>
+    //  </div>
      );
  }
 }
