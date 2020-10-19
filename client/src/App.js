@@ -16,8 +16,8 @@ import {loadUser} from './actions/authActions';
 import PropTypes from 'prop-types';
 import home from './components/home';
 import Createmenu from './components/createmenu/createmenu';
-import Changes_required from './components/changes_required/changes_required'
-import changes_screen from './components/changes_required/changes_screen'
+import Changes_required from './components/changes_required/changes_required';
+import changes_screen from './components/changes_required/changes_screen';
 import Deactivate from './components/deactivate/deactivate';
 import screens_test from './components/createmenu/screens_test';
 import screens_test_d from './components/createmenu/screens_test_d';
@@ -25,7 +25,8 @@ import Pending_requests from './components/createmenu/pending_requests';
 import Displaying1 from './components/createmenu/displaying';
 import Rejected_req from './components/createmenu/Rejected_req';
 import Displaying_rejected from './components/createmenu/displaying_rejected';
-import status1 from './components/createmenu/status';
+import Status from './components/createmenu/status';
+import Register from './register/register';
 class App extends Component{
   static propTypes={
     auth:PropTypes.object.isRequired
@@ -63,8 +64,8 @@ class App extends Component{
             <Route exact path='/requests/display' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Displaying1/>))}/>
             <Route exact path='/rejected' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Rejected_req/>))}/>
             <Route exact path='/rejected/display' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Displaying_rejected/>))}/>
-            <Route exact path='/status' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<status1/>))}/>
-
+            <Route exact path='/status' render={()=>(this.requireAuth()?(<Redirect to="/"/>):(<Status/>))}/>
+            <Route exact path='/register' component={Register}/>
         </div>
       </BrowserRouter>
     </Provider>

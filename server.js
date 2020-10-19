@@ -29,6 +29,7 @@ app.use('/api/changes_required',require('./routes/api/changes_required'));
 app.use('/api/changes_screen',require('./routes/api/changes_screen'));
 app.use('/api/deactivate',require('./routes/api/deactivate'));
 app.use('/api/status',require('./routes/api/status'));
+app.use('/api/register',require('./routes/api/register2'));
 require("./routes/api/items");
 
 const port = process.env.PORT || 5000;

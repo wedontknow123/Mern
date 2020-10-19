@@ -38,7 +38,8 @@ class home extends Component{
                         <div className="row1"><Button className="bt-3" href="/requests" title="Check Pending Requests">Pending Requests</Button></div>
                         <div className="row1"><Button className="bt-4" href="/rejected" title="Check Rejected Requests">Rejected Requests</Button></div>
                         <div className="row1"><Button className="bt-4" href="/status" title="Check Rejected Requests">Status</Button></div>
-                 
+                        <div className="row1"><Button className="bt-4" href="/register" title="register">Register</Button></div>
+
                     </div>                
                 </div>
             </div>

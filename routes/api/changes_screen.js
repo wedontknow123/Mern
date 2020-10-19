@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router =express.Router();
 const call= require('./calling');
@@ -15,8 +16,8 @@ router.post('/hkey',(req,res)=>{
 })
 
 router.post('/data',(req,res)=>{
-    const key= req.body.key;    
-    call.get8(req,res,key);
+    const id= req.body.empid;    
+    call.getscreens(req,res,id);
 })
 
 router.get('/',(req,res)=>{

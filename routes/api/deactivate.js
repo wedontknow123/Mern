@@ -4,7 +4,7 @@ const call= require('./calling');
 
 router.post('/',(req,res)=>{
     const useremail= req.body.useremail;    
-    call.get10(req,res,useremail);
+    call.getempid(req,res,useremail);
 })
 
 router.post('/cont',(req,res)=>{

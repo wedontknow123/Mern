@@ -49,7 +49,7 @@ toggle=()=>{
      const guestLinks=(
         <Fragment>
            <NavItem>
-             <RegisterModal/>
+             <NavLink href='/register'>Register</NavLink>
              </NavItem>
              
             <NavItem>

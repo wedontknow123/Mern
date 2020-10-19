@@ -11,6 +11,7 @@ else{
 }
 });
 };
+
 exports.get=function(req,resp,empno,callback){
     db.executeSql("SELECT SL_NO, Username, Email FROM [User] where SL_NO="+empno,function(data,err){  
                 if(err){
@@ -105,6 +106,17 @@ exports.get8=function(req,res,key){
     }
   });
 };
+exports.getscreens=function(req,res,id){
+  
+  db.executeSql("SELECT * FROM UserAccess_Detail_Master where Emp_ID='"+id+"'",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
 exports.get9=function(req,res,callback){
   db.executeSql("Select Top 1 Document_Path from Org_details",function(data,err){
     if(err){
@@ -140,6 +152,44 @@ exports.get11=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+
   });
 };
 
+exports.getempid=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+useremail+"'
+  db.executeSql("SELECT distinct Emp_ID FROM UserAccess_Header_Master ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+    if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
+
+exports.getstatus=function(req,resp){
+  try{
+
+      db.executeSql("Select distinct A.UserAccess_Headerkey,A.Emp_ID from Email_Workflow A where A.Status<>'NULL' and A.UserAccess_Headerkey not  in (Select B.UserAccess_Headerkey from User_Credentials B WHERE A.UserAccess_Headerkey = B.UserAccess_Headerkey)",function(data,err){
+        if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.getempidinfo2=function(req,res,empid){
+  db.executeSql("SELECT * FROM UserAccess_Header_Master where Emp_ID ='"+empid+"'",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
 exports.get12=function(req,res,empid){
   db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+empid+"' and Trans_Type = 'New User Creation'",function(data,err){
    if(err){
@@ -182,6 +232,52 @@ exports.checkITorNot2=function(req,resp,reqbody){
     var data = JSON.parse(reqbody);
     if(data){
       db.executeSql("Select IT_Notification from Org_details where IT_Notification='"+data.Approver_Email+"'",function(data,err){
+        if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.checkauth=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+      db.executeSql("Select Email from [User] where Status='A' and Email='"+data.Email+"'",function(data,err){
+        if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.checkotp=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+      db.executeSql("Select Email from [User] where OTP='"+data.OTP+"' and Email='"+data.Email+"'",function(data,err){
         if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -273,7 +369,30 @@ exports.getapprovedby=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT Approver_Name,Trans_Datetime FROM Email_Workflow where UserAccess_Headerkey = '"+data.UserAccess_Headerkey+"' and (Status='A' or Status='AF')",function(data,err){
+            db.executeSql("SELECT Approver_Name,convert(varchar,Trans_Datetime,0) as Trans_Datetime FROM Email_Workflow where UserAccess_Headerkey = '"+data.UserAccess_Headerkey+"' and (Status='A' or Status='AF')",function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+              httpMsgs.sendJson(req,resp,data);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+
+exports.checkvaliddate=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    var data = JSON.parse(reqbody);
+    if(data){
+            db.executeSql("select datediff(hour,Trans_Datetime,GETDATE()) as diff from [User] where Email='"+data.Email+"'",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -718,6 +837,54 @@ exports.addapmaster2=function(req,resp,reqbody){
     var data = JSON.parse(reqbody);
     if(data){
       var sql=util.format("UPDATE Email_Workflow SET Status ='%s',Reasons ='%s', Trans_Datetime='%s' where UserAccess_Headerkey='%d' and Approver_Email='%s' and Emp_ID='%s' and (Status is null or Status ='')",data.Status,data.Reason,data.Trans_Datetime,data.UserAccess_Headerkey,data.Approver_Email,data.Emp_ID);
+      db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+exports.otpgen=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("UPDATE [User] set OTP='%s',Trans_Datetime='%s' where Email='%s'",data.OTP,data.Trans_Datetime,data.Email);
+      db.executeSql(sql,function(data,err){
+            if(err){ 
+             httpMsgs.show500(req,resp,err);
+            }
+            else{
+             httpMsgs.send200(req,resp);
+            }
+            });
+    }
+    else{
+         throw new Error("Input not valid");
+    }
+  }
+  catch(ex){
+    httpMsgs.show500(req,resp,ex);
+  }
+};
+exports.savepassword=function(req,resp,reqbody){
+  try{
+    if(!reqbody) throw new Error("Input not valid");
+    
+    var data = JSON.parse(reqbody);
+    if(data){
+      var sql=util.format("UPDATE [User] set Password='%s' where Email='%s'",data.Password,data.Email);
       db.executeSql(sql,function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);

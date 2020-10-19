@@ -7,4 +7,7 @@ router.post('/',(req,res)=>{
     call.getapprovedby(req,res,JSON.stringify(req.body))
 })
 
+router.get('/stat',(req,res)=>{
+    call.getstatus(req,res);
+})
 module.exports=router;
