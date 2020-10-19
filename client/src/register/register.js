@@ -4,7 +4,7 @@ class Register extends Component{
     
     render(){
         return(
-            <div className='App'>
+            <div className='App' style={{marginTop:"200px"}}>
                 <Form/>
                             </div>
         )
