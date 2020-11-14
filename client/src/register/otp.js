@@ -68,6 +68,7 @@ class Otp extends Component{
           <div>
          
          <Form>
+         
             <FormGroup>
               <Label>Enter OTP</Label>
             <Input
@@ -87,7 +88,10 @@ class Otp extends Component{
             <Tooltip placement="right" isOpen={this.state.toggle} target="tooltip" toggle={this.toggle}>
             Generate it only if you your previous OTP has expired.
             </Tooltip>
+            <br/>
+            <Label style={{color:'red',fontSize:'20px' }} >OTP valid only for 48 hours</Label>
             </Form>
+            
       </div>
         )
     }

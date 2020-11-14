@@ -33,7 +33,8 @@ var nodelink=require('../../nodelink.json');
 class Editdraftform extends Component{
   uploadObj = new UploaderComponent();
     state={
-        branch:'',
+        branch_prv:'',
+        branch:"",
         name:'',
         desig:"",
         depart:"",
@@ -54,6 +55,7 @@ class Editdraftform extends Component{
         filepath : "",
         r : "",
         department_options:[],
+        branch_options:[], 
         errors: {
           name:'',          
           email:'',
@@ -153,6 +155,7 @@ class Editdraftform extends Component{
               var x = r[0];
               console.log(r);
               this.setState({
+                branch_prv:x.Location,
                 branch:x.Location,
                 name:x.Emp_Name,
                 desig:x.Emp_Designation,
@@ -184,7 +187,7 @@ class Editdraftform extends Component{
               console.log(this.state.filepath)
             })                 
             console.log(this.props)
-            console.log(this.state)            
+            console.log(this.state)           
         })
       });
   }
@@ -211,6 +214,14 @@ class Editdraftform extends Component{
     .then(res=>{
         this.setState({
            department_options:res.data
+        })
+        axios.get(nodelink.site+'/api/items/branch')
+        .then(res=>{
+        this.setState({
+            branch_options:res.data
+            })
+        console.log("now getting branches") 
+        console.log(this.state.branch_options)      
         })
         console.log("now gettin depart options")
         console.log(this.state.department_options)        
@@ -279,6 +290,33 @@ class Editdraftform extends Component{
         
     }
 
+    handlechange8=(e)=>{
+      if( e !== null ){
+      const { value } = e.target;
+      if(Number.isInteger(value) ){
+        console.log(value)        
+      } 
+      else{
+        console.log(value);               
+        this.setState({branch_prv: value}) 
+      } 
+    }
+    else{
+      this.setState({branch_prv: this.state.branch})
+    }   
+    }
+
+
+    handlechange7=(value,event)=>{
+      if(event!==null ){                                     
+       this.setState({
+         branch:event.Branch
+       }) 
+       console.log(event.Branch) 
+       console.log(this.state.branch)
+      }   
+  }
+
   //   handlechange2=(value,event)=>{
   //     if(event!==null){           
   //      this.setState({
@@ -336,6 +374,10 @@ class Editdraftform extends Component{
             matchFrom: 'start',
             stringify: (option) => option.Emp_ID,
           });
+          const filterOptions2 = createFilterOptions({
+            matchFrom: 'start',
+            stringify: (option) => option.Branch,
+          });
         return(
             <div className="container">
                        <Breadcrumb style={{marginTop:'105px'}}>
@@ -357,39 +399,28 @@ class Editdraftform extends Component{
                     onChange={this.handlechange}                    
                     renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
                     />
+                    <br/>
                                                       {/* @ */}
            
                 <Form >{/*onSubmit={this.fileSave} disabled={true}*/}
                         
-                        <FormGroup tag="fieldset" row>
-                            <legend className="col-form-label col-sm-3">Branch:</legend>
-                            <Col sm={10}>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="Marketing" checked={this.state.branch==='Marketing'} disabled={this.state.boola} onChange={this.handlechange1}/>
-                                    Marketing
-                                    </Label>
-                                </FormGroup>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="SCM" checked={this.state.branch==='SCM'} disabled={this.state.boola} onChange={this.handlechange1}/>
-                                    SCM
-                                    </Label>
-                                    </FormGroup>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="MFG-Hosur Rd Plant" checked={this.state.branch==='MFG-Hosur Rd Plant'} disabled={this.state.boola} onChange={this.handlechange1}/>
-                                     MFG-Hosur Rd Plant
-                                    </Label>
-                                </FormGroup>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="MFG-jigani Rd plant" checked={this.state.branch==='MFG-jigani Rd plant'} disabled={this.state.boola} onChange={this.handlechange1}/>
-                                     MFG-Jigani Rd Plant
-                                    </Label>
-                                </FormGroup>
-                                    </Col>
-                                </FormGroup>
+                <FormGroup row>
+                         <Label for="branch" sm={3}>Branch:</Label>
+                         <Col sm={5}>
+                         <Autocomplete
+                           id="Module"
+                            options={this.state.branch_options }
+                              getOptionLabel={(option)=>option.Branch}
+                              filterOptions={filterOptions2}
+                              style={{width:270}}                                                 
+                              onChange={this.handlechange7}
+                              inputValue={this.state.branch_prv}
+                              onInputChange={this.handlechange8}
+                              renderInput={(params)=><TextField {...params} label="Branch" variant="outlined"/>}
+                              disabled={this.state.boola}
+                               />
+                               </Col>
+                         </FormGroup>
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>

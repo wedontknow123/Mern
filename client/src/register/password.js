@@ -31,6 +31,9 @@ class Password extends Component{
            .then(res=>{
             this.props.nextStep();
            })
+        }
+        else{
+          alert("Password doesn't match !")
         } 
             console.log(this.props.values)
         
@@ -50,9 +53,9 @@ class Password extends Component{
                 
                 console.log(this.props.values)
             }
-            else{
-                console.log("Password doesn't match");
-            }
+            // else{
+            //     console.log("Password doesn't match");
+            // }
           })
           
       }

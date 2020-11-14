@@ -25,7 +25,7 @@ class Mail extends Component{
         }
         console.log(this.props.values.mail.toLowerCase());
         axios.post(nodelink.site+"/api/register",info)
-        .then(res=>{
+        .then(res=>{            
             var now = new Date();
             console.log(res.data.length)
             if(res.data.length==1){
@@ -37,19 +37,22 @@ class Mail extends Component{
                 }
                 axios.post(nodelink.site+"/api/register/date",info)
                 .then(res=>{
-                console.log(res.data[0].diff)
-                if(res.data[0].diff==null||res.data[0].diff>48){              
-                axios.post(nodelink.site+"/api/register/otp",info2)
-                .then(res=>{
-                    console.log(dateFormat(now, "yyyy-mm-dd H:MM:ss "))
-                    this.props.nextStep();
-                })
+                  console.log(res.data[0].diff)
+                  if(res.data[0].diff==null||res.data[0].diff>48){              
+                  axios.post(nodelink.site+"/api/register/otp",info2)
+                  .then(res=>{
+                      console.log(dateFormat(now, "yyyy-mm-dd H:MM:ss "))
+                      this.props.nextStep();
+                  })
+                  }
+                  else{
+                      this.props.nextStep();
+                  }
+                  })
+                console.log(info2);
             }
             else{
-                this.props.nextStep();
-            }
-            })
-                console.log(info2);
+              alert("Email does not exist !")
             }
         })
       };
@@ -61,7 +64,7 @@ class Mail extends Component{
         <div className='app'>
           <Form>
             <FormGroup>
-              <Label>Email</Label>
+              <Label>Email :</Label>
             <Input
               placeholder="Enter Your Mail ID"
               type='email'
