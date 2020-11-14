@@ -210,6 +210,16 @@ exports.getdepartment=function(req,res){
     }
   });
 };
+exports.getbranch=function(req,res){
+  db.executeSql("Select distinct Branch from Branch_Master",function(data,err){
+   if(err){
+     httpMsgs.show500(req,res,err);
+    }
+    else{
+     httpMsgs.sendJson(req,res,data);
+    }
+  });
+};
 exports.checkITorNot=function(req,resp,reqbody,callback){
 
   db.executeSql("Select IT_Notification from Org_details where IT_Notification='"+reqbody.Approver_Email+"'",function(data,err){

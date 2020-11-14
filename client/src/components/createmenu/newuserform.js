@@ -51,6 +51,7 @@ class Newuserform extends Component{
         filepath:[],
         status:'draft' ,
         department_options:[],
+        branch_options:[],
         errors: {
             name:'',
             empid:'',
@@ -102,9 +103,17 @@ class Newuserform extends Component{
     }
 
     handlechange6=(value,event)=>{
-        if(event!==null){                                     
+        if(event!==null ){                                     
          this.setState({
            depart:event.Department
+         }) 
+        }   
+    }
+
+    handlechange7=(value,event)=>{
+        if(event!==null ){                                     
+         this.setState({
+           branch:event.Branch
          }) 
         }   
     }
@@ -137,8 +146,14 @@ class Newuserform extends Component{
                department_options:res.data
             })
             console.log("now getting departments")
+            axios.get(nodelink.site+'/api/items/branch')
+            .then(res=>{
+                this.setState({
+                    branch_options:res.data
+                 })
+            console.log("now getting branches")
             this.getheader()
-            //console.log(this.state.key)
+            })
         })
     }
        
@@ -232,10 +247,16 @@ class Newuserform extends Component{
             alert("Successfully saved as draft")
             return <Redirect to='/options'/>     //the final return should be inside an else ....         
         }
+        
         const filterOptions1 = createFilterOptions({
             matchFrom: 'start',
             stringify: (option) => option.Department,
           });
+          const filterOptions2 = createFilterOptions({
+            matchFrom: 'start',
+            stringify: (option) => option.Branch,
+          });
+           
         return( //
             <div className="container">
                 <Breadcrumb style={{marginTop:'105px'}}>
@@ -245,7 +266,7 @@ class Newuserform extends Component{
                  </Breadcrumb>
                 <Form  > {/*onSubmit={this.handlechange4} // should have a onsubmit attribute to disable bothe buttons */} 
                         
-                        <FormGroup tag="fieldset" row>
+                        {/* <FormGroup tag="fieldset" row>
                             <legend className="col-form-label col-sm-3">Branch:</legend>
                             <Col sm={10}>
                                 <FormGroup check inline>
@@ -273,7 +294,21 @@ class Newuserform extends Component{
                                     </Label>
                                 </FormGroup>
                                     </Col>
-                                </FormGroup>
+                                </FormGroup> */}
+                        <FormGroup row>
+                         <Label for="branch" sm={3}>Branch:</Label>
+                         <Col sm={5}>
+                         <Autocomplete
+                           id="Module"
+                            options={this.state.branch_options}
+                              getOptionLabel={(option)=>option.Branch}
+                                 filterOptions={filterOptions2}
+                              style={{width:270}}
+                              onChange={this.handlechange7}
+                              renderInput={(params)=><TextField {...params} label="Branch" variant="outlined"/>}
+                               />
+                               </Col>
+                         </FormGroup>
                        <FormGroup row>
                           <Label for="name" sm={3}>Employee Name:</Label>
                            <Col sm={5}>
@@ -303,6 +338,8 @@ class Newuserform extends Component{
                                  filterOptions={filterOptions1}
                               style={{width:270}}
                               onChange={this.handlechange6}
+                            //   inputValue= {Sales}
+                            //   onInputChange={this.handlechange6}
                               renderInput={(params)=><TextField {...params} label="Department" variant="outlined"/>}
                                />
                                </Col>

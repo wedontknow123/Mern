@@ -26,4 +26,7 @@ router.post('/',(req,res)=>{
 router.get('/department',(req,res)=>{
     call.getdepartment(req,res);
 })
+router.get('/branch',(req,res)=>{
+    call.getbranch(req,res);
+})
 module.exports= router;

@@ -45,6 +45,7 @@ class Otp extends Component{
           <div>
          
          <Form>
+         
             <FormGroup>
               <Label>Enter OTP</Label>
             <Input
@@ -59,7 +60,10 @@ class Otp extends Component{
             <Button
               onClick={this.continue}
             >Continue</Button>
+            <br/>
+            <Label style={{color:'red',fontSize:'20px' }} >OTP valid only for 48 hours</Label>
             </Form>
+            
       </div>
         )
     }

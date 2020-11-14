@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import DownloadLinks from './DownloadLinks'
 import Screens_test_d from './screens_test_d';
 import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';
+import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField'
 
 var dateFormat = require('dateformat');
 var n = 1;
@@ -26,7 +28,8 @@ class Displaying_rejected extends Component{
         remark:'',
         userid:'',
         created_on:'',
-        branch:'',
+        branch_prv:'',
+        branch:"",
         name:'',
         empid:this.props.eid,
         key: this.props.hkey,        
@@ -41,7 +44,8 @@ class Displaying_rejected extends Component{
         status:'sent for approval',
         items: [],
         data:[],
-        filenames : [],        
+        filenames : [],  
+        branch_options:[],      
         filepath : "",
         done:"",
         errors: {
@@ -78,9 +82,33 @@ class Displaying_rejected extends Component{
         //     default:
         //         break;
         // }    
-        this.setState({errors,[name]: value})
-          
+        this.setState({errors,[name]: value})          
       }
+
+      handlechange8=(e)=>{
+        if( e !== null ){
+        const { value } = e.target;
+        if(Number.isInteger(value) ){
+          console.log(value)        
+        } 
+        else{
+          console.log(value);               
+          this.setState({branch_prv: value}) 
+        } 
+      }
+      else{
+        this.setState({branch_prv: this.state.branch})
+      }   
+      }
+
+      handlechange7=(value,event)=>{
+        if(event!==null ){                                     
+         this.setState({
+           branch:event.Branch
+         }) 
+        }   
+    }
+    
 
     componentDidMount(){       
         console.log(this.props)
@@ -102,6 +130,7 @@ class Displaying_rejected extends Component{
                     var x = r[0];
                     console.log(r);
                     this.setState({
+                        branch_prv:x.Location,
                         branch:x.Location,
                         name:x.Emp_Name,
                         desig:x.Emp_Designation,
@@ -128,6 +157,14 @@ class Displaying_rejected extends Component{
                     })
                     console.log(this.state.filepath)
                      })
+                     axios.get(nodelink.site+'/api/items/branch')
+                    .then(res=>{
+                    this.setState({
+                        branch_options:res.data
+                        })
+                    console.log("now getting branches")
+                    
+                    })
                                   
                     console.log(this.props)
                     console.log(this.state)            
@@ -272,7 +309,10 @@ class Displaying_rejected extends Component{
                 <Redirect to='/rejected'/>
                 )
             }
-        const {errors} = this.state;
+            const filterOptions2 = createFilterOptions({
+                matchFrom: 'start',
+                stringify: (option) => option.Branch,
+              });
         return(
             <div className="container">
                        <Breadcrumb style={{marginTop:'105px'}}>
@@ -290,35 +330,23 @@ class Displaying_rejected extends Component{
                                </Col>
                             </FormGroup>
                         
-                        <FormGroup tag="fieldset" row>
-                            <legend className="col-form-label col-sm-3">Branch:</legend>
-                            <Col sm={10}>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="Marketing" checked={this.state.branch==='Marketing'} onChange={this.handlechange1}/>
-                                    Marketing
-                                    </Label>
-                                </FormGroup>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="SCM" checked={this.state.branch==='SCM'} onChange={this.handlechange1}/>
-                                    SCM
-                                    </Label>
-                                    </FormGroup>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="MFG-Hosur Rd Plant" checked={this.state.branch==='MFG-Hosur Rd Plant'} onChange={this.handlechange1}/>
-                                     MFG-Hosur Rd Plant
-                                    </Label>
-                                </FormGroup>
-                                <FormGroup check inline>
-                                    <Label check>
-                                    <Input type="radio" name="branch" value="MFG-jigani Rd plant" checked={this.state.branch==='MFG-jigani Rd plant'} onChange={this.handlechange1}/>
-                                     MFG-Jigani Rd Plant
-                                    </Label>
-                                </FormGroup>
-                                    </Col>
-                                </FormGroup>
+                            <FormGroup row>
+                         <Label for="branch" sm={3}>Branch:</Label>
+                         <Col sm={5}>
+                         <Autocomplete
+                           id="Module"
+                            options={this.state.branch_options}
+                              getOptionLabel={(option)=>option.Branch}
+                                 filterOptions={filterOptions2}
+                              style={{width:270}}
+                              onChange={this.handlechange7}
+                              inputValue={this.state.branch_prv}
+                              onInputChange={this.handlechange8}
+                              renderInput={(params)=><TextField {...params} label="Branch" variant="outlined"/>}
+                              disabled={this.state.boola}
+                               />
+                               </Col>
+                         </FormGroup>
                        <FormGroup row>
                           <Label for="name" sm={3}>FS Username:</Label>
                            <Col sm={5}>

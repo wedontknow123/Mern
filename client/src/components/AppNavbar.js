@@ -61,7 +61,7 @@ toggle=()=>{
     );
      const guestLinks=(
         <Fragment>
-           <NavItem>
+           <NavItem style={{fontSize: '20px'}}>
              <NavLink href='/register'>Register</NavLink>
              </NavItem>
              
