@@ -13,7 +13,8 @@ class Rejected_req extends Component{
         r:"",
         empid:[],
         Approver_Email:"",
-        next:""
+        next:"",
+        count:0
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -40,6 +41,11 @@ class Rejected_req extends Component{
                   empid:res.data,
                   r : "yes"
               })
+              if(this.state.empid.length>0){
+                  this.setState({
+                      count:1
+                  })
+              }
                 console.log(this.state)                      
               })
               n = n+1
@@ -60,6 +66,22 @@ class Rejected_req extends Component{
             return <Redirect to='/rejected/display'/>
         }
         const {empid}=this.state;
+        const list1=(
+            <Container>                                 
+            <ListGroup>
+                <TransitionGroup >
+                    {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons,Emp_Name})=>(
+                        <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
+                            <ListGroupItem tag="button" style={{backgroundColor:'#998242', color:'#fff',borderRadius:'5px',marginBottom:'10px'}}  onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey,Reasons)}>                                   
+                                {Emp_ID}-{Emp_Name}
+                            </ListGroupItem>                                
+                        </CSSTransition>                            
+                    ))}                        
+                </TransitionGroup>                    
+            </ListGroup>
+            <br></br>
+        </Container>
+        )
         return(
             <div>
                 <Breadcrumb style={{marginTop:'105px',marginBottom:'50px'}}>
@@ -67,20 +89,7 @@ class Rejected_req extends Component{
                 <BreadcrumbItem active>Rejected Requests</BreadcrumbItem>
                 </Breadcrumb>
                 <div className="container">                
-                    <Container>                                 
-                        <ListGroup>
-                            <TransitionGroup >
-                                {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons})=>(
-                                    <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
-                                        <ListGroupItem tag="button" style={{backgroundColor:'#998242', color:'#fff',borderRadius:'5px',marginBottom:'10px'}}  onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey,Reasons)}>                                   
-                                            {Emp_ID}
-                                        </ListGroupItem>                                
-                                    </CSSTransition>                            
-                                ))}                        
-                            </TransitionGroup>                    
-                        </ListGroup>
-                        <br></br>
-                    </Container>
+                   {this.state.count==1?list1:<h1>You have no rejected requests.</h1>}
                 </div>
             </div>
             

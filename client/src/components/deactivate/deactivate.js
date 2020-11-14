@@ -170,16 +170,27 @@ class Deactivate extends Component{
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                  <BreadcrumbItem active>Deactivate</BreadcrumbItem>
                  </Breadcrumb>
-            <Form>            
+            <Form>   
+                <FormGroup row> 
+                <Label for="exampleText"sm={3}>Emp ID<span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
+                    <Col sm={5}>       
               <Autocomplete
               id="deactivate"
               options={this.state.empid}
               getOptionLabel={(option)=>option.Emp_ID}
+              renderOption={(option)=>(
+                <React.Fragment>
+                  {option.Emp_ID} - {option.Emp_Name}
+                </React.Fragment>
+              )}
               filterOptions={filterOptions1}
               style={{width:300}}              
               onChange={this.handlechange}
               renderInput={(params)=><TextField {...params} label="Deactivate" variant="outlined"/>}
-              /><br></br>
+              />
+              </Col>
+              </FormGroup> 
+              <br></br>
               <FormGroup row>
                     <Label for="exampleText"sm={3}>Reason<span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
                     <Col sm={5}>

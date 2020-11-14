@@ -347,6 +347,11 @@ class Editdraftform extends Component{
                     id="EmpId"
                     options={this.state.items}                      
                     getOptionLabel={(option)=>option.Emp_ID}
+                    renderOption={(option)=>(
+                      <React.Fragment>
+                        {option.Emp_ID} - {option.Emp_Name}
+                      </React.Fragment>
+                    )}
                     filterOptions={filterOptions1}
                     style={{width:300}}
                     onChange={this.handlechange}                    

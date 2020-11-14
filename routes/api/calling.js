@@ -86,7 +86,7 @@ exports.get6=function(req,res,empid){
   });
 };
 exports.get7=function(req,res,useremail){ //,useremail
-  db.executeSql("SELECT Emp_ID FROM UserAccess_Header where Status='draft' and Trans_Type = 'New User Creation' and User_Email ='"+useremail+"'  ",function(data,err){ //and User_Email ='"+useremail+"'
+  db.executeSql("SELECT Emp_ID,Emp_Name FROM UserAccess_Header where Status='draft' and Trans_Type = 'New User Creation' and User_Email ='"+useremail+"'  ",function(data,err){ //and User_Email ='"+useremail+"'
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -153,7 +153,7 @@ exports.get11=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+
 };
 
 exports.getempid=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+useremail+"'
-  db.executeSql("SELECT distinct Emp_ID FROM UserAccess_Header_Master ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+  db.executeSql("SELECT distinct Emp_ID,Emp_Name FROM UserAccess_Header_Master ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
     if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -166,7 +166,7 @@ exports.getempid=function(req,res,useremail ){//,useremail  //and A.User_Email =
 exports.getstatus=function(req,resp){
   try{
 
-      db.executeSql("Select distinct A.UserAccess_Headerkey,A.Emp_ID from Email_Workflow A where A.Status<>'NULL' and A.UserAccess_Headerkey not  in (Select B.UserAccess_Headerkey from User_Credentials B WHERE A.UserAccess_Headerkey = B.UserAccess_Headerkey)",function(data,err){
+      db.executeSql("Select distinct A.UserAccess_Headerkey,A.Emp_ID,C.Emp_Name from Email_Workflow as A inner join (select Emp_ID, max(Emp_Name) as Emp_Name from UserAccess_Header group by Emp_ID) C on A.Emp_ID=C.Emp_ID where A.Status<>'NULL' and A.UserAccess_Headerkey not in  (Select B.UserAccess_Headerkey from User_Credentials B WHERE A.UserAccess_Headerkey = B.UserAccess_Headerkey)",function(data,err){
         if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -346,7 +346,7 @@ exports.getpending_requests=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT Emp_ID,UserAccess_Headerkey from Email_Workflow where Approver_Email='"+data.Approver_Email+"' and (Status is null or Status ='')",function(data,err){
+            db.executeSql("SELECT A.UserAccess_Headerkey,A.Emp_ID,B.Emp_Name from Email_Workflow as A inner join (select Emp_ID,max(Emp_Name) as Emp_Name from UserAccess_Header group by Emp_ID) B on A.Emp_ID =B.Emp_ID where Approver_Email='"+data.Approver_Email+"' and (Status is null or Status ='')",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -369,7 +369,7 @@ exports.getapprovedby=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT Approver_Name,convert(varchar,Trans_Datetime,0) as Trans_Datetime FROM Email_Workflow where UserAccess_Headerkey = '"+data.UserAccess_Headerkey+"' and (Status='A' or Status='AF')",function(data,err){
+            db.executeSql("SELECT Status,Approver_Name,convert(varchar,Trans_Datetime,0) as Trans_Datetime FROM Email_Workflow where UserAccess_Headerkey = '"+data.UserAccess_Headerkey+"' and (Status='A' or Status='AF')",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -415,7 +415,7 @@ exports.getpending_requests_IT=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("Select A.Emp_ID,A.UserAccess_Headerkey from Email_Workflow A where A.Status='AF' AND A.Emp_ID not in (Select B.Emp_ID from User_Credentials B) ",function(data,err){
+            db.executeSql("Select A.Emp_ID,A.UserAccess_Headerkey,C.Emp_Name from Email_Workflow as A inner join (select Emp_ID,max(Emp_Name) as Emp_Name from UserAccess_Header group by Emp_ID) C on A.Emp_ID =C.Emp_ID  where A.Status='AF' AND A.Emp_ID not in (Select B.Emp_ID from User_Credentials B)",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -437,7 +437,7 @@ exports.getrejected_emp_id=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("Select distinct A.Emp_ID,A.UserAccess_Headerkey,B.Reasons from UserAccess_Header A inner join Email_Workflow B on A.UserAccess_Headerkey=B.UserAccess_Headerkey where A.User_Email='"+data.User_Email+"' and B.Status='R'",function(data,err){
+            db.executeSql("Select distinct A.Emp_ID,A.UserAccess_Headerkey,B.Reasons,A.Emp_Name from UserAccess_Header A inner join Email_Workflow B on A.UserAccess_Headerkey=B.UserAccess_Headerkey where A.User_Email='"+data.User_Email+"' and B.Status='R'",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }

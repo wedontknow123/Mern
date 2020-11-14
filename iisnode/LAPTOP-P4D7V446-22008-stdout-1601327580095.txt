@@ -1,2 +1,0 @@
-
-Server started on port \\.\pipe\653a259f-d7fc-40aa-be8e-916353794e73

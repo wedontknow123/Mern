@@ -22,7 +22,7 @@ class Password extends Component{
     continue = e => {
         e.preventDefault();
         const info={
-            Email:this.props.values.mail,
+            Email:this.props.values.mail.toLowerCase(),
             Password:this.props.values.password
         }
         if(this.state.password1==this.state.password2 && this.state.password1!=''){

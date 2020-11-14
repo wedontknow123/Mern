@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{Component,Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -14,7 +14,9 @@ class Status extends Component{
     state={
         empid:[],
         selectid:'',
-        approved:[]
+        approved:[],
+        count:0,
+        count2:''
     }
     handlechange = (values,event) => {
         var i=0;        // for combobox till the next @
@@ -38,8 +40,30 @@ class Status extends Component{
       axios.post(nodelink.site+'/api/status',info)
       .then(res=>{
           this.setState({
-              approved:res.data
+              approved:res.data,
+              count:0,
+              count2:''
           })
+          console.log(this.state.approved);
+          var n;
+          for(n=0;n<this.state.approved.length;n++){
+              if(this.state.approved[n].Status=='AF        '){
+                this.setState({
+                    count2:'yes'
+                })
+            }
+          }
+          if(this.state.approved.length>0)
+          {
+              this.setState({
+                  count:1
+              })
+          }
+          else{
+              this.setState({
+                  count:2
+              })
+          }
       })
     }
 }
@@ -58,19 +82,10 @@ class Status extends Component{
             stringify: (option) => option.Emp_ID,
           });
           const {approved}=this.state;
-        return(
-            <div>
 
-                <Autocomplete
-            id="EmpId"
-            options={this.state.empid}
-            getOptionLabel={(option)=>option.Emp_ID}
-            filterOptions={filterOptions1}
-            style={{width:300}}
-            onChange={this.handlechange}
-            renderInput={(params)=><TextField {...params} label="Emp ID" variant="outlined"/>}
-            />
-            <h2>This is already been approved by:</h2>
+          const list1=(
+              <Fragment>
+                <h2>This is already been approved by:</h2>
                 <Table striped>
                 <thead>
                  <tr>
@@ -88,6 +103,29 @@ class Status extends Component{
 
                   ))}
                 </Table>
+              </Fragment>
+          )
+        return(
+            <div className='App' style={{marginTop:"200px", padding:"40px"}}>
+
+                <Autocomplete
+            id="EmpId"
+            options={this.state.empid}
+            getOptionLabel={(option)=>option.Emp_ID}
+            renderOption={(option)=>(
+                <React.Fragment>
+                  {option.Emp_ID} - {option.Emp_Name}
+                </React.Fragment>
+              )}
+            filterOptions={filterOptions1}
+            style={{width:300}}
+            onChange={this.handlechange}
+            renderInput={(params)=><TextField {...params} label="Emp ID" variant="outlined"/>}
+            />
+           
+                {this.state.count==1?list1:''}
+                {this.state.count==2?<h2>Its not been approved by anyone yet.</h2>:''}
+                {this.state.count2=='yes'?<h2>It's been successfully approved.</h2>:''}
             </div>
         )
     }

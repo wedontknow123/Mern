@@ -60,7 +60,8 @@ class Displaying1 extends Component{
         filepath : "",
         done:"",
         lol:"",
-        approvedby:[]
+        approvedby:[],
+        count:0
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -79,7 +80,7 @@ class Displaying1 extends Component{
                 this.setState({
                     info:res.data
                 })
-                
+                console.log(res.data)
                 axios.post(nodelink.site+'/api/apmaster/emp',this.props)
                 .then(res=>{            
                     console.log(res.data)
@@ -131,6 +132,11 @@ class Displaying1 extends Component{
                             this.setState({
                                 approvedby:res.data
                             })
+                            if(this.state.approvedby.length>0){
+                                this.setState({
+                                    count:1
+                                })
+                            }
                         })
                     })                 
                     console.log(this.props)
@@ -553,30 +559,11 @@ class Displaying1 extends Component{
             
         );
         const {approvedby}=this.state;
-        return(
-            <div className="container">
-                <Breadcrumb style={{marginTop:'105px'}}>
-                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
-                <BreadcrumbItem><a href="/requests">Pending Requests</a></BreadcrumbItem>
-                 <BreadcrumbItem active>Display</BreadcrumbItem>
-                 </Breadcrumb>
-                <h3>{this.props.eid} :</h3>
-                <br/>
-                {list4}
-                <br/>
-                <ListGroup>
-                    <TransitionGroup className="shopping-list">
-                        {approvedby.map(({Approver_Name,Trans_Datetime})=>(
-                            <CSSTransition key={Trans_Datetime} timeout={500} classNames="fade">
-                                <ListGroupItem>                                   
-                                  <p>This form has already been approved by {Approver_Name} on {Trans_Datetime}</p>
-                                </ListGroupItem>
-                            </CSSTransition>
-                        ))}
-                    </TransitionGroup>
-                </ListGroup>
+
+        const list6=(
+            <Fragment>
                 <h2>This is already been approved by:</h2>
-                <Table striped>
+              <Table striped>
                 <thead>
                  <tr>
                  <th>Approver Name</th>
@@ -594,6 +581,20 @@ class Displaying1 extends Component{
                   ))}
                 </Table>
                 <br/>
+            </Fragment>
+        )
+        return(
+            <div className="container">
+                <Breadcrumb style={{marginTop:'105px'}}>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                <BreadcrumbItem><a href="/requests">Pending Requests</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Display</BreadcrumbItem>
+                 </Breadcrumb>
+                <h3>{this.props.eid} :</h3>
+                <br/>
+                {list4}
+                <br/>
+                {(this.state.count==1)?list6:''}
                {(this.state.dep===1)?list3:list2}
                {(this.state.last===1)?list1:''}
             </div>

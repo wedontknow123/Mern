@@ -73,7 +73,6 @@ class Deleteform extends Component{
           }
       }
     }
-
     render(){
         if(this.state.lol==="yes"){
           alert("Draft deleted successfully !")
@@ -94,10 +93,16 @@ class Deleteform extends Component{
             id="delete"
             options={this.state.empid}
             getOptionLabel={(option)=>option.Emp_ID}
+            renderOption={(option)=>(
+              <React.Fragment>
+                {option.Emp_ID} - {option.Emp_Name}
+              </React.Fragment>
+            )}
+            
             filterOptions={filterOptions1}
             style={{width:300}}
             onChange={this.handlechange}
-            renderInput={(params)=><TextField {...params} label="Delete" variant="outlined"/>}
+            renderInput={(params)=><TextField {...params} label="Emp ID" variant="outlined"/>}
             /><br></br>
             <Button style={{backgroundColor:'#393939'}} type="button" onClick={this.handlesubmit} disabled={this.state.boola} id="delete">Delete</Button>
 

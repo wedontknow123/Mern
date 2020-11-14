@@ -21,8 +21,9 @@ class Mail extends Component{
     continue = e => {
         e.preventDefault();
         const info={
-            Email:this.props.values.mail
+            Email:this.props.values.mail.toLowerCase()
         }
+        console.log(this.props.values.mail.toLowerCase());
         axios.post(nodelink.site+"/api/register",info)
         .then(res=>{
             var now = new Date();
@@ -30,7 +31,7 @@ class Mail extends Component{
             if(res.data.length==1){
                 const token = otp.getToken()
                 const info2={
-                    Email:this.props.values.mail,
+                    Email:this.props.values.mail.toLowerCase(),
                     OTP:token,
                     Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
                 }

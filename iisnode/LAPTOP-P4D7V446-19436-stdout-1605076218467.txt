@@ -1,0 +1,58 @@
+
+Server started on port \\.\pipe\68562224-f666-44b0-abfd-0e56491785ea
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+[
+  {
+    SL_NO: '128',
+    Username: 'good_hod',
+    Email: 'goodhod@d.com',
+    Password: '$2a$10$/xD/Ogk.3vbwq/4gtIFYzO7CAQOoSf80IeTyw4K7EVb8vo/yRC5y.'
+  }
+]
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]
+[
+  {
+    SL_NO: '122',
+    Username: 'good',
+    Email: 'good@d.com',
+    Password: '$2a$10$4fNH18paIejO7fPeCElRSeZZeycLb6/REBHAdns8pwrK3V0laGA1e'
+  }
+]

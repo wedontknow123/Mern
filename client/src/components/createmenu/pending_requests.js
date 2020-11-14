@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -13,7 +13,8 @@ class Pending_requests extends Component{
         r:"",
         empid:[],
         Approver_Email:"",
-        next:""
+        next:"",
+        count:0
     }
     static propTypes={
         auth:PropTypes.object.isRequired
@@ -37,6 +38,12 @@ class Pending_requests extends Component{
                   empid:res.data,
                   r : "yes"
               })
+              if(this.state.empid.length>0){
+                  this.setState({
+                      count:1
+                  })
+
+              }
                 console.log(this.state)                      
               })
               n = n+1
@@ -56,6 +63,23 @@ class Pending_requests extends Component{
             return <Redirect to='/requests/display'/>
         }
         const {empid}=this.state;
+        const list1=(
+            <Fragment>
+                 <Container>                
+                        <ListGroup>
+                            <TransitionGroup >
+              {empid.map(({Emp_ID,Emp_Name,UserAccess_Headerkey})=>(
+                                    <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
+                                        <ListGroupItem tag="button" style={{backgroundColor:'#998242',color:'#fff',borderRadius:'5px',marginBottom:'10px'}} onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey)}> 
+                                        {Emp_ID}-{Emp_Name}                                  
+                                        </ListGroupItem>
+                                    </CSSTransition>
+                                ))}
+                                </TransitionGroup>
+                        </ListGroup>
+                    </Container>
+            </Fragment>
+        )
         return(
             <div>
                 <Breadcrumb style={{marginTop:'105px',marginBottom:'50px'}}>
@@ -63,19 +87,9 @@ class Pending_requests extends Component{
                 <BreadcrumbItem active>Pending Requests</BreadcrumbItem>
                 </Breadcrumb>
                 <div className="container">                
-                    <Container>                
-                        <ListGroup>
-                            <TransitionGroup >
-                                {empid.map(({Emp_ID,UserAccess_Headerkey})=>(
-                                    <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
-                                        <ListGroupItem tag="button" style={{backgroundColor:'#998242',color:'#fff',borderRadius:'5px',marginBottom:'10px'}} onClick={this.handleclick.bind(this,Emp_ID,UserAccess_Headerkey)}>                                   
-                                            {Emp_ID}
-                                        </ListGroupItem>
-                                    </CSSTransition>
-                                ))}
-                            </TransitionGroup>
-                        </ListGroup>
-                    </Container>
+                   
+                {this.state.count==1?list1:<h1>You have no pending requests.</h1>}
+              
                 </div>
 
             </div>

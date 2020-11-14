@@ -22,26 +22,35 @@ class home extends Component{
     
     render(){
         return(
-            <div>
+            <div >
                 <Breadcrumb style={{marginTop:'105px',padding:'0px 50px'}}>
                 <BreadcrumbItem active>Home</BreadcrumbItem>                
                 </Breadcrumb>
-                {/* <div className="vuttons_1" >
-                    
-                    <div  >
-                        <div className="row1"><Button className="bt-0" href='/options' title="Create New User">New User Creation</Button></div>
-                        <div className="row1"><Button className="bt-1" href='/changes_required'title="Change User Data">Changes Required</Button></div>
-                        <div className="row1"><Button className="bt-2" href='/deactivate' title="Deactivate User">Deactivation</Button></div>
-                    </div>
-                    <br/>
-                    <div className="row2" >
-                        <div className="row1"><Button className="bt-3" href="/requests" title="Check Pending Requests">Pending Requests</Button></div>
-                        <div className="row1"><Button className="bt-4" href="/rejected" title="Check Rejected Requests">Rejected Requests</Button></div>
-                        <div className="row1"><Button className="bt-4" href="/status" title="Check Rejected Requests">Status</Button></div>
-                        <div className="row1"><Button className="bt-4" href="/register" title="register">Register</Button></div>
+                <h1 style={{textAlign:"center"}}>Welcome to</h1>
+                <h1 style={{textAlign:"center"}}>FS UserAccess Management System</h1>
+                <br></br>
+                <br></br>
+                <h4 style={{textAlign:"center" ,padding:"0px 50px"}}>Start by clicking the menu buuton  on the top right corner of the screen.
+                 Select the screen that you would like to use. Log in before accessing any screen.
+                
+                    If you are unable register with your official email, contact the IT department. </h4>
 
-                    </div>                
-                </div> */}
+                    <br></br>
+                    <br></br>
+                    <h1 style={{
+fontFamily: "Impact,Charcoal, sans-serif",
+fontSize: "80px",
+letterSpacing: "-1.8px",
+wordSpacing: "1px",
+color: "#151FB8",
+textDecoration: "none solid rgb(68, 68, 68)",
+fontStyle: "normal",
+fontvariant: "normal",
+texttransform: "uppercase",
+fontWeight:"600",
+textAlign:"center"
+}}>FOURTH SHIFT</h1>
+
             </div>
         )
     }
