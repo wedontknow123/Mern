@@ -12,12 +12,14 @@ import {
 
 } from 'reactstrap';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 var nodelink=require('../nodelink.json');
 
 class Password extends Component{
     state={
         password1:'',
-        password2:''
+        password2:'',
+        count:0
     }
     continue = e => {
         e.preventDefault();
@@ -29,7 +31,10 @@ class Password extends Component{
 
            axios.post(nodelink.site+"/api/register/password",info)
            .then(res=>{
-            this.props.nextStep();
+            //this.props.nextStep();
+            this.setState({
+              count:1
+            })
            })
         }
         else{
@@ -61,14 +66,18 @@ class Password extends Component{
       }
     render(){
         const { values, handleChange } = this.props;
-        
+        if(this.state.count==1){
+          alert("Password successfully saved. You can now login using the new password.")
+          return <Redirect to='/'/>
+        }
         return(
-          <div>
+          <div style={{marginLeft:"30px",marginTop:"30px"}}>
             
                 
              <Form>
-            <FormGroup>
-              <Label>Enter new password:</Label>
+            <FormGroup row>
+              <Label sm={5}>Enter new password:</Label>
+            <Col sm={6}>
             <Input
             type='password'
               placeholder="Password"
@@ -76,9 +85,11 @@ class Password extends Component{
                   defaultValue={values.password}
                   name='password1'
             />
-            </FormGroup>
-            <FormGroup>
-              <Label>Confirm new password:</Label>
+            </Col>
+            </FormGroup >
+            <FormGroup row>
+              <Label sm={5}>Confirm new password:</Label>
+              <Col sm={6}>
             <Input
             type='password'
               placeholder="Password"
@@ -86,11 +97,12 @@ class Password extends Component{
                   defaultValue={values.password}
                   name='password2'
             />
+            </Col>
             </FormGroup>
-            <Button
+            <Button style={{marginLeft:"120px"}}
               onClick={this.back}
             >Back</Button>
-            <Button
+            <Button style={{marginLeft:"40px"}}
               onClick={this.continue}
             >Confirm</Button>
             </Form>

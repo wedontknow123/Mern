@@ -28,7 +28,7 @@ var now = new Date();
 var c=0 
 var nodelink=require('../../nodelink.json');
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-
+const data=new FormData();
 class Newuserform extends Component{
 
     uploadObj = new UploaderComponent();     
@@ -40,7 +40,7 @@ class Newuserform extends Component{
         depart:"",
         empid:null,
         email:'',
-        doj:'',
+        doj:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
         emptype:'Permanent',
         software:'FS',
         reason:'',
@@ -245,7 +245,7 @@ class Newuserform extends Component{
             alert("Successfully sent for approval")
             else
             alert("Successfully saved as draft")
-            return <Redirect to='/options'/>     //the final return should be inside an else ....         
+            return <Redirect to='/'/>     //the final return should be inside an else ....         
         }
         
         const filterOptions1 = createFilterOptions({
@@ -261,7 +261,6 @@ class Newuserform extends Component{
             <div className="container">
                 <Breadcrumb style={{marginTop:'105px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
-                <BreadcrumbItem><a href="/options">New User Creation Menu</a></BreadcrumbItem>
                  <BreadcrumbItem active>Create New User Form</BreadcrumbItem>
                  </Breadcrumb>
                 <Form  > {/*onSubmit={this.handlechange4} // should have a onsubmit attribute to disable bothe buttons */} 

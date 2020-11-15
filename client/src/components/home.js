@@ -30,7 +30,7 @@ class home extends Component{
                 <h1 style={{textAlign:"center"}}>FS UserAccess Management System</h1>
                 <br></br>
                 <br></br>
-                <h4 style={{textAlign:"center" ,padding:"0px 50px"}}>Start by clicking the menu buuton  on the top right corner of the screen.
+                <h4 style={{textAlign:"center" ,padding:"0px 50px"}}>Start by clicking the menu button on the top left corner of the screen.
                  Select the screen that you would like to use. Log in before accessing any screen.
                 
                     If you are unable register with your official email, contact the IT department. </h4>

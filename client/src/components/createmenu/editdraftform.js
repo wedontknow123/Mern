@@ -367,8 +367,11 @@ class Editdraftform extends Component{
         if(this.state.done=='yes'){
           console.log("ALL DONE!!!")
           if(lol=="yes")
-            alert("Successfully sent for approval")
-          return  <Redirect to='/options'/>            
+            alert("Successfully sent for approval.")
+          else{
+            alert("Successfully saved as draft.")
+          }
+          return  <Redirect to='/'/>            
         }
         const filterOptions1 = createFilterOptions({   //for combo box till the next @
             matchFrom: 'start',
@@ -382,7 +385,6 @@ class Editdraftform extends Component{
             <div className="container">
                        <Breadcrumb style={{marginTop:'105px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
-                <BreadcrumbItem><a href="/options">New User Creation Menu</a></BreadcrumbItem>
                  <BreadcrumbItem active>Edit User Form</BreadcrumbItem>
                  </Breadcrumb> 
                     <Autocomplete

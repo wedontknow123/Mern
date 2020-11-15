@@ -61,18 +61,21 @@ class Mail extends Component{
     render(){
         const { values, handleChange } = this.props;
         return(
-        <div className='app'>
-          <Form>
-            <FormGroup>
-              <Label>Email :</Label>
+        <div className='app' style={{marginLeft:'90px',marginTop:'60px'}} >
+          <Form >
+            <FormGroup row >
+              <Label sm={2}>Email:</Label>
+              <Col sm={8}>
             <Input
               placeholder="Enter Your Mail ID"
               type='email'
               onChange={handleChange('mail')}
               defaultValue={values.mail}
             />
+            </Col>
             </FormGroup>
-            <Button
+            <br></br>
+            <Button style={{marginLeft:"120px"}}
               onClick={this.continue}
             >Continue</Button>
             </Form>

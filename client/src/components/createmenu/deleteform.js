@@ -86,7 +86,6 @@ class Deleteform extends Component{
             <div className="container">
               <Breadcrumb style={{marginTop:'105px',marginBottom:'50px'}}>
                 <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
-                <BreadcrumbItem><a href="/options">New User Creation Menu</a></BreadcrumbItem>
                  <BreadcrumbItem active>Delete</BreadcrumbItem>
                  </Breadcrumb>
             <Autocomplete

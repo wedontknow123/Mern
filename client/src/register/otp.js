@@ -31,6 +31,9 @@ class Otp extends Component{
             if(res.data.length>0){
                 this.props.nextStep();
             }
+            else{
+              alert("OTP has expired or it's incorrect.")
+            }
         })
         console.log(info)
       };
@@ -65,31 +68,34 @@ class Otp extends Component{
         const { values, handleChange } = this.props;
         
         return(
-          <div>
+          <div style={{marginLeft:'70px',marginTop:'50px'}}>
          
          <Form>
          
-            <FormGroup>
-              <Label>Enter OTP</Label>
+            <FormGroup row>
+              <Label sm={3}>Enter OTP :</Label>
+              <Col sm={7}>
             <Input
               placeholder="OTP"
               onChange={handleChange('otp')}
               defaultValue={values.otp}
             />
+            </Col>
             </FormGroup>
-            <Button
+            <Button 
               onClick={this.back}
+              style={{marginLeft:"80px"}}
             >Back</Button>
-            <Button
+            <Button style={{marginLeft:"40px"}}
               onClick={this.continue}
             >Continue</Button>
             <br></br>
-            <Button id="tooltip" onClick={this.regen}>Regenerate OTP</Button>
+            <Button id="tooltip" style={{marginLeft:"90px",marginTop:'10px'}} onClick={this.regen}>Regenerate OTP</Button>
             <Tooltip placement="right" isOpen={this.state.toggle} target="tooltip" toggle={this.toggle}>
             Generate it only if you your previous OTP has expired.
             </Tooltip>
             <br/>
-            <Label style={{color:'red',fontSize:'20px' }} >OTP valid only for 48 hours</Label>
+            <Label style={{color:'black',fontSize:'20px',marginLeft:'40px' }} >OTP is valid only for 48 hours.</Label>
             </Form>
             
       </div>

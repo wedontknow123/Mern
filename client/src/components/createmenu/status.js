@@ -106,8 +106,11 @@ class Status extends Component{
               </Fragment>
           )
         return(
-            <div className='App' style={{marginTop:"200px", padding:"40px"}}>
-
+            <div className='App' style={{marginTop:"0px", padding:"40px"}}>
+                <Breadcrumb style={{marginTop:'75px'}}>
+                <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                 <BreadcrumbItem active>Status</BreadcrumbItem>
+                 </Breadcrumb> 
                 <Autocomplete
             id="EmpId"
             options={this.state.empid}

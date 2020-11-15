@@ -56,7 +56,8 @@ class Screens_test extends Component{
           itr:'',
           valid:'',
           reasonl:'',
-          reason:''
+          reason:'',
+          mod:0
         };
 
          handleclick2=()=>{
@@ -99,7 +100,8 @@ class Screens_test extends Component{
                 itr:"yes"
               },()=>{
                 console.log("now savin into approve master");
-                this.handleclick()
+                //this.handleclick()//mistakeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+                this.final_s()
               })
              }
            }
@@ -247,9 +249,14 @@ class Screens_test extends Component{
         screens:[],
         module:'',
         selectedscreen:[],
-        boola:false
-        })
+        boola:false,
+        mod:1
+        },()=>{
+          this.setState({
+            mod:0
+          })
 
+        })
    }
 
     componentDidMount(){
@@ -329,17 +336,12 @@ class Screens_test extends Component{
             </Fragment>
         );
         const filterOptions1 = createFilterOptions({
-            matchFrom: 'start',
-            stringify: (option) => option.Module,
-          });
-
-          // <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>
-        return(
-           <div>
-             <div style={{position:'absolute'}} >
-                <Label name="screens">Choose Screens :</Label>
-                <br/>
-                <Autocomplete
+          matchFrom: 'start',
+          stringify: (option) => option.Module,
+        });
+        const list5=(
+          <Fragment>
+           <Autocomplete
                 id="Module"
                 options={this.state.items}
                 getOptionLabel={(option)=>option.Module}
@@ -349,6 +351,17 @@ class Screens_test extends Component{
                 disabled={this.state.boola}
                 renderInput={(params)=><TextField {...params} label="Module" variant="outlined"/>}
                 />
+          </Fragment>
+        );
+        
+
+          // <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>
+        return(
+           <div>
+             <div style={{position:'absolute'}} >
+                <Label name="screens">Choose Screens :</Label>
+                <br/>
+                {(this.state.mod==0)?list5:''}
                 <br/>
                 {(this.state.screens.length&&this.state.module)?list2:''}
                 {(this.state.selectedscreen.length)?list3:''}
@@ -405,7 +418,7 @@ class Screens_test extends Component{
                 </Col>
               </FormGroup>
              <FormGroup row>
-                <Label for="exampleText"sm={3}>Reason:</Label>
+                <Label for="exampleText"sm={3}>Remarks:</Label>
                 <Col sm={5}>
                 <Input type="textarea" name="reason" id="reason" maxLength='150' onChange={this.handlechange2}/>
                 {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}

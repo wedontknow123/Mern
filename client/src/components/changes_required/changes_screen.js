@@ -57,7 +57,8 @@ class Changes_screen extends Component{
           r : '',
           valid:'',
           reasonl:'',
-          reason:''
+          reason:'',
+          mod:0
         };
         
         handleclick2=()=>{
@@ -274,7 +275,12 @@ class Changes_screen extends Component{
         screens:[],
         module:'',
         selectedscreen:[],
-        boola:false
+        boola:false,
+        mod:1
+        },()=>{
+          this.setState({
+            mod:0
+          })
         })
 
    }
@@ -380,7 +386,7 @@ class Changes_screen extends Component{
             <div style={{position:'absolute'}}>
             <Label name="screens">Choose Screens <span className="required" style={{color:'red',fontSize:'20px'}}>*</span>:</Label>
               <br/>
-              {list5}
+              {this.state.mod==0?list5:''}
               <br/>
               {(this.state.screens.length&&this.state.module)?list2:''}
               {(this.state.selectedscreen.length)?list3:''}

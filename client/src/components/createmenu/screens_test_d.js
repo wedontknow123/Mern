@@ -58,7 +58,8 @@ class Screens_test_d extends Component{
           r : '',
           valid:'',
           reasonl:'',
-          reason:''
+          reason:'',
+          mod:0
         };
         
         handleclick2=()=>{
@@ -138,7 +139,10 @@ class Screens_test_d extends Component{
              this.props.approval1(info);            
              this.setState({
                itr:"yes"
-             },()=>{console.log("now savin into approve master");this.handleclick()})
+             },()=>{console.log("now savin into approve master");
+             //this.handleclick()//mistakeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+            this.final_s();
+            })
              
             }
           }
@@ -305,7 +309,12 @@ class Screens_test_d extends Component{
         screens:[],
         // module:'', 
         selectedscreen:[],
-        boola:false
+        boola:false,
+        mod:1
+        },()=>{
+          this.setState({
+            mod:0
+          })
         })
 
    }
@@ -446,7 +455,7 @@ class Screens_test_d extends Component{
             <div style={{position:'absolute'}}>
                <Label name="screens">Choose Screens :</Label>
                <br/>
-              {list5}
+              {(this.state.mod==0)?list5:''}
               <br/>
               {(this.state.screens.length&&this.state.module)?list2:''}
               {(this.state.selectedscreen.length)?list3:''}
@@ -504,7 +513,7 @@ class Screens_test_d extends Component{
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="exampleText"sm={3}>Reason:</Label>
+                <Label for="exampleText"sm={3}>Remarks:</Label>
                 <Col sm={5}>
                 <Input type="textarea" name="reason" id="reason" maxLength='150' disabled={this.props.Fields.boola} onChange={this.handlechange2} value={this.state.reason}/>
                 {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}

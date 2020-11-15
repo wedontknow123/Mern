@@ -63,8 +63,6 @@ class Form extends Component{
             handlepassword={this.handlepassword}
           />     
           );
-        case 4:
-          return <Confirm/>;
         default:
           (console.log('This is a multi-step form built with React.'))
       }
