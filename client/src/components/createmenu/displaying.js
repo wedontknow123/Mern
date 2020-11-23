@@ -325,6 +325,9 @@ class Displaying1 extends Component{
         switch (name) {            
             case 'reason': 
                 reasonl = `${value.length}/150`                
+                break; 
+            case 'remark': 
+                reasonl = `${value.length}/150`                
                 break;                
             default:
                 break;
@@ -427,7 +430,7 @@ class Displaying1 extends Component{
                     </Col>                                    
                 </FormGroup>
                 <FormGroup row>
-                    <Label for="name" sm={3}>FS Username:</Label>
+                    <Label for="name" sm={3}>Employee Name</Label>
                     <Col sm={5}>
                         <Input type="text" name="name" maxLength='100' id="name" value={this.state.name} disabled />
                     </Col>
@@ -475,7 +478,7 @@ class Displaying1 extends Component{
                     </Col>
                 </FormGroup>
                 <FormGroup row>
-                    <Label for="exampleText"sm={3}>reason:</Label>
+                    <Label for="exampleText"sm={3}>Remarks:</Label>
                     <Col sm={5}>
                         <Input type="textarea" name="reason" id="reason"  maxLength='150' value={this.state.reason} disabled/>                        
                     </Col>
@@ -508,7 +511,7 @@ class Displaying1 extends Component{
         const list2=(            
                 <Form> 
                 <FormGroup row>
-                    <Label for="exampleText"sm={3}>Remarks:</Label>
+                    <Label for="exampleText"sm={3}>Reason:</Label>
                     <Col sm={5}>
                         <Input type="textarea" name="reason" id="reason"  maxLength='150'  onChange={this.handlechange1}/>
                         {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
@@ -516,7 +519,7 @@ class Displaying1 extends Component{
                 </FormGroup>
                     <br/>                             
                 <Fragment>                
-                    <Button onClick={this.handleclick1} style={{margin:5, backgroundColor:'#393939'}} id="approve">Approve</Button>
+                    <Button onClick={this.handleclick1} style={{margin:5 ,backgroundColor:'#393939'}} id="approve">Approve</Button>
                     <Button onClick={this.handle_rejection} style={{backgroundColor:'#393939'}} id="reject">Reject</Button>
                 </Fragment>
                 </Form>
@@ -527,7 +530,7 @@ class Displaying1 extends Component{
             <Fragment>
              <Form onSubmit={this.handlesubmit } >
              <FormGroup row>
-                          <Label for="FS_SS User ID" sm={3}>FS_SS User ID:</Label>
+                          <Label for="FS_SS User ID" sm={3}>Employee ID:</Label>
                            <Col sm={5}>
                              <Input type="text" name="userid" id="uerid" onChange={this.handlechange1}/>
                            </Col>
@@ -546,7 +549,8 @@ class Displaying1 extends Component{
                 <FormGroup row>
                                <Label for="exampleText"sm={3}>Remarks</Label>
                                <Col sm={5}>
-                               <Input type="textarea" name="remark" id="remark" onChange={this.handlechange1}/>
+                               <Input type="textarea" name="remark" id="remark" onChange={this.handlechange1} maxLength='150'/>
+                               {this.state.remark.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                                </Col>
                 </FormGroup>
                 <FormGroup>
@@ -591,9 +595,13 @@ class Displaying1 extends Component{
                  <BreadcrumbItem active>Display</BreadcrumbItem>
                  </Breadcrumb>
                 <h3>{this.props.eid} :</h3>
+                <div style={{border: '2px solid #000000',borderRadius:'9px 9px 9px 9px',padding:'10px'}}>
+
                 <br/>
                 {list4}
                 <br/>
+                </div>
+                <br></br>
                 {(this.state.count==1)?list6:''}
                {(this.state.dep===1)?list3:list2}
                {(this.state.last===1)?list1:''}

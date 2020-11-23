@@ -21,7 +21,6 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete,{createFilterOptions} from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
 import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';    
-
 var dateFormat = require('dateformat');
 var n = 1;
 var now = new Date();
@@ -424,7 +423,7 @@ class Editdraftform extends Component{
                                </Col>
                          </FormGroup>
                        <FormGroup row>
-                          <Label for="name" sm={3}>FS Username:</Label>
+                          <Label for="name" sm={3}>Employee Name:</Label>
                            <Col sm={5}>
                              <Input type="text" name="name" maxLength='60' id="name" value={this.state.name} disabled={this.state.boola} onChange={this.handlechange1} />
                              {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}

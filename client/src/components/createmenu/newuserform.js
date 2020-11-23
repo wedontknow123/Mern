@@ -12,7 +12,7 @@ import {
 
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {getEmpid,getHeaderkey,getdepartment} from '../../actions/itemActions';//addItem,
+import {getapprovalinfo,approval1,getEmpid,getHeaderkey,getdepartment} from '../../actions/itemActions';//addItem,
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -46,12 +46,17 @@ class Newuserform extends Component{
         reason:'',
         reasonl:'',
         key:'',
+        i:1,
+        j:1,
         done:'',
         file:null,
         filepath:[],
         status:'draft' ,
         department_options:[],
         branch_options:[],
+        itr:'',
+        v:'',
+        rea:'',
         errors: {
             name:'',
             empid:'',
@@ -109,7 +114,16 @@ class Newuserform extends Component{
          }) 
         }   
     }
-
+    temp=(itr,v,rea)=>{
+        console.log(v);
+        this.setState({
+            v:v,
+            itr:itr,
+            rea:rea
+        },()=>{
+            console.log(this.state)
+        })
+    }
     handlechange7=(value,event)=>{
         if(event!==null ){                                     
          this.setState({
@@ -118,26 +132,26 @@ class Newuserform extends Component{
         }   
     }
     
-    getheader=()=>{
-        var v='';
-        axios.get(nodelink.site+'/api/items/key')
-        .then(res=>{
-            v=res.data[0][''];
-            console.log(v);
-            if(v==null){
-               this.setState({
-                   key:1
-               })
-            }
-            else {
-                v=v+1
-                console.log("now getting header key")
-                this.setState({
-                    key:v
-                })
-            }
-        })
-    }
+    // getheader=()=>{
+    //     var v='';
+    //     axios.get(nodelink.site+'/api/items/key')
+    //     .then(res=>{
+    //         v=res.data[0][''];
+    //         console.log(v);
+    //         if(v==null){
+    //            this.setState({
+    //                key:1
+    //            })
+    //         }
+    //         else {
+    //             v=v+1
+    //             console.log("now getting header key")
+    //             this.setState({
+    //                 key:v
+    //             })
+    //         }
+    //     })
+    // }
    
     componentDidMount(){
         axios.get(nodelink.site+'/api/items/department')
@@ -152,28 +166,61 @@ class Newuserform extends Component{
                     branch_options:res.data
                  })
             console.log("now getting branches")
-            this.getheader()
+            //this.getheader()    change1
             })
         })
     }
-       
+       componentDidUpdate(){
+           if((this.state.i==1)){
+               if((this.props.hkey!=='')&&(this.state.v!=='')){
+                   this.setState({
+                       i:2,
+                       j:2
+                   },()=>{
+                       console.log(this.state);
+                    this.handlechange4(this.state.itr,this.state.v,this.state.rea);
+                   })
+                   
+               }
+               
+           }
+           else if(this.state.j==2){
+            if(this.props.approver_name!==''){
+                const info={
+                    UserAccess_Headerkey:this.props.hkey,
+                    Emp_ID:this.state.empid,
+                    Approver_Name:this.props.approver_name,
+                    Approver_Email:this.props.approver_email
+                  }
+                  console.log(info);
+                  this.props.approval1(info);
+                  this.setState({
+                      j:3
+                  })
+            }
+           }
+           
+       }
     handlechange4=(itr,v,rea)=>{         
         // let v = this.uploadObj.getFilesData()
         var x;
+        console.log(this.props);
+       
         if(v!==null){
             const data=new FormData();
             for(var y=0;y<v.length;y++){//v
                 data.append('file',v[y].rawFile);
             }            
             axios.post(nodelink.site+'/api/doc',data,{}).
-            then(res=>{                
+            then(res=>{      
+
                 console.log("now gettin new files")                
                 this.setState({
                     filepath:res.data,                    
                 },()=>{                  
                         for(x=0;x<this.state.filepath.length;x++){
                         const new5={
-                            UserAccess_Headerkey:this.state.key,
+                            UserAccess_Headerkey:this.props.hkey,
                             Emp_ID:this.state.empid,
                             Document_Name:this.state.filepath[x],
                             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
@@ -183,13 +230,13 @@ class Newuserform extends Component{
                             console.log("now saving new files"); 
                              c=c+1;
                              console.log(c)
-                            //  if(c==this.state.filepath.length){                                 
-                            //     this.handlechange3(itr) 
-                            // }                      
+                              if(c==this.state.filepath.length){                                 
+                                 this.handlechange3() 
+                             }                      
                            })                                                
                         }
-                        if(this.state.filepath.length>=0){                                 
-                            this.handlechange3(itr,rea) 
+                        if(this.state.filepath.length<=0){                                 
+                            this.handlechange3() 
                         }                                                                   
                     })
             })
@@ -210,20 +257,29 @@ class Newuserform extends Component{
             DOJ:this.state.doj,
             Employee_Type:this.state.emptype,
             Software:this.state.software,
-            Reason:rea,
+            Reason:this.state.rea,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-            UserAccess_Headerkey:this.state.key,
+            UserAccess_Headerkey:this.props.hkey,
             Status:this.state.status,
             User_Email:this.props.auth.user.Email
         }        
         axios.post(nodelink.site+'/api/items',newItem)
        .then(res=>{
+        
             console.log("now saving newuserform")
-            if(itr=="yes"){
+            if(this.state.itr=="yes"){
                 lol="yes"
                 console.log("changing state")
-                var s ={sa:'sent for approval',id:this.state.empid,key:this.state.key}
+                var s ={sa:'sent for approval',id:this.state.empid,key:this.props.hkey}
                 axios.post(nodelink.site+'/api/screens_test/upstat',s)
+                .then(res=>{
+                    const info9={
+                        UserAccess_Headerkey:this.props.hkey,
+                        Department:this.props.department
+                      }
+                      console.log(info9);
+                      this.props.getapprovalinfo(info9);
+                })
             }
             setTimeout(() => {
                 this.setState({
@@ -394,7 +450,7 @@ class Newuserform extends Component{
                              <hr width="90%" size="15" ></hr>
                              <br/>
                              <FormGroup >
-                             <Screens_test Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.handlechange4} Errors={this.state.errors} Fields={this.state}/>
+                             <Screens_test Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.temp} Errors={this.state.errors} Fields={this.state}/>
                              </FormGroup>
                              <Label style={{color:'red',fontSize:'20px' }} >* Required</Label> 
                     </Form>            
@@ -408,6 +464,8 @@ const mapStateToProps=state=>({
     item:state.item.items,
     hkey:state.item.hkey,
     eid:state.item.eid,
-    department:state.item.department
+    department:state.item.department,
+    approver_name:state.item.approver_name,
+    approver_email:state.item.approver_email
   });
-export default connect(mapStateToProps,{getdepartment})(Newuserform);//addItem,
+export default connect(mapStateToProps,{getdepartment,getapprovalinfo,approval1})(Newuserform);//addItem,

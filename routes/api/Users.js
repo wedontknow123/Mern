@@ -35,7 +35,7 @@ router.post('/',(req,res)=>{
                 jwt.sign({
                     id:data[0].SL_NO },
                     config.get('jwtSecret'),
-                    {expiresIn:3600},
+                    {expiresIn:7200},
                     (err,token)=>{
                         if(err){
                             console.log(err);

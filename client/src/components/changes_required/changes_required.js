@@ -14,7 +14,7 @@ import {
 
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {getEmpid,getHeaderkey,getOldkey,getdepartment} from '../../actions/itemActions';
+import {getEmpid,getHeaderkey,getOldkey,getdepartment,getapprovalinfo,approval1} from '../../actions/itemActions';
 import axios from 'axios';
 import { Redirect,NavLink } from 'react-router-dom';
 //import screens from './screens';
@@ -86,7 +86,7 @@ class Changes_required extends Component{
               },()=>{
                       for(var x=0;x<this.state.files.length;x++){
                           const new5={
-                              UserAccess_Headerkey:this.state.key,
+                              UserAccess_Headerkey:this.props.hkey,
                               Emp_ID:this.state.empid,
                               Document_Name:this.state.files[x],
                               Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss ")
@@ -199,9 +199,8 @@ class Changes_required extends Component{
               console.log(this.state)
             }) 
              
-            this.props.getOldkey(x.UserAccess_Headerkey); 
+            //this.props.getOldkey(x.UserAccess_Headerkey); 
             console.log(this.state)
-            this.getheader() 
         })
 
       });
@@ -271,8 +270,25 @@ class Changes_required extends Component{
           }
         }
       }
-    }
+     else if(this.props.approver_name!==""){
+        //      //console.log("3");
 
+              const info={
+                UserAccess_Headerkey:this.props.hkey,
+                Emp_ID:this.state.empid,
+                Approver_Name:this.props.approver_name,
+                Approver_Email:this.props.approver_email
+              }
+              //console.log(info);
+              this.props.approval1(info);
+              console.log("done go check in the table")
+              setTimeout(() => {
+                     this.setState({
+                         done:'yes'
+                     })
+                 }, 3000)
+    }
+  }
     handlechange1=(e)=>{
       const { name, value } = e.target;        
       //console.log(value);        
@@ -330,26 +346,7 @@ class Changes_required extends Component{
       }   
   }
   
-    getheader=()=>{
-        var v='';
-        axios.get(nodelink.site+'/api/items/key')
-        .then(res=>{
-            v=res.data[0][''];
-            //console.log(v);
-            if(v==null){
-               this.setState({
-                   key:1
-               })
-            }
-            else {
-                v=v+1
-                console.log("now getting new header key")
-                this.setState({
-                    key:v
-                })
-            }
-        })
-    }
+    
 
 
     onSubmit=(rea)=>{ 
@@ -368,18 +365,24 @@ class Changes_required extends Component{
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Status:'sent for approval',            
             Emp_ID:this.state.empid,
-            UserAccess_Headerkey:this.state.key,
+            UserAccess_Headerkey:this.props.hkey,
             User_Email:this.props.auth.user.Email
         }
         axios.post(nodelink.site+'/api/changes_required/save',newItem)
           .then(res=>{
             console.log(res);
             console.log("now saving form")
-            setTimeout(() => {
-              this.setState({
-                  done:'yes'
-              })
-          }, 3000)
+            const info9={
+              UserAccess_Headerkey:this.props.hkey,
+              Department:this.state.depart
+            }
+            console.log(info9);
+            this.props.getapprovalinfo(info9);
+          //   setTimeout(() => {
+          //     this.setState({
+          //         done:'yes'
+          //     })
+          // }, 3000)
           })
     }
 
@@ -420,7 +423,7 @@ class Changes_required extends Component{
             onChange={this.handlechange}
             renderInput={(params)=><TextField {...params} label="EmpId" variant="outlined"/>}
             />                                        {/* @ */}
-           
+           <br></br>
                 <Form >
                        <FormGroup row>
                          <Label for="branch" sm={3}>Branch:</Label>
@@ -440,7 +443,7 @@ class Changes_required extends Component{
                                </Col>
                          </FormGroup>
                        <FormGroup row>
-                          <Label for="name" sm={3}>FS Username:</Label>
+                          <Label for="name" sm={3}>Employee Name:</Label>
                            <Col sm={5}>
                              <Input type="text" name="name" id="name" maxLength='70' value={this.state.name} disabled={this.state.boola} onChange={this.handlechange1} />
                              {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}
@@ -506,7 +509,8 @@ class Changes_required extends Component{
                              <hr width="90%" size="15" ></hr>
                              <br/>
                              <FormGroup >
-                             <Changes_screen Hkey={this.state.key} Okey={this.state.okey} Department={this.state.depart} Reason={this.state.reason} Eid={this.state.empid} FSubmit={this.fileSave} Errors={this.state.errors} Fields={this.state}/>                             
+                             <Changes_screen Hkey={this.state.key} //Okey={this.state.okey}
+                              Department={this.state.depart} Reason={this.state.reason} Eid={this.state.empid} FSubmit={this.fileSave} Errors={this.state.errors} Fields={this.state}/>                             
                              </FormGroup>
                              <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
                            
@@ -523,6 +527,8 @@ const mapStateToProps=state=>({
     okey:state.item.okey,
     eid:state.item.eid,
     auth:state.auth,
-    department:state.item.department
+    department:state.item.department,
+    approver_name:state.item.approver_name,
+  approver_email:state.item.approver_email
   });
-  export default connect(mapStateToProps,{getEmpid,getHeaderkey,getOldkey,getdepartment})(Changes_required); 
+  export default connect(mapStateToProps,{getapprovalinfo,getEmpid,getHeaderkey,getOldkey,getdepartment,approval1})(Changes_required); 

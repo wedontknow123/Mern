@@ -323,6 +323,7 @@ class Displaying_rejected extends Component{
                     <Form  >
                             <h3 >{this.props.eid} :</h3>
                             <br/>
+                            <div style={{border: '2px solid #000000',borderRadius:'9px 9px 9px 9px',padding:'10px'}}>
                             <FormGroup row>
                                <Label for="exampleText"sm={3}>Reason :</Label>
                                <Col sm={5}>
@@ -348,7 +349,7 @@ class Displaying_rejected extends Component{
                                </Col>
                          </FormGroup>
                        <FormGroup row>
-                          <Label for="name" sm={3}>FS Username:</Label>
+                          <Label for="name" sm={3}>Employee name:</Label>
                            <Col sm={5}>
                              <Input type="text" name="name" maxLength='70' id="name" value={this.state.name} onChange={this.handlechange1} />
                              {/* {errors.name.length > 0 && <span className='error' style={{color:"red"}}>{errors.name}</span>} */}
@@ -418,6 +419,7 @@ class Displaying_rejected extends Component{
                              <Screens_test_d Hkey={this.state.key} Department={this.state.depart} Eid={this.state.empid} FSubmit={this.fileSave} Errors={this.state.errors} Fields={this.state} />                             
                              </FormGroup>
                              <Label style={{color:'red',fontSize:'20px' }} >* Required</Label>
+                             </div >
                           </Form>
              
             </div>

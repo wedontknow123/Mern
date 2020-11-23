@@ -38,6 +38,7 @@ export const getdepartment=(department)=>dispatch=>{
         payload: department
     })     
 };
+
 export const getOldkey=(okey)=>dispatch=>{
     dispatch({
         type:GET_oldkey,
@@ -54,7 +55,7 @@ export const approval1=(info)=>dispatch=>{
 
 export const getapprovalinfo=(info)=>dispatch=>{
     axios.post(nodelink.site+'/api/apmaster',info)
-    .then(res=>{console.log("now getting approval info")//res.data[0].Approver_Name
+    .then(res=>{console.log("now getting approval info",res.data[0].Approver_Name)//res.data[0].Approver_Name
         dispatch({
         type:send_for_approval,
         payload:res.data

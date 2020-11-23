@@ -28,7 +28,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import {getapprovalinfo,approval1} from '../../actions/itemActions';
+import {getapprovalinfo,approval1,getHeaderkey} from '../../actions/itemActions';
 var n =1;
 var a='';
 var dateFormat = require('dateformat');
@@ -58,7 +58,8 @@ class Changes_screen extends Component{
           valid:'',
           reasonl:'',
           reason:'',
-          mod:0
+          mod:0,
+          key:''
         };
         
         handleclick2=()=>{
@@ -70,85 +71,129 @@ class Changes_screen extends Component{
            }
            else{
             if(window.confirm('Are you sure you want to SEND FOR APPROVAL ?')){
-              let errors=this.props.Errors            
-              const info={
-              UserAccess_Headerkey:this.props.Hkey,
-              Department:this.props.Department
-              }
+              let errors=this.props.Errors;  
+              this.getheader();
+              // const info={
+              // UserAccess_Headerkey:this.props.Hkey,
+              // Department:this.props.Department
+              // }
               document.getElementById("approval").disabled=true;          
-              this.props.getapprovalinfo(info);
+              //this.props.getapprovalinfo(info);
             }
             else{
               document.getElementById("approval").disabled=false;
             }
           }           
         }
-
         componentDidUpdate(){
-         // console.log("1");
-          if(this.state.itr===""){
-           //console.log("2"); 
-           //console.log(this.state.r)          
-           if(this.state.r===""){
-            //console.log(this.state.data)
-            //console.log(this.props)            
-           if(this.props.Hkey!==""){
-            
-            if(this.state.key===""){
-              var a=this.props.Eid;
-              var b=this.props.Okey;
-              //console.log(a)
-              //console.log(b)
-              this.setState({
-                  empid: a,
-                  key:b
-              })} 
-            else if(n==1){
-              //console.log(this.state)
-              //do smthng abt data: [] here, to fill the table
-              axios.post(nodelink.site+'/api/changes_screen/data',this.state)
-                .then(res=>{
-                  //console.log(res)                  
-                  //console.log(res.data)
-                  var datas =[];
-                  var i;
-                  for (i=1;i<res.data.length+1;i++){
-                      var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
-                      //console.log(x)
-                      datas[i-1] = x
-                      //console.log(datas)
-                  } n=n+1                       
-                  this.setState({
-                      data : datas,
-                      r : '0' ,
-                      reason:this.props.Fields.reason                
-                      })                  
-                  console.log("now getting data for table")
-                })
-                
-              }         
-           }}
-
-            if(this.props.approver_name!==""){
-             //console.log("3");
-
-             const info={
-               UserAccess_Headerkey:this.props.Hkey,
-               Emp_ID:this.props.Eid,
-               Approver_Name:this.props.approver_name,
-               Approver_Email:this.props.approver_email
-             }
-             //console.log(info);
-             this.props.approval1(info);
-            //  var s = {sa:'sent for approval',id:this.props.Eid,key:this.props.Hkey}
-            //  axios.post('/api/screens_test_d/upstat',s).then(res=>{console.log(res)})
-             this.setState({
-               itr:"yes"
-             },()=>{console.log("now savin into approve master");this.handleclick()})
-             
-            }
-          }
+          if((this.state.itr=='')&&(this.props.Eid!=='') ){
+          console.log(this.props.Eid);
+          this.setState({
+            empid:this.props.Eid,
+            itr:'yes'
+          },()=>{
+            this.data()
+          })
         }
+       else if(this.state.r==''){
+         console.log('checkin r')
+         if(this.props.hkey!==''){
+          console.log('hkey');
+          this.setState({
+             r:'yes'
+          },()=>{
+            this.handleclick()
+          })
+        }
+      }
+        }
+        data=()=>{
+          axios.post(nodelink.site+'/api/changes_screen/data',this.state)
+                 .then(res=>{
+                   //console.log(res)                  
+                   console.log(res.data)
+                   var datas =[];
+                   var i;
+                   for (i=1;i<res.data.length+1;i++){
+                       var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
+                       //console.log(x)
+                       datas[i-1] = x
+                       //console.log(datas)
+                   } n=n+1                       
+                   this.setState({
+                       data : datas,
+                       reason:this.props.Fields.reason                
+                       })                  
+                   console.log("now getting data for table")
+                 })
+        }
+        // componentDidUpdate(){
+        //   console.log("1");
+        //   if(this.state.itr===""){
+        //    console.log("2"); 
+        //    console.log(this.state.r)          
+        //    if(this.state.r===""){
+        //     console.log(this.state.data)
+        //     console.log(this.props)            
+        //    //if(this.props.hkey!==""){
+            
+        //     if(this.state.key===""){
+        //       var a=this.props.Eid;
+        //       var b=this.props.hkey;
+        //       //console.log(a)
+        //       console.log(b)
+        //       this.setState({
+        //           empid: a,
+        //           key:b
+        //       })} 
+        //     else if(n==1){
+        //       console.log(this.state)
+        //       //do smthng abt data: [] here, to fill the table
+        //       axios.post(nodelink.site+'/api/changes_screen/data',this.state)
+        //         .then(res=>{
+        //           //console.log(res)                  
+        //           console.log(res.data)
+        //           var datas =[];
+        //           var i;
+        //           for (i=1;i<res.data.length+1;i++){
+        //               var x ={ mo: res.data[i-1].Module , sc: res.data[i-1].Screens };
+        //               //console.log(x)
+        //               datas[i-1] = x
+        //               //console.log(datas)
+        //           } n=n+1                       
+        //           this.setState({
+        //               data : datas,
+        //               r : '0' ,
+        //               reason:this.props.Fields.reason                
+        //               })                  
+        //           console.log("now getting data for table")
+        //         })
+                
+        //       }         
+        //   // }
+        //   }
+
+        //     if(this.props.approver_name!==""){
+        //      //console.log("3");
+
+        //      const info={
+        //        UserAccess_Headerkey:this.props.hkey,
+        //        Emp_ID:this.props.Eid,
+        //        Approver_Name:this.props.approver_name,
+        //        Approver_Email:this.props.approver_email
+        //      }
+        //      //console.log(info);
+        //      this.props.approval1(info);
+        //     //  var s = {sa:'sent for approval',id:this.props.Eid,key:this.props.Hkey}
+        //     //  axios.post('/api/screens_test_d/upstat',s).then(res=>{console.log(res)})
+        //      this.setState({
+        //        itr:"yes"
+        //      },()=>{console.log("now savin into approve master");
+        //      this.handleclick()})
+             
+        //     }
+        //   }
+        // }
 
         handlechange2=(e)=>{
           const { name, value } = e.target; 
@@ -225,7 +270,29 @@ class Changes_screen extends Component{
        }
 
     }     
-    
+    getheader=()=>{
+      var v='';
+      axios.get(nodelink.site+'/api/items/key')
+      .then(res=>{
+          v=res.data[0][''];
+          console.log(v);
+          if(v==null){
+             this.setState({
+                 key:1
+             })
+          }
+          else {
+              v=v+1
+              console.log("now getting new header key")
+              this.setState({
+                  key:v
+              },()=>{
+                this.props.getHeaderkey(this.state.key);
+                console.log('hkey done')
+              })
+          }
+      })
+  }
   //this will save the data to the database 
    handleclick=(e)=>{
     if(this.props.Eid===null || this.props.Department==="" || this.state.data.length==0 ){//
@@ -244,7 +311,7 @@ class Changes_screen extends Component{
             Module:this.state.data[i].mo,
             Screens:this.state.data[i].sc,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-            UserAccess_Headerkey:this.props.Hkey
+            UserAccess_Headerkey:this.props.hkey
             }         
             axios.post(nodelink.site+'/api/changes_screen/save',new2)
             .then(res=>{
@@ -465,5 +532,5 @@ const mapStateToProps=state=>({
   approver_name:state.item.approver_name,
   approver_email:state.item.approver_email
 });
-export default connect(mapStateToProps,{getapprovalinfo,approval1})(Changes_screen);
+export default connect(mapStateToProps,{getHeaderkey,getapprovalinfo,approval1})(Changes_screen);
 //export default (changes_screen);

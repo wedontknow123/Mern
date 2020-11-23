@@ -27,7 +27,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import {getapprovalinfo,approval1} from '../../actions/itemActions';
+import {getapprovalinfo,approval1,getHeaderkey} from '../../actions/itemActions';
 import { UploaderComponent  } from '@syncfusion/ej2-react-inputs';
 var nodelink=require('../../nodelink.json');
 var a='';
@@ -57,7 +57,10 @@ class Screens_test extends Component{
           valid:'',
           reasonl:'',
           reason:'',
-          mod:0
+          mod:0,
+          key:'',
+          a1:0,
+          a2:0
         };
 
          handleclick2=()=>{
@@ -73,12 +76,15 @@ class Screens_test extends Component{
           //     alert("Correct the errors (in red) and try again !")}
             if(window.confirm('Are you sure you want to SEND FOR APPROVAL ?')){
               console.log(this.props);
-              const info={
-                UserAccess_Headerkey:this.props.Hkey,
-                Department:this.props.Department
-              }
               document.getElementById("approval").disabled=true;
-              this.props.getapprovalinfo(info); 
+              //this.props.getapprovalinfo(info); 
+              this.setState({
+                itr:'yes'
+              })
+                this.getheader();
+                
+              
+              
             }
             else{
               document.getElementById("approval").disabled=false;
@@ -86,26 +92,17 @@ class Screens_test extends Component{
           }
          }
 
-         componentDidUpdate(){
-           if(this.state.itr===""){
-             if(this.props.approver_name!==""){
-              const info={
-                UserAccess_Headerkey:this.props.Hkey,
-                Emp_ID:this.props.Eid,
-                Approver_Name:this.props.approver_name,
-                Approver_Email:this.props.approver_email
-              }
-              this.props.approval1(info);
-              this.setState({
-                itr:"yes"
-              },()=>{
-                console.log("now savin into approve master");
-                //this.handleclick()//mistakeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-                this.final_s()
-              })
+          componentDidUpdate(){
+
+            if(this.state.a1===0){
+             if(this.props.hkey!==''){
+               this.final_s();
+               this.setState({
+                 a1:1
+               })
              }
-           }
-         }
+            }
+          }
 
       //handles the screens-list
       handlechange = (values,event) => {
@@ -184,11 +181,32 @@ class Screens_test extends Component{
        }
 
     }
-
+    getheader=()=>{
+      var v='';
+      axios.get(nodelink.site+'/api/items/key')
+      .then(res=>{
+          v=res.data[0][''];
+          console.log(v);
+          if(v==null){
+             this.setState({
+                 key:1
+             })
+          }
+          else {
+              v=v+1
+              console.log("now getting header key")
+              this.setState({
+                  key:v
+              },()=>{
+                     this.props.getHeaderkey(this.state.key)
+              })
+          }
+      })
+  }
     final_s=()=>{
       let v = this.uploadObj.getFilesData()
       document.getElementById("approval").disabled=true;
-      document.getElementById("draft").disabled=true;        
+      document.getElementById("draft").disabled=true;   
       var now = new Date();
       var i;
       for (i=0;i<this.state.data.length;i++){
@@ -197,7 +215,7 @@ class Screens_test extends Component{
             Module:this.state.data[i].mo,
             Screens:this.state.data[i].sc,
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
-            UserAccess_Headerkey:this.props.Hkey
+            UserAccess_Headerkey:this.props.hkey
             }
             axios.post(nodelink.site+'/api/screens_test/save',new2)
             .then(res=>{
@@ -216,14 +234,14 @@ class Screens_test extends Component{
    else{
      if(e.target.id==="draft"){
       if(window.confirm('Are you sure you want to SAVE AS DRAFT ?')){
-        this.final_s()       
+        this.getheader();       
       }
       else{
         document.getElementById("draft").disabled=false;
       }
      }
      else{
-      this.final_s()
+      this.getheader();
      }
     }
    }
@@ -441,5 +459,5 @@ const mapStateToProps=state=>({
   approver_name:state.item.approver_name,
   approver_email:state.item.approver_email
 });
-export default connect(mapStateToProps,{getapprovalinfo,approval1})(Screens_test);
+export default connect(mapStateToProps,{getHeaderkey,getapprovalinfo,approval1})(Screens_test);
 //export default (screens_test);

@@ -65,7 +65,9 @@ class Pending_requests extends Component{
         const {empid}=this.state;
         const list1=(
             <Fragment>
-                 <Container>                
+                    <h2 style={{marginTop:'45px',marginBottom:'50px'}}>Select the employee that you would like to approve:</h2>                                
+
+                 <Container>
                         <ListGroup>
                             <TransitionGroup >
               {empid.map(({Emp_ID,Emp_Name,UserAccess_Headerkey})=>(

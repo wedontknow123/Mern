@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -67,8 +67,12 @@ class Rejected_req extends Component{
         }
         const {empid}=this.state;
         const list1=(
-            <Container>                                 
+            <Fragment>
+                    <h2 style={{marginTop:'45px',marginBottom:'50px'}}>Select the employee that you would like to approve:</h2>                                
+
+            <Container> 
             <ListGroup>
+
                 <TransitionGroup >
                     {empid.map(({Emp_ID,UserAccess_Headerkey,Reasons,Emp_Name})=>(
                         <CSSTransition key={UserAccess_Headerkey} timeout={500} classNames="fade">
@@ -81,6 +85,7 @@ class Rejected_req extends Component{
             </ListGroup>
             <br></br>
         </Container>
+        </Fragment>
         )
         return(
             <div>
