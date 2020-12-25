@@ -75,6 +75,7 @@ class Screens_test_d extends Component{
                 UserAccess_Headerkey:this.props.Hkey,
                 Department:this.props.Department
                 }
+                console.log(info);
                 document.getElementById("approval").disabled=true;          
                 this.props.getapprovalinfo(info);
             }
@@ -135,6 +136,7 @@ class Screens_test_d extends Component{
                Approver_Name:this.props.approver_name,
                Approver_Email:this.props.approver_email
              }
+             console.log(info);
              //console.log(info);
              this.props.approval1(info);            
              this.setState({

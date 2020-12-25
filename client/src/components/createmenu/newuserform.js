@@ -428,7 +428,7 @@ class Newuserform extends Component{
                               <Col sm={5}>
                                   <Input type ="select" name="emptype" id="emptype" onChange={this.handlechange1} value={this.state.emptype}>
                                       <option value="Permanent">Permanent</option>
-                                      <option value="Temperory">Temperory</option>
+                                      <option value="Temporary">Temporary</option>
                                       <option value="Apprentice">Apprentice</option>
                                       <option value="Others">others</option>
                                   </Input>

@@ -2,7 +2,7 @@ var db =require("../../db");
 var httpMsgs=require("../../httpMsgs");
 var util= require("util");
 exports.getList=function(req,resp){
-db.executeSql("SELECT * FROM UserAccess_Header",function(data,err){
+db.executeSql("SELECT * FROM UserAccess_Header with (nolock)",function(data,err){
 if(err){
  httpMsgs.show500(req,resp,err);
 }
@@ -13,7 +13,7 @@ else{
 };
 
 exports.get=function(req,resp,empno,callback){
-    db.executeSql("SELECT SL_NO, Username, Email FROM [User] where SL_NO="+empno,function(data,err){  
+    db.executeSql("SELECT SL_NO, Username, Email FROM [User] with (nolock) where SL_NO="+empno,function(data,err){  
                 if(err){
                   throw err;
                  }
@@ -26,7 +26,7 @@ exports.get=function(req,resp,empno,callback){
 };
 exports.get2=function(req,resp,email,callback){
 
-  db.executeSql("SELECT SL_NO, Username, Email, Password FROM [User] where Email='"+email+"'",function(data,err){
+  db.executeSql("SELECT SL_NO, Username, Email, Password FROM [User] with (nolock) where Email='"+email+"'",function(data,err){
       
     if(err){
        throw err;
@@ -41,7 +41,7 @@ exports.get2=function(req,resp,email,callback){
 };
 
 exports.get3=function(req,resp,mod){
-  db.executeSql("SELECT Screens from FS_Transactions where Module ='"+mod+"'",function(data,err){
+  db.executeSql("SELECT Screens from FS_Transactions with (nolock) where Module ='"+mod+"'",function(data,err){
     if(err){
       httpMsgs.show500(req,resp,err);
      }
@@ -54,7 +54,7 @@ exports.get3=function(req,resp,mod){
 };
 
 exports.get4=function(req,resp){
-  db.executeSql("SELECT distinct Module from FS_Transactions",function(data,err){
+  db.executeSql("SELECT distinct Module from FS_Transactions with (nolock)",function(data,err){
     if(err){
       httpMsgs.show500(req,resp,err);
      }
@@ -65,7 +65,7 @@ exports.get4=function(req,resp){
 };
 
 exports.get5=function(req,res){
-   db.executeSql("SELECT max (UserAccess_Headerkey) from UserAccess_Header",function(data,err){
+   db.executeSql("SELECT max (UserAccess_Headerkey) from UserAccess_Header with (nolock)",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
      }
@@ -76,7 +76,7 @@ exports.get5=function(req,res){
 };
 
 exports.get6=function(req,res,empid){
-  db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+empid+"' ",function(data,err){
+  db.executeSql("SELECT * FROM UserAccess_Header with (nolock) where Emp_ID ='"+empid+"' ",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -86,7 +86,7 @@ exports.get6=function(req,res,empid){
   });
 };
 exports.get7=function(req,res,useremail){ //,useremail
-  db.executeSql("SELECT Emp_ID,Emp_Name FROM UserAccess_Header where Status='draft' and Trans_Type = 'New User Creation' and User_Email ='"+useremail+"'  ",function(data,err){ //and User_Email ='"+useremail+"'
+  db.executeSql("SELECT Emp_ID,Emp_Name FROM UserAccess_Header with (nolock) where Status='draft' and Trans_Type = 'New User Creation' and User_Email ='"+useremail+"'  ",function(data,err){ //and User_Email ='"+useremail+"'
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -97,7 +97,7 @@ exports.get7=function(req,res,useremail){ //,useremail
 };
 exports.get8=function(req,res,key){
   
-  db.executeSql("SELECT * FROM UserAccess_Detail where UserAccess_Headerkey='"+key+"'",function(data,err){
+  db.executeSql("SELECT * FROM UserAccess_Detail with (nolock) where UserAccess_Headerkey='"+key+"'",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -108,7 +108,7 @@ exports.get8=function(req,res,key){
 };
 exports.getscreens=function(req,res,id){
   
-  db.executeSql("SELECT * FROM UserAccess_Detail_Master where Emp_ID='"+id+"'",function(data,err){
+  db.executeSql("SELECT * FROM UserAccess_Detail_Master with (nolock) where Emp_ID='"+id+"'",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -118,7 +118,7 @@ exports.getscreens=function(req,res,id){
   });
 };
 exports.get9=function(req,res,callback){
-  db.executeSql("Select Top 1 Document_Path from Org_details",function(data,err){
+  db.executeSql("Select Top 1 Document_Path from Org_details with (nolock)",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
      }
@@ -131,7 +131,7 @@ exports.get9=function(req,res,callback){
   });
 };
 exports.get10=function(req,res,useremail){
-  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'sent for approval' and A.User_Email ='"+useremail+"' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Status = 'inactive')",function(data,err){
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A with (nolock) where A.Status = 'sent for approval' and A.User_Email ='"+useremail+"' and A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B with (nolock) where B.Status = 'inactive')",function(data,err){
     if(err){
       httpMsgs.show500(req,res,err);
      }
@@ -142,7 +142,7 @@ exports.get10=function(req,res,useremail){
 };
 
 exports.get11=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+useremail+"'
-  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A where A.Status = 'sent for approval' and A.Trans_Type = 'New User Creation' and A.User_Email ='"+useremail+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+  db.executeSql("SELECT  A.Emp_ID FROM UserAccess_Header A with (nolock) where A.Status = 'sent for approval' and A.Trans_Type = 'New User Creation' and A.User_Email ='"+useremail+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
     if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -153,7 +153,7 @@ exports.get11=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+
 };
 
 exports.getempid=function(req,res,useremail ){//,useremail  //and A.User_Email ='"+useremail+"'
-  db.executeSql("SELECT distinct Emp_ID,Emp_Name FROM UserAccess_Header_Master ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+  db.executeSql("SELECT distinct Emp_ID,Emp_Name FROM UserAccess_Header_Master with (nolock) ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
     if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -166,7 +166,7 @@ exports.getempid=function(req,res,useremail ){//,useremail  //and A.User_Email =
 exports.getstatus=function(req,resp){
   try{
 
-      db.executeSql("Select distinct A.UserAccess_Headerkey,A.Emp_ID,C.Emp_Name from Email_Workflow as A inner join (select Emp_ID, max(Emp_Name) as Emp_Name from UserAccess_Header group by Emp_ID) C on A.Emp_ID=C.Emp_ID where A.Status<>'NULL' and A.UserAccess_Headerkey not in  (Select B.UserAccess_Headerkey from User_Credentials B WHERE A.UserAccess_Headerkey = B.UserAccess_Headerkey)",function(data,err){
+      db.executeSql("Select distinct A.UserAccess_Headerkey,A.Emp_ID,C.Emp_Name from Email_Workflow as A with (nolock) inner join (select Emp_ID, max(Emp_Name) as Emp_Name from UserAccess_Header with (nolock) group by Emp_ID) C on A.Emp_ID=C.Emp_ID where A.Status<>'NULL' and A.UserAccess_Headerkey not in  (Select B.UserAccess_Headerkey from User_Credentials B with (nolock) WHERE A.UserAccess_Headerkey = B.UserAccess_Headerkey)",function(data,err){
         if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -181,7 +181,7 @@ exports.getstatus=function(req,resp){
 };
 
 exports.getempidinfo2=function(req,res,empid){
-  db.executeSql("SELECT * FROM UserAccess_Header_Master where Emp_ID ='"+empid+"'",function(data,err){
+  db.executeSql("SELECT * FROM UserAccess_Header_Master with (nolock) where Emp_ID ='"+empid+"'",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -191,7 +191,7 @@ exports.getempidinfo2=function(req,res,empid){
   });
 };
 exports.get12=function(req,res,empid){
-  db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+empid+"' and Trans_Type = 'New User Creation'",function(data,err){
+  db.executeSql("SELECT * FROM UserAccess_Header with (nolock) where Emp_ID ='"+empid+"' and Trans_Type = 'New User Creation'",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -201,7 +201,7 @@ exports.get12=function(req,res,empid){
   });
 };
 exports.getdepartment=function(req,res){
-  db.executeSql("Select distinct Department from Approval_Master",function(data,err){
+  db.executeSql("Select distinct Department from Approval_Master with (nolock)",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -211,7 +211,7 @@ exports.getdepartment=function(req,res){
   });
 };
 exports.getbranch=function(req,res){
-  db.executeSql("Select distinct Branch from Branch_Master",function(data,err){
+  db.executeSql("Select distinct Branch from Branch_Master with (nolock)",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -222,7 +222,7 @@ exports.getbranch=function(req,res){
 };
 exports.checkITorNot=function(req,resp,reqbody,callback){
 
-  db.executeSql("Select IT_Notification from Org_details where IT_Notification='"+reqbody.Approver_Email+"'",function(data,err){
+  db.executeSql("Select IT_Notification from Org_details with (nolock) where IT_Notification='"+reqbody.Approver_Email+"'",function(data,err){
       
     if(err){
        throw err;
@@ -241,7 +241,7 @@ exports.checkITorNot2=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-      db.executeSql("Select IT_Notification from Org_details where IT_Notification='"+data.Approver_Email+"'",function(data,err){
+      db.executeSql("Select IT_Notification from Org_details with (nolock) where IT_Notification='"+data.Approver_Email+"'",function(data,err){
         if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -264,7 +264,7 @@ exports.checkauth=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-      db.executeSql("Select Email from [User] where Status='A' and Email='"+data.Email+"'",function(data,err){
+      db.executeSql("Select Email from [User] with (nolock) where Status='A' and Email='"+data.Email+"'",function(data,err){
         if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -287,7 +287,7 @@ exports.checkotp=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-      db.executeSql("Select Email from [User] where OTP='"+data.OTP+"' and Email='"+data.Email+"'",function(data,err){
+      db.executeSql("Select Email from [User] with (nolock) where OTP='"+data.OTP+"' and Email='"+data.Email+"'",function(data,err){
         if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -309,7 +309,7 @@ exports.get_to_display=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT * from UserAccess_Header where Emp_ID='"+data.Emp_ID+"' and UserAccess_Headerkey='"+data.UserAccess_Headerkey+"'",function(data,err){
+            db.executeSql("SELECT * from UserAccess_Header with (nolock) where Emp_ID='"+data.Emp_ID+"' and UserAccess_Headerkey='"+data.UserAccess_Headerkey+"'",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -333,7 +333,7 @@ exports.getapmaster=function(req,resp,reqbody){
     console.log(reqbody);
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT TOP 1 A.* from Approval_Master A where A.Department ='"+data.Department+"' and A.Email not in (SELECT B.Approver_Email from Email_Workflow B where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and A.Email not in (Select D.Email from Approval_Master D where D.Approval_ID <= (Select E.Approval_ID from Approval_Master E where E.Email=(Select C.User_Email from UserAccess_Header C where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and E.Department='"+data.Department+"')) ",function(data,err){
+            db.executeSql("SELECT TOP 1 A.* from Approval_Master A with (nolock) where A.Department ='"+data.Department+"' and A.Email not in (SELECT B.Approver_Email from Email_Workflow B with (nolock) where B.Status ='A' and B.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and A.Email not in (Select D.Email from Approval_Master D with (nolock) where D.Approval_ID <= (Select E.Approval_ID from Approval_Master E with (nolock) where E.Email=(Select C.User_Email from UserAccess_Header C with (nolock) where C.UserAccess_Headerkey='"+data.UserAccess_Headerkey+"') and E.Department='"+data.Department+"')) ",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -356,7 +356,7 @@ exports.getpending_requests=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT A.UserAccess_Headerkey,A.Emp_ID,B.Emp_Name from Email_Workflow as A inner join (select Emp_ID,max(Emp_Name) as Emp_Name from UserAccess_Header group by Emp_ID) B on A.Emp_ID =B.Emp_ID where Approver_Email='"+data.Approver_Email+"' and (Status is null or Status ='')",function(data,err){
+            db.executeSql("SELECT A.UserAccess_Headerkey,A.Emp_ID,B.Emp_Name from Email_Workflow as A with (nolock) inner join (select Emp_ID,max(Emp_Name) as Emp_Name from UserAccess_Header with (nolock) group by Emp_ID) B on A.Emp_ID =B.Emp_ID where Approver_Email='"+data.Approver_Email+"' and (Status is null or Status ='')",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -379,7 +379,7 @@ exports.getapprovedby=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("SELECT Status,Approver_Name,convert(varchar,Trans_Datetime,0) as Trans_Datetime FROM Email_Workflow where UserAccess_Headerkey = '"+data.UserAccess_Headerkey+"' and (Status='A' or Status='AF')",function(data,err){
+            db.executeSql("SELECT Status,Approver_Name,convert(varchar,Trans_Datetime,0) as Trans_Datetime FROM Email_Workflow with (nolock) where UserAccess_Headerkey = '"+data.UserAccess_Headerkey+"' and (Status='A' or Status='AF')",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -402,7 +402,7 @@ exports.checkvaliddate=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("select datediff(hour,Trans_Datetime,GETDATE()) as diff from [User] where Email='"+data.Email+"'",function(data,err){
+            db.executeSql("select datediff(hour,Trans_Datetime,GETDATE()) as diff from [User] with (nolock) where Email='"+data.Email+"'",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -425,7 +425,7 @@ exports.getpending_requests_IT=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("Select A.Emp_ID,A.UserAccess_Headerkey,C.Emp_Name from Email_Workflow as A inner join (select Emp_ID,max(Emp_Name) as Emp_Name from UserAccess_Header group by Emp_ID) C on A.Emp_ID =C.Emp_ID  where A.Status='AF' AND A.Emp_ID not in (Select B.Emp_ID from User_Credentials B)",function(data,err){
+            db.executeSql("Select A.Emp_ID,A.UserAccess_Headerkey,C.Emp_Name from Email_Workflow as A with (nolock) inner join (select Emp_ID,max(Emp_Name) as Emp_Name from UserAccess_Header with (nolock) group by Emp_ID) C on A.Emp_ID =C.Emp_ID  where A.Status='AF' AND A.Emp_ID not in (Select B.Emp_ID from User_Credentials B with (nolock))",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -447,7 +447,7 @@ exports.getrejected_emp_id=function(req,resp,reqbody){
     if(!reqbody) throw new Error("Input not valid");
     var data = JSON.parse(reqbody);
     if(data){
-            db.executeSql("Select distinct A.Emp_ID,A.UserAccess_Headerkey,B.Reasons,A.Emp_Name from UserAccess_Header A inner join Email_Workflow B on A.UserAccess_Headerkey=B.UserAccess_Headerkey where A.User_Email='"+data.User_Email+"' and B.Status='R'",function(data,err){
+            db.executeSql("Select distinct A.Emp_ID,A.UserAccess_Headerkey,B.Reasons,A.Emp_Name from UserAccess_Header A with (nolock) inner join Email_Workflow B with (nolock) on A.UserAccess_Headerkey=B.UserAccess_Headerkey where A.User_Email='"+data.User_Email+"' and B.Status='R'",function(data,err){
             if(err){ 
              httpMsgs.show500(req,resp,err);
             }
@@ -538,7 +538,7 @@ exports.finalApprover=function(req,resp,reqbody){
   }
 };
 exports.get13=function(req,res,key,callback){//,useremail  //and A.User_Email ='"+useremail+"'
-  db.executeSql("SELECT  Document_Name FROM User_Document where UserAccess_Headerkey = '"+key+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
+  db.executeSql("SELECT  Document_Name FROM User_Document with (nolock) where UserAccess_Headerkey = '"+key+"' ",function(data,err){//A.Emp_ID not in (select B.Emp_ID from UserAccess_Header B where B.Trans_Type = 'Changes Required'
     if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -554,7 +554,7 @@ exports.get13=function(req,res,key,callback){//,useremail  //and A.User_Email ='
 };
 
 exports.get14=function(req,res,key){
-  db.executeSql("SELECT  Document_Name FROM User_Document where UserAccess_Headerkey = '"+key+"' ",function(data,err){
+  db.executeSql("SELECT  Document_Name FROM User_Document with (nolock) where UserAccess_Headerkey = '"+key+"' ",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -565,7 +565,7 @@ exports.get14=function(req,res,key){
 };
 
 exports.get15=function(req,res){
-  db.executeSql("Select Document_Path from Org_details",function(data,err){
+  db.executeSql("Select Document_Path from Org_details with (nolock)",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -575,7 +575,7 @@ exports.get15=function(req,res){
   });
 };
 exports.get16=function(req,res,eid,hkey){
-  db.executeSql("SELECT * FROM UserAccess_Header where Emp_ID ='"+eid+"' and UserAccess_Headerkey = '"+hkey+"' ",function(data,err){
+  db.executeSql("SELECT * FROM UserAccess_Header with (nolock) where Emp_ID ='"+eid+"' and UserAccess_Headerkey = '"+hkey+"' ",function(data,err){
    if(err){
      httpMsgs.show500(req,res,err);
     }
@@ -919,7 +919,7 @@ exports.login=function(req,resp,reqbody){
     var data=JSON.parse(reqbody);
     if(data){
       
-       db.executeSql("SELECT Password FROM [User] WHERE User_ID="+util.format("('%s')",data.User_ID),function(dat,err){
+       db.executeSql("SELECT Password FROM [User] with (nolock) WHERE User_ID="+util.format("('%s')",data.User_ID),function(dat,err){
         if(err){
          httpMsgs.show500(req,resp,err);
         }

@@ -18,8 +18,12 @@ const secret = 'TPQDAHVBZ5NBO5LFEQKC7V7UPATSSMFY'
 const otp = new OTP1(secret)
 var nodelink=require('../nodelink.json');
 class Mail extends Component{
+  state={
+    a:false
+  }
     continue = e => {
         e.preventDefault();
+        this.rev();
         const info={
             Email:this.props.values.mail.toLowerCase()
         }
@@ -53,10 +57,15 @@ class Mail extends Component{
             }
             else{
               alert("Email does not exist !")
+              this.rev();
             }
         })
       };
-    
+    rev=()=>{
+      this.setState({
+        a:!this.state.a
+      });
+    }
      
     render(){
         const { values, handleChange } = this.props;
@@ -76,7 +85,7 @@ class Mail extends Component{
             </FormGroup>
             <br></br>
             <Button style={{marginLeft:"120px"}}
-              onClick={this.continue}
+              onClick={this.continue} disabled={this.state.a}
             >Continue</Button>
             </Form>
         </div>

@@ -19,10 +19,12 @@ class Password extends Component{
     state={
         password1:'',
         password2:'',
-        count:0
+        count:0,
+        a:false
     }
     continue = e => {
         e.preventDefault();
+        //this.rev();
         const info={
             Email:this.props.values.mail.toLowerCase(),
             Password:this.props.values.password
@@ -38,16 +40,23 @@ class Password extends Component{
            })
         }
         else{
+          //this.rev();
           alert("Password doesn't match !")
         } 
             console.log(this.props.values)
         
         
       };
-    
+     rev=()=>{
+       this.setState({
+         a:!this.state.a
+       })
+     };
       back = e => {
+        
         e.preventDefault();
         this.props.prevStep();
+        this.rev();
       };
       handleChangepass=e=>{
           this.setState({
@@ -101,9 +110,11 @@ class Password extends Component{
             </FormGroup>
             <Button style={{marginLeft:"120px"}}
               onClick={this.back}
+              disabled={this.state.a}
             >Back</Button>
             <Button style={{marginLeft:"40px"}}
               onClick={this.continue}
+              disabled={this.state.a}
             >Confirm</Button>
             </Form>
           </div>

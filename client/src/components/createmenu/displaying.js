@@ -52,6 +52,7 @@ class Displaying1 extends Component{
         emptype:'Permanent',
         software:'FS',
         reason:'',
+        reason2:'',
         reasonl:'',
         status:'draft',
         items: [],
@@ -81,7 +82,8 @@ class Displaying1 extends Component{
                     info:res.data
                 })
                 console.log(res.data)
-                axios.post(nodelink.site+'/api/apmaster/emp',this.props)
+                //axios.post(nodelink.site+'/api/apmaster/display',this.props)
+                axios.post(nodelink.site+'/api/apmaster/display',info)
                 .then(res=>{            
                     console.log(res.data)
                     console.log(this.state.info)
@@ -227,7 +229,7 @@ class Displaying1 extends Component{
             document.getElementById("approve").disabled=true;
             const info={
             Status:'A',
-            Reason:this.state.reason,
+            Reason:this.state.reason2,
             UserAccess_Headerkey:String(this.props.hkey),
             Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
             Approver_Email:this.props.auth.user.Email,
@@ -296,7 +298,7 @@ class Displaying1 extends Component{
             document.getElementById("approve").disabled=true;
             const info={
                 Status:'R',
-                Reason:this.state.reason,
+                Reason:this.state.reason2,
                 UserAccess_Headerkey:String(this.props.hkey),
                 Trans_Datetime:dateFormat(now, "yyyy-mm-dd H:MM:ss "),
                 Approver_Email: this.props.auth.user.Email,
@@ -323,7 +325,7 @@ class Displaying1 extends Component{
         const { name, value } = e.target;
         let reasonl = this.state.reasonl;   
         switch (name) {            
-            case 'reason': 
+            case 'reason2': 
                 reasonl = `${value.length}/150`                
                 break; 
             case 'remark': 
@@ -513,7 +515,7 @@ class Displaying1 extends Component{
                 <FormGroup row>
                     <Label for="exampleText"sm={3}>Reason:</Label>
                     <Col sm={5}>
-                        <Input type="textarea" name="reason" id="reason"  maxLength='150'  onChange={this.handlechange1}/>
+                        <Input type="textarea" name="reason2" id="reason2"  maxLength='150'  onChange={this.handlechange1}/>
                         {this.state.reason.length > 0 && <span className='error' style={{color:"red"}}>{this.state.reasonl}</span>}
                     </Col>
                 </FormGroup>
@@ -530,7 +532,7 @@ class Displaying1 extends Component{
             <Fragment>
              <Form onSubmit={this.handlesubmit } >
              <FormGroup row>
-                          <Label for="FS_SS User ID" sm={3}>Employee ID:</Label>
+                          <Label for="FS_SS User ID" sm={3}>FS User ID:</Label>
                            <Col sm={5}>
                              <Input type="text" name="userid" id="uerid" onChange={this.handlechange1}/>
                            </Col>

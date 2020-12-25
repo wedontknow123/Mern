@@ -20,8 +20,13 @@ const secret = 'TPQDAHVBZ5NBO5LFEQKC7V7UPATSSMFY'
 const otp = new OTP1(secret)
 var nodelink=require('../nodelink.json');
 class Otp extends Component{
+  state={
+    toggle:false,
+    a:false
+  }
     continue = e => {
         e.preventDefault();
+        this.rev();
         const info={
             Email:this.props.values.mail.toLowerCase(),
             OTP:this.props.values.otp
@@ -32,19 +37,24 @@ class Otp extends Component{
                 this.props.nextStep();
             }
             else{
+              this.rev();
+
               alert("OTP has expired or it's incorrect.")
             }
         })
         console.log(info)
       };
-    
+      rev=()=>{
+        this.setState({
+          a:!this.state.a
+        });
+      }
       back = e => {
+        this.rev();
         e.preventDefault();
         this.props.prevStep();
       };
-     state={
-       toggle:false
-     }
+     
      toggle=()=>{
        this.setState(prevState=>({
          toggle:!prevState.toggle
@@ -52,6 +62,9 @@ class Otp extends Component{
      }
      regen=()=>{
        var now=new Date();
+       this.rev();
+
+       
        const token=otp.getToken()
        const info={
          Email:this.props.values.mail.toLowerCase(),
@@ -61,8 +74,12 @@ class Otp extends Component{
        axios.post(nodelink.site+"/api/register/otp",info)
        .then(res=>{
           console.log(info);
+          alert("Check your mail for your new OTP.")
+          this.rev();
+          this.props.prevStep();
        }
        )
+      
      }
     render(){
         const { values, handleChange } = this.props;
@@ -85,12 +102,15 @@ class Otp extends Component{
             <Button 
               onClick={this.back}
               style={{marginLeft:"80px"}}
+              disabled={this.state.a}
             >Back</Button>
             <Button style={{marginLeft:"40px"}}
               onClick={this.continue}
+              disabled={this.state.a}
             >Continue</Button>
             <br></br>
-            <Button id="tooltip" style={{marginLeft:"90px",marginTop:'10px'}} onClick={this.regen}>Regenerate OTP</Button>
+            <br></br>
+            <Button id="tooltip" style={{marginLeft:"90px",marginTop:'10px'}} onClick={this.regen} disabled={this.state.a}>Regenerate OTP</Button>
             <Tooltip placement="right" isOpen={this.state.toggle} target="tooltip" toggle={this.toggle}>
             Generate it only if you your previous OTP has expired.
             </Tooltip>
